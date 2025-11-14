@@ -19,6 +19,14 @@
         reverse_proxy {$API_UPSTREAM}
     }
 
+    @nats_monitor path /jsz*
+    handle @nats_monitor {
+        basicauth {
+            {$JSZ_BASIC_AUTH_USER} {$JSZ_BASIC_AUTH_PASSHASH}
+        } # Credentials hashed per `caddy hash-password`.
+        reverse_proxy {$NATS_MONITOR_UPSTREAM} # JetStream monitor proxy https://docs.nats.io/running-a-nats-service/nats_admin/monitoring/monitoring_jetstream
+    }
+
     handle {
         reverse_proxy {$FRONTEND_UPSTREAM}
     }

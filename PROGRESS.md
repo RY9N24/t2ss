@@ -16,10 +16,16 @@
 
 ### Внешние интерфейсы
 - Caddy Auto-HTTPS: https://caddyserver.com/docs/json/apps/http/servers/automatic_https/
+- NATS JetStream Streams: https://docs.nats.io/using-nats/developer/develop_jetstream/jetstream_streams
 - NATS JetStream Monitoring (/jsz): https://docs.nats.io/running-a-nats-service/nats_admin/monitoring/monitoring_jetstream
 - Docker Engine для Ubuntu 24.04: https://docs.docker.com/engine/install/ubuntu/
 - MatchZy Events & Forwards: https://shobhit-pathak.github.io/MatchZy/events.html
 - MatchZy GOTV & Demos: https://shobhit-pathak.github.io/MatchZy/gotv/
 
+## Шаг 03
+- Настроен поток JetStream `MATCHZY.EVENTS` (Retention=Limits, MaxAge 48h, MaxBytes конфигурируемый) через nats-box CLI.
+- Добавлен прокси `/jsz` в Caddy с Basic Auth и ссылкой на документацию.
+- Подготовлены скрипты `scripts/nats-init.sh` и `scripts/nats-smoke.sh`, обновлена документация и Compose.
+
 ## Следующие шаги
-- Шаг 03: определить хранилище live-статистики и базовые сущности.
+- Шаг 04: уточнить требования по live-статистике и storage согласно мастер-контексту.

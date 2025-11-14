@@ -22,6 +22,7 @@
 - MatchZy (README, CSV/SQLite/MySQL): https://github.com/shobhit-pathak/MatchZy
 - Caddy Auto-HTTPS: https://caddyserver.com/docs/json/apps/http/servers/automatic_https/
 - NATS JetStream Monitoring: https://docs.nats.io/running-a-nats-service/nats_admin/monitoring/monitoring_jetstream
+- NATS JetStream Streams: https://docs.nats.io/using-nats/developer/develop_jetstream/jetstream_streams
 - Docker Engine Ubuntu: https://docs.docker.com/engine/install/ubuntu/
 - PostgreSQL pg_dump: https://www.postgresql.org/docs/current/app-pgdump.html
 - PostgreSQL pg_restore: https://www.postgresql.org/docs/current/app-pgrestore.html
@@ -51,11 +52,32 @@
 | `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD` | PostgreSQL | Параметры БД по умолчанию. |
 | `REDIS_URL` | API/Workers | Подключение к Redis (по умолчанию `redis://redis:6379/0`). |
 | `NATS_URL` | API/Workers/Bot | Подключение к NATS JetStream (по умолчанию `nats://nats:4222`). |
+| `NATS_MONITOR_UPSTREAM` | Caddy | Внутренний адрес мониторинга JetStream `/jsz` (по умолчанию `nats:8222`, см. https://docs.nats.io/running-a-nats-service/nats_admin/monitoring/monitoring_jetstream). |
+| `JSZ_BASIC_AUTH_USER` | Caddy | Пользователь Basic Auth для прокси `/jsz`. |
+| `JSZ_BASIC_AUTH_PASSHASH` | Caddy | Хеш пароля Basic Auth (сгенерировать `caddy hash-password --plaintext 'secret'`). |
+| `MATCHZY_STREAM_MAX_BYTES` | `scripts/nats-init.sh` | Лимит хранения Stream `MATCHZY.EVENTS` в байтах (5–10 ГиБ по https://docs.nats.io/using-nats/developer/develop_jetstream/jetstream_streams). |
+| `MATCHZY_STREAM_MAX_AGE` | `scripts/nats-init.sh` | Максимальный возраст сообщений Stream (по умолчанию `48h`). |
 | `API_ORIGIN` | Frontend/Bot | Базовый URL API для клиентских запросов. |
 | `TELEGRAM_BOT_TOKEN` | Bot | Токен Telegram-бота (см. лимиты https://core.telegram.org/bots/faq). |
 | `TELEGRAM_WEBHOOK_URL` | Bot | (Опц.) Вебхук Telegram. |
 
 Скрипт можно запускать повторно — если Docker уже установлен, блок установки будет пропущен. Для изменения режима достаточно обновить `.env` и снова выполнить `docker compose up -d` в каталоге `deploy/`.
+
+### JetStream Stream и мониторинг
+1. После запуска стека создайте (или проверьте существование) Stream `MATCHZY.EVENTS` с помощью `scripts/nats-init.sh` — скрипт использует `nats-box` CLI и настройки из https://docs.nats.io/using-nats/developer/develop_jetstream/jetstream_streams.
+   ```bash
+   MATCHZY_STREAM_MAX_BYTES=6442450944 ./scripts/nats-init.sh
+   ```
+   Значение `MATCHZY_STREAM_MAX_BYTES` допускает диапазон 5–10 ГиБ и вместе с `MATCHZY_STREAM_MAX_AGE` определяет Retention=Limits (макс. возраст по умолчанию `48h`).
+2. Для smoke-проверки публикации/чтения используйте `scripts/nats-smoke.sh`:
+   ```bash
+   ./scripts/nats-smoke.sh
+   ```
+   Скрипт публикует сообщение в subject `matchzy.events.smoke` и читает последнюю запись потока, чтобы убедиться в доставке.
+3. Мониторинг JetStream (`/jsz`) проксируется через Caddy с Basic Auth (https://docs.nats.io/running-a-nats-service/nats_admin/monitoring/monitoring_jetstream).
+   - Сгенерируйте хеш пароля: `caddy hash-password --plaintext 'strong-secret'`.
+   - Установите переменные `JSZ_BASIC_AUTH_USER` и `JSZ_BASIC_AUTH_PASSHASH`, после чего `/jsz` будет доступен по адресу `https://<ваш_домен>/jsz`. По умолчанию используется пара `nats/changeme` (хеш `JSZ_BASIC_AUTH_PASSHASH` уже задан в `docker-compose.yml`) — обязательно замените на собственные значения.
+   - Для HTTP-режима Auto-HTTPS отключается директивой `auto_https off` (https://caddyserver.com/docs/json/apps/http/servers/automatic_https/).
 
 ## Backend ingest API (NestJS + Fastify)
 

@@ -15,6 +15,10 @@ services:
       - CADDY_AUTO_HTTPS_DIRECTIVE=${CADDY_AUTO_HTTPS_DIRECTIVE}
       - FRONTEND_UPSTREAM=${FRONTEND_UPSTREAM:-frontend:3000}
       - API_UPSTREAM=${API_UPSTREAM:-api:3000}
+      - NATS_MONITOR_UPSTREAM=${NATS_MONITOR_UPSTREAM:-nats:8222}
+      - JSZ_BASIC_AUTH_USER=${JSZ_BASIC_AUTH_USER:-nats}
+      - JSZ_BASIC_AUTH_PASSHASH=${JSZ_BASIC_AUTH_PASSHASH:-$$2b$$12$$AoLmj.J8qA2kMaWzzzvuSuPBtsRIjX3V19KXLPDhUrVjobEOQxify}
+      # Basic Auth хеш получен командой `caddy hash-password --plaintext changeme` — замените на свой.
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy-data:/data
@@ -217,6 +221,15 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+
+  nats-tools:
+    image: natsio/nats-box:0.15.0
+    depends_on:
+      nats:
+        condition: service_healthy
+    environment:
+      - NATS_URL=${NATS_URL:-nats://nats:4222}
+
 
 volumes:
   caddy-data:

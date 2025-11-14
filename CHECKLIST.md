@@ -3,7 +3,7 @@
 - [x] Шаг 00 — Префлайт и каркас репозитория
 - [x] Шаг 01 — Docker Compose и Caddy
 - [x] Шаг 02 — Backend Ingest/API (NestJS+Fastify)
-- [ ] Шаг 03
+- [x] Шаг 03
 - [ ] Шаг 04
 - [ ] Шаг 05
 - [ ] Шаг 06
