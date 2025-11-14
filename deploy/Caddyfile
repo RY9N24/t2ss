@@ -1,0 +1,25 @@
+{
+    {$CADDY_AUTO_HTTPS_DIRECTIVE}
+    # Automatic HTTPS behaviour is controlled according to https://caddyserver.com/docs/json/apps/http/servers/automatic_https/
+}
+
+{$CADDY_SITE_ADDRESS} {
+    encode gzip
+
+    handle /healthz {
+        respond "ok" 200
+    }
+
+    @api {
+        path /ingest/matchzy*
+        path /ingest/demo*
+        path /api/*
+    }
+    handle @api {
+        reverse_proxy {$API_UPSTREAM}
+    }
+
+    handle {
+        reverse_proxy {$FRONTEND_UPSTREAM}
+    }
+}

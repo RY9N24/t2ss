@@ -1,12 +1,22 @@
 [
-  {"path": "README.md", "description": "Основной документ с мастер-контекстом, верификацией и правилами анти-выдумывания."},
-  {"path": "PROGRESS.md", "description": "Журнал выполнения шагов и план следующих действий."},
+  {"path": "README.md", "description": "Основной документ с мастер-контекстом, верификацией, правилами и инструкциями по развёртыванию."},
+  {"path": "PROGRESS.md", "description": "Журнал выполнения шагов, список внешних интерфейсов и план следующих действий."},
   {"path": "CHECKLIST.md", "description": "Чеклист шагов проекта с отметками выполнения."},
   {"path": "MANIFEST.json", "description": "Перечень ключевых файлов и каталогов с описанием."},
   {"path": "backend/", "description": "Каталог для серверной части (NestJS/Fastify)."},
+  {"path": "backend/.gitkeep", "description": "Заглушка для отслеживания каталога backend в git."},
   {"path": "workers/", "description": "Каталог для асинхронных воркеров JetStream."},
+  {"path": "workers/.gitkeep", "description": "Заглушка для отслеживания каталога workers в git."},
   {"path": "frontend/", "description": "Каталог для панели на Next.js."},
+  {"path": "frontend/.gitkeep", "description": "Заглушка для отслеживания каталога frontend в git."},
   {"path": "bot/", "description": "Каталог для Telegram-бота на Telegraf."},
+  {"path": "bot/.gitkeep", "description": "Заглушка для отслеживания каталога bot в git."},
   {"path": "deploy/", "description": "Каталог для конфигураций деплоя (Docker/Compose/Caddy)."},
-  {"path": "scripts/", "description": "Каталог для вспомогательных скриптов."}
+  {"path": "deploy/docker-compose.yml", "description": "Конфигурация Docker Compose для сервисов Caddy, API, workers, NATS, PostgreSQL, Redis, фронтенда и бота."},
+  {"path": "deploy/Caddyfile", "description": "Caddy-конфигурация с поддержкой режимов с доменом и без домена."},
+  {"path": "deploy/.gitkeep", "description": "Заглушка для отслеживания каталога deploy в git."},
+  {"path": "scripts/", "description": "Каталог для вспомогательных скриптов."},
+  {"path": "scripts/install.sh", "description": "Скрипт установки Docker Engine/Compose и запуска стека в выбранном режиме."},
+  {"path": "scripts/.gitkeep", "description": "Заглушка для отслеживания каталога scripts в git."},
+  {"path": "start.md", "description": "Дополнительные заметки (исходный файл)."}
 ]
