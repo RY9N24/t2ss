@@ -57,6 +57,56 @@
 
 Скрипт можно запускать повторно — если Docker уже установлен, блок установки будет пропущен. Для изменения режима достаточно обновить `.env` и снова выполнить `docker compose up -d` в каталоге `deploy/`.
 
+## Backend ingest API (NestJS + Fastify)
+
+### Подготовка окружения
+1. Установите зависимости:
+   ```bash
+   cd backend
+   npm install
+   ```
+2. Скопируйте `.env.example` и задайте значения (токен, подключения к PostgreSQL и NATS):
+   ```bash
+   cp .env.example .env
+   ```
+3. Локальный запуск:
+   ```bash
+   npm run start:dev
+   ```
+4. Запуск тестов (CI-режим):
+   ```bash
+   CI=true npm test
+   ```
+
+### Примеры ingest-запросов
+- `/ingest/matchzy` принимает любой JSON и требует `Authorization: Bearer <SERVER_TOKEN>`; события публикуются в NATS subject `matchzy.events.raw` (см. [MatchZy Events & Forwards](https://shobhit-pathak.github.io/MatchZy/events.html) и [NATS JetStream мониторинг](https://docs.nats.io/running-a-nats-service/nats_admin/monitoring/monitoring_jetstream)).
+
+  ```bash
+  curl -X POST "http://localhost:3000/ingest/matchzy" \
+    -H "Authorization: Bearer ${SERVER_TOKEN}" \
+    -H "Content-Type: application/json" \
+    -d '{"event":"match_started","matchId":"123"}'
+  ```
+
+- `/ingest/demo` принимает поток RAW ZIP и сохраняет все заголовки в `meta_headers` без модификаций (см. [MatchZy GOTV & Demos](https://shobhit-pathak.github.io/MatchZy/gotv/)).
+
+  ```bash
+  curl -X POST "http://localhost:3000/ingest/demo" \
+    -H "MatchZy-FileName: sample.zip" \
+    -H "MatchZy-MapNumber: 0" \
+    -H "MatchZy-MatchId: abc" \
+    --data-binary @demo.zip
+  ```
+
+### Основные переменные окружения API
+| Переменная | Назначение |
+|------------|------------|
+| `SERVER_TOKEN` | Токен авторизации для `/ingest/matchzy` (MatchZy Events & Forwards). |
+| `DEMO_STORAGE_PATH` | Каталог для сохранения загруженных демо. |
+| `NATS_URL`, `NATS_SUBJECT_MATCHZY_EVENTS` | Подключение и subject публикации событий в NATS JetStream. |
+| `POSTGRES_*` | Параметры подключения к PostgreSQL для хранения `demo_uploads`. |
+| `PORT` | Порт HTTP сервера (по умолчанию `3000`). |
+
 ## Правила анти-выдумывания
 - Использовать только подтверждённые источники и спецификации.
 - Любое непроверенное поле или интерфейс помечать как TODO(need-confirmation) и реализовывать безопасную заглушку.
