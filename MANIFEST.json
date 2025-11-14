@@ -1,0 +1,12 @@
+[
+  {"path": "README.md", "description": "Основной документ с мастер-контекстом, верификацией и правилами анти-выдумывания."},
+  {"path": "PROGRESS.md", "description": "Журнал выполнения шагов и план следующих действий."},
+  {"path": "CHECKLIST.md", "description": "Чеклист шагов проекта с отметками выполнения."},
+  {"path": "MANIFEST.json", "description": "Перечень ключевых файлов и каталогов с описанием."},
+  {"path": "backend/", "description": "Каталог для серверной части (NestJS/Fastify)."},
+  {"path": "workers/", "description": "Каталог для асинхронных воркеров JetStream."},
+  {"path": "frontend/", "description": "Каталог для панели на Next.js."},
+  {"path": "bot/", "description": "Каталог для Telegram-бота на Telegraf."},
+  {"path": "deploy/", "description": "Каталог для конфигураций деплоя (Docker/Compose/Caddy)."},
+  {"path": "scripts/", "description": "Каталог для вспомогательных скриптов."}
+]
