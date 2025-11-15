@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { join } from 'node:path';
 import { IngestModule } from './ingest/ingest.module';
-import { DemoUpload } from './ingest/demo-upload.entity';
+import { StoredFile } from './database/entities/file.entity';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { DemoUpload } from './ingest/demo-upload.entity';
           return {
             type: 'sqlite',
             database: ':memory:',
-            entities: [DemoUpload],
+            entities: [StoredFile],
             synchronize: true,
           };
         }
@@ -28,8 +29,11 @@ import { DemoUpload } from './ingest/demo-upload.entity';
           username: config.get<string>('POSTGRES_USER', 'matchzy'),
           password: config.get<string>('POSTGRES_PASSWORD', 'matchzy'),
           database: config.get<string>('POSTGRES_DB', 'matchzy'),
-          entities: [DemoUpload],
-          synchronize: true,
+          autoLoadEntities: true,
+          entities: [join(__dirname, '**/*.entity.{ts,js}')],
+          migrations: [join(__dirname, 'database/migrations/*.{ts,js}')],
+          synchronize: false,
+          migrationsRun: true,
         };
       },
     }),

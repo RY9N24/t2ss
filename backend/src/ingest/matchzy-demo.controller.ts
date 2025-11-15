@@ -23,6 +23,19 @@ export class DemoIngestController {
     const originalFilename = Array.isArray(originalFilenameHeader)
       ? originalFilenameHeader[0]
       : (originalFilenameHeader ?? null);
+    const contentTypeHeader = headers['content-type'];
+    const contentType = Array.isArray(contentTypeHeader)
+      ? contentTypeHeader[0]
+      : (contentTypeHeader ?? null);
+    const contentLengthHeader = headers['content-length'];
+    const parsedSize = Array.isArray(contentLengthHeader)
+      ? Number(contentLengthHeader[0])
+      : contentLengthHeader
+      ? Number(contentLengthHeader)
+      : undefined;
+    const sizeBytes = Number.isFinite(parsedSize ?? NaN)
+      ? (parsedSize as number)
+      : null;
     const stream = request.raw;
     const { filePath } = await this.storage.saveStream(stream, originalFilename);
 
@@ -34,6 +47,8 @@ export class DemoIngestController {
       filePath,
       originalFilename,
       metaHeaders: normalizedHeaders,
+      contentType,
+      sizeBytes,
     });
 
     return { status: 'stored' };

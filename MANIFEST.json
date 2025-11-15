@@ -1,174 +1,246 @@
 [
-  {
-    "path": "README.md",
-    "description": "Основной документ с мастер-контекстом, верификацией, правилами и инструкциями по развёртыванию и backend-интеграции."
-  },
-  {
-    "path": "PROGRESS.md",
-    "description": "Журнал выполнения шагов, список внешних интерфейсов и план следующих действий."
-  },
-  {
-    "path": "CHECKLIST.md",
-    "description": "Чеклист шагов проекта с отметками выполнения."
-  },
-  {
-    "path": "MANIFEST.json",
-    "description": "Перечень ключевых файлов и каталогов с описанием."
-  },
-  {
-    "path": "backend/",
-    "description": "Каталог серверной части (NestJS + Fastify ingest API)."
-  },
-  {
-    "path": "backend/EXTERNAL_INTERFACES.md",
-    "description": "Ссылки на внешние интерфейсы, задействованные на шаге 02."
-  },
-  {
-    "path": "backend/package.json",
-    "description": "Конфигурация NPM пакета backend-приложения."
-  },
-  {
-    "path": "backend/package-lock.json",
-    "description": "Зафиксированное дерево зависимостей backend-приложения."
-  },
-  {
-    "path": "backend/tsconfig.json",
-    "description": "Общие настройки TypeScript для backend."
-  },
-  {
-    "path": "backend/tsconfig.build.json",
-    "description": "Конфигурация компиляции для сборки backend."
-  },
-  {
-    "path": "backend/nest-cli.json",
-    "description": "Настройки Nest CLI (sourceRoot)."
-  },
-  {
-    "path": "backend/jest.config.js",
-    "description": "Конфигурация Jest для модульных тестов backend."
-  },
-  {
-    "path": "backend/.eslintrc.js",
-    "description": "Правила ESLint для TypeScript backend."
-  },
-  {
-    "path": "backend/.prettierrc",
-    "description": "Настройки форматирования кода backend."
-  },
-  {
-    "path": "backend/.gitignore",
-    "description": "Игнорируемые файлы и каталоги backend."
-  },
-  {
-    "path": "backend/.env.example",
-    "description": "Пример переменных окружения для ingest API."
-  },
-  {
-    "path": "backend/src/main.ts",
-    "description": "Точка входа NestJS с Fastify и глобальными пайпами."
-  },
-  {
-    "path": "backend/src/app.module.ts",
-    "description": "Корневой модуль приложения с конфигурацией TypeORM."
-  },
-  {
-    "path": "backend/src/ingest/ingest.module.ts",
-    "description": "Модуль ingest-эндпоинтов и сервисов."
-  },
-  {
-    "path": "backend/src/ingest/demo-upload.entity.ts",
-    "description": "Entity для хранения метаданных загруженных демо."
-  },
-  {
-    "path": "backend/src/ingest/matchzy-ingest.controller.ts",
-    "description": "Контроллер `/ingest/matchzy` с проверкой Bearer токена и публикацией в NATS."
-  },
-  {
-    "path": "backend/src/ingest/matchzy-demo.controller.ts",
-    "description": "Контроллер `/ingest/demo` со streaming-сохранением ZIP и заголовков."
-  },
-  {
-    "path": "backend/src/ingest/services/demo-storage.service.ts",
-    "description": "Сервис сохранения демо-файлов на диск."
-  },
-  {
-    "path": "backend/src/ingest/services/demo-upload.service.ts",
-    "description": "Сервис записи метаданных загрузки в БД."
-  },
-  {
-    "path": "backend/src/ingest/services/matchzy-events.publisher.ts",
-    "description": "Публикация событий MatchZy в NATS JetStream."
-  },
-  {
-    "path": "backend/src/ingest/matchzy-ingest.controller.spec.ts",
-    "description": "Тесты контроллера MatchZy ingest."
-  },
-  {
-    "path": "backend/src/ingest/matchzy-demo.controller.spec.ts",
-    "description": "Тесты контроллера загрузки демо."
-  },
-  {
-    "path": "workers/",
-    "description": "Каталог для асинхронных воркеров JetStream."
-  },
-  {
-    "path": "workers/.gitkeep",
-    "description": "Заглушка для отслеживания каталога workers в git."
-  },
-  {
-    "path": "frontend/",
-    "description": "Каталог для панели на Next.js."
-  },
-  {
-    "path": "frontend/.gitkeep",
-    "description": "Заглушка для отслеживания каталога frontend в git."
-  },
-  {
-    "path": "bot/",
-    "description": "Каталог для Telegram-бота на Telegraf."
-  },
-  {
-    "path": "bot/.gitkeep",
-    "description": "Заглушка для отслеживания каталога bot в git."
-  },
-  {
-    "path": "deploy/",
-    "description": "Каталог для конфигураций деплоя (Docker/Compose/Caddy)."
-  },
-  {
-    "path": "deploy/docker-compose.yml",
-    "description": "Конфигурация Docker Compose для сервисов Caddy, API, workers, NATS, PostgreSQL, Redis, фронтенда, бота и вспомогательного nats-tools (JetStream)."
-  },
-  {
-    "path": "deploy/Caddyfile",
-    "description": "Caddy-конфигурация с поддержкой режимов с доменом/без домена и прокси `/jsz` с Basic Auth."
-  },
-  {
-    "path": "deploy/.gitkeep",
-    "description": "Заглушка для отслеживания каталога deploy в git."
-  },
-  {
-    "path": "scripts/",
-    "description": "Каталог для вспомогательных скриптов."
-  },
-  {
-    "path": "scripts/install.sh",
-    "description": "Скрипт установки Docker Engine/Compose и запуска стека в выбранном режиме."
-  },
-  {
-    "path": "scripts/.gitkeep",
-    "description": "Заглушка для отслеживания каталога scripts в git."
-  },
-  {
-    "path": "start.md",
-    "description": "Дополнительные заметки (исходный файл)."
-  },
-  {
-    "path": "scripts/nats-init.sh",
-    "description": "Скрипт создания/проверки Stream MATCHZY.EVENTS в NATS JetStream через nats-box."
-  },
-  {
-    "path": "scripts/nats-smoke.sh",
-    "description": "Smoke-тест публикации и чтения сообщений из Stream MATCHZY.EVENTS."
-  }
+    {
+        "path": "README.md",
+        "description": "\u041e\u0441\u043d\u043e\u0432\u043d\u043e\u0439 \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442 \u0441 \u043c\u0430\u0441\u0442\u0435\u0440-\u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u043e\u043c, \u0432\u0435\u0440\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u0435\u0439, \u043f\u0440\u0430\u0432\u0438\u043b\u0430\u043c\u0438 \u0438 \u0438\u043d\u0441\u0442\u0440\u0443\u043a\u0446\u0438\u044f\u043c\u0438 \u043f\u043e \u0440\u0430\u0437\u0432\u0451\u0440\u0442\u044b\u0432\u0430\u043d\u0438\u044e \u0438 backend-\u0438\u043d\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u0438."
+    },
+    {
+        "path": "PROGRESS.md",
+        "description": "\u0416\u0443\u0440\u043d\u0430\u043b \u0432\u044b\u043f\u043e\u043b\u043d\u0435\u043d\u0438\u044f \u0448\u0430\u0433\u043e\u0432, \u0441\u043f\u0438\u0441\u043e\u043a \u0432\u043d\u0435\u0448\u043d\u0438\u0445 \u0438\u043d\u0442\u0435\u0440\u0444\u0435\u0439\u0441\u043e\u0432 \u0438 \u043f\u043b\u0430\u043d \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u0445 \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0439."
+    },
+    {
+        "path": "CHECKLIST.md",
+        "description": "\u0427\u0435\u043a\u043b\u0438\u0441\u0442 \u0448\u0430\u0433\u043e\u0432 \u043f\u0440\u043e\u0435\u043a\u0442\u0430 \u0441 \u043e\u0442\u043c\u0435\u0442\u043a\u0430\u043c\u0438 \u0432\u044b\u043f\u043e\u043b\u043d\u0435\u043d\u0438\u044f."
+    },
+    {
+        "path": "MANIFEST.json",
+        "description": "\u041f\u0435\u0440\u0435\u0447\u0435\u043d\u044c \u043a\u043b\u044e\u0447\u0435\u0432\u044b\u0445 \u0444\u0430\u0439\u043b\u043e\u0432 \u0438 \u043a\u0430\u0442\u0430\u043b\u043e\u0433\u043e\u0432 \u0441 \u043e\u043f\u0438\u0441\u0430\u043d\u0438\u0435\u043c."
+    },
+    {
+        "path": "backend/",
+        "description": "\u041a\u0430\u0442\u0430\u043b\u043e\u0433 \u0441\u0435\u0440\u0432\u0435\u0440\u043d\u043e\u0439 \u0447\u0430\u0441\u0442\u0438 (NestJS + Fastify ingest API)."
+    },
+    {
+        "path": "backend/EXTERNAL_INTERFACES.md",
+        "description": "\u0421\u0441\u044b\u043b\u043a\u0438 \u043d\u0430 \u0432\u043d\u0435\u0448\u043d\u0438\u0435 \u0438\u043d\u0442\u0435\u0440\u0444\u0435\u0439\u0441\u044b, \u0437\u0430\u0434\u0435\u0439\u0441\u0442\u0432\u043e\u0432\u0430\u043d\u043d\u044b\u0435 \u043d\u0430 \u0448\u0430\u0433\u0435 02."
+    },
+    {
+        "path": "backend/package.json",
+        "description": "\u041a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044f NPM \u043f\u0430\u043a\u0435\u0442\u0430 backend-\u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u044f."
+    },
+    {
+        "path": "backend/package-lock.json",
+        "description": "\u0417\u0430\u0444\u0438\u043a\u0441\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u043e\u0435 \u0434\u0435\u0440\u0435\u0432\u043e \u0437\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0441\u0442\u0435\u0439 backend-\u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u044f."
+    },
+    {
+        "path": "backend/tsconfig.json",
+        "description": "\u041e\u0431\u0449\u0438\u0435 \u043d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 TypeScript \u0434\u043b\u044f backend."
+    },
+    {
+        "path": "backend/tsconfig.build.json",
+        "description": "\u041a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044f \u043a\u043e\u043c\u043f\u0438\u043b\u044f\u0446\u0438\u0438 \u0434\u043b\u044f \u0441\u0431\u043e\u0440\u043a\u0438 backend."
+    },
+    {
+        "path": "backend/nest-cli.json",
+        "description": "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 Nest CLI (sourceRoot)."
+    },
+    {
+        "path": "backend/jest.config.js",
+        "description": "\u041a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044f Jest \u0434\u043b\u044f \u043c\u043e\u0434\u0443\u043b\u044c\u043d\u044b\u0445 \u0442\u0435\u0441\u0442\u043e\u0432 backend."
+    },
+    {
+        "path": "backend/.eslintrc.js",
+        "description": "\u041f\u0440\u0430\u0432\u0438\u043b\u0430 ESLint \u0434\u043b\u044f TypeScript backend."
+    },
+    {
+        "path": "backend/.prettierrc",
+        "description": "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 \u0444\u043e\u0440\u043c\u0430\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u044f \u043a\u043e\u0434\u0430 backend."
+    },
+    {
+        "path": "backend/.gitignore",
+        "description": "\u0418\u0433\u043d\u043e\u0440\u0438\u0440\u0443\u0435\u043c\u044b\u0435 \u0444\u0430\u0439\u043b\u044b \u0438 \u043a\u0430\u0442\u0430\u043b\u043e\u0433\u0438 backend."
+    },
+    {
+        "path": "backend/.env.example",
+        "description": "\u041f\u0440\u0438\u043c\u0435\u0440 \u043f\u0435\u0440\u0435\u043c\u0435\u043d\u043d\u044b\u0445 \u043e\u043a\u0440\u0443\u0436\u0435\u043d\u0438\u044f \u0434\u043b\u044f ingest API."
+    },
+    {
+        "path": "backend/src/main.ts",
+        "description": "\u0422\u043e\u0447\u043a\u0430 \u0432\u0445\u043e\u0434\u0430 NestJS \u0441 Fastify \u0438 \u0433\u043b\u043e\u0431\u0430\u043b\u044c\u043d\u044b\u043c\u0438 \u043f\u0430\u0439\u043f\u0430\u043c\u0438."
+    },
+    {
+        "path": "backend/src/app.module.ts",
+        "description": "\u041a\u043e\u0440\u043d\u0435\u0432\u043e\u0439 \u043c\u043e\u0434\u0443\u043b\u044c \u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u044f \u0441 \u043a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u0435\u0439 TypeORM (migrationsRun, \u0430\u0432\u0442\u043e-\u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u0435 \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u0435\u0439)."
+    },
+    {
+        "path": "backend/src/ingest/ingest.module.ts",
+        "description": "\u041c\u043e\u0434\u0443\u043b\u044c ingest-\u044d\u043d\u0434\u043f\u043e\u0438\u043d\u0442\u043e\u0432 \u0438 \u0441\u0435\u0440\u0432\u0438\u0441\u043e\u0432."
+    },
+    {
+        "path": "backend/src/database/entities/",
+        "description": "TypeORM \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u0438 \u043e\u0441\u043d\u043e\u0432\u043d\u043e\u0439 \u0441\u0445\u0435\u043c\u044b (\u0442\u0443\u0440\u043d\u0438\u0440\u044b, \u043a\u043e\u043c\u0430\u043d\u0434\u044b, \u0438\u0433\u0440\u043e\u043a\u0438, \u043c\u0430\u0442\u0447\u0438, \u043a\u0430\u0440\u0442\u044b, \u0441\u0442\u0430\u0442\u0438\u0441\u0442\u0438\u043a\u0430, \u0444\u0430\u0439\u043b\u044b, \u0441\u043e\u0431\u044b\u0442\u0438\u044f, \u043f\u043e\u0434\u043f\u0438\u0441\u043a\u0438)."
+    },
+    {
+        "path": "backend/src/database/entities/tournament.entity.ts",
+        "description": "\u0421\u0443\u0449\u043d\u043e\u0441\u0442\u044c \u0442\u0443\u0440\u043d\u0438\u0440\u043e\u0432 (\u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435, slug, \u0432\u043d\u0435\u0448\u043d\u0438\u0439 \u0438\u0434\u0435\u043d\u0442\u0438\u0444\u0438\u043a\u0430\u0442\u043e\u0440)."
+    },
+    {
+        "path": "backend/src/database/entities/server.entity.ts",
+        "description": "\u0421\u0443\u0449\u043d\u043e\u0441\u0442\u044c \u0438\u0433\u0440\u043e\u0432\u044b\u0445 \u0441\u0435\u0440\u0432\u0435\u0440\u043e\u0432 \u0441 endpoint \u0438 \u0441\u0442\u0430\u0442\u0443\u0441\u043e\u043c \u0430\u043a\u0442\u0438\u0432\u043d\u043e\u0441\u0442\u0438."
+    },
+    {
+        "path": "backend/src/database/entities/team.entity.ts",
+        "description": "\u0421\u0443\u0449\u043d\u043e\u0441\u0442\u044c \u043a\u043e\u043c\u0430\u043d\u0434 \u0441 \u043f\u0440\u0438\u0432\u044f\u0437\u043a\u043e\u0439 \u043a \u0442\u0443\u0440\u043d\u0438\u0440\u0443."
+    },
+    {
+        "path": "backend/src/database/entities/player.entity.ts",
+        "description": "\u0421\u0443\u0449\u043d\u043e\u0441\u0442\u044c \u0438\u0433\u0440\u043e\u043a\u043e\u0432 (Steam ID, \u0441\u0442\u0440\u0430\u043d\u0430, \u043a\u043e\u043c\u0430\u043d\u0434\u0430, \u0442\u0443\u0440\u043d\u0438\u0440)."
+    },
+    {
+        "path": "backend/src/database/entities/match.entity.ts",
+        "description": "\u0421\u0443\u0449\u043d\u043e\u0441\u0442\u044c \u043c\u0430\u0442\u0447\u0435\u0439 \u0441 \u0441\u0441\u044b\u043b\u043a\u0430\u043c\u0438 \u043d\u0430 \u0442\u0443\u0440\u043d\u0438\u0440\u044b, \u0441\u0435\u0440\u0432\u0435\u0440\u044b \u0438 \u043a\u043e\u043c\u0430\u043d\u0434\u044b."
+    },
+    {
+        "path": "backend/src/database/entities/map.entity.ts",
+        "description": "\u0421\u0443\u0449\u043d\u043e\u0441\u0442\u044c \u043a\u0430\u0440\u0442 \u043c\u0430\u0442\u0447\u0430 \u0441 \u043d\u043e\u043c\u0435\u0440\u043e\u043c \u0438 \u0441\u0442\u0430\u0442\u0443\u0441\u043e\u043c."
+    },
+    {
+        "path": "backend/src/database/entities/player-stat.entity.ts",
+        "description": "\u0421\u0443\u0449\u043d\u043e\u0441\u0442\u044c \u0441\u0442\u0430\u0442\u0438\u0441\u0442\u0438\u043a\u0438 \u0438\u0433\u0440\u043e\u043a\u043e\u0432 \u043f\u043e \u043a\u0430\u0440\u0442\u0430\u043c (K/D/A, \u0440\u0435\u0439\u0442\u0438\u043d\u0433 \u0438 \u0434\u0440.)."
+    },
+    {
+        "path": "backend/src/database/entities/raw-event.entity.ts",
+        "description": "\u0421\u0443\u0449\u043d\u043e\u0441\u0442\u044c `events_raw` \u0441 \u0443\u043d\u0438\u043a\u0430\u043b\u044c\u043d\u044b\u043c `idempotency_key` \u0438 payload JSON."
+    },
+    {
+        "path": "backend/src/database/entities/audit-log-entry.entity.ts",
+        "description": "\u0421\u0443\u0449\u043d\u043e\u0441\u0442\u044c \u0436\u0443\u0440\u043d\u0430\u043b\u0430 \u0430\u0443\u0434\u0438\u0442\u0430 \u0434\u043b\u044f \u0441\u0438\u0441\u0442\u0435\u043c\u043d\u044b\u0445 \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0439."
+    },
+    {
+        "path": "backend/src/database/entities/bot-subscription.entity.ts",
+        "description": "\u0421\u0443\u0449\u043d\u043e\u0441\u0442\u044c \u043f\u043e\u0434\u043f\u0438\u0441\u043e\u043a Telegram-\u0431\u043e\u0442\u0430 \u043d\u0430 \u0442\u0443\u0440\u043d\u0438\u0440\u044b."
+    },
+    {
+        "path": "backend/src/database/entities/file.entity.ts",
+        "description": "\u0421\u0443\u0449\u043d\u043e\u0441\u0442\u044c `files` \u0434\u043b\u044f \u0441\u043e\u0445\u0440\u0430\u043d\u0451\u043d\u043d\u044b\u0445 \u0434\u0435\u043c\u043e \u0438 \u0437\u0430\u0433\u043e\u043b\u043e\u0432\u043a\u043e\u0432 MatchZy."
+    },
+    {
+        "path": "backend/src/database/entities/index.ts",
+        "description": "\u041f\u0435\u0440\u0435\u044d\u043a\u0441\u043f\u043e\u0440\u0442 \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u0435\u0439 \u0434\u043b\u044f \u043c\u043e\u0434\u0443\u043b\u0435\u0439 NestJS."
+    },
+    {
+        "path": "backend/src/database/entities/timestamped.entity.ts",
+        "description": "\u0411\u0430\u0437\u043e\u0432\u044b\u0439 \u043a\u043b\u0430\u0441\u0441 \u0441 UUID \u0438 \u0432\u0440\u0435\u043c\u0435\u043d\u043d\u044b\u043c\u0438 \u043c\u0435\u0442\u043a\u0430\u043c\u0438 \u0434\u043b\u044f \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u0435\u0439."
+    },
+    {
+        "path": "backend/src/database/migrations/1706040000000-CreateCoreSchema.ts",
+        "description": "\u041d\u0430\u0447\u0430\u043b\u044c\u043d\u0430\u044f \u043c\u0438\u0433\u0440\u0430\u0446\u0438\u044f PostgreSQL-\u0441\u0445\u0435\u043c\u044b (\u0442\u0443\u0440\u043d\u0438\u0440\u044b, \u043c\u0430\u0442\u0447\u0438, \u043a\u0430\u0440\u0442\u044b, \u0441\u0442\u0430\u0442\u0438\u0441\u0442\u0438\u043a\u0430, \u0441\u043e\u0431\u044b\u0442\u0438\u044f, \u0444\u0430\u0439\u043b\u044b, \u043f\u043e\u0434\u043f\u0438\u0441\u043a\u0438)."
+    },
+    {
+        "path": "backend/src/database/data-source.ts",
+        "description": "\u041a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044f TypeORM DataSource \u0434\u043b\u044f CLI-\u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0439 \u0438 \u0441\u043a\u0440\u0438\u043f\u0442\u043e\u0432 \u043c\u0438\u0433\u0440\u0430\u0446\u0438\u0439."
+    },
+    {
+        "path": "backend/src/database/run-migrations.ts",
+        "description": "\u0421\u043a\u0440\u0438\u043f\u0442 \u0437\u0430\u043f\u0443\u0441\u043a\u0430 \u043c\u0438\u0433\u0440\u0430\u0446\u0438\u0439 TypeORM."
+    },
+    {
+        "path": "backend/src/database/revert-last-migration.ts",
+        "description": "\u0421\u043a\u0440\u0438\u043f\u0442 \u043e\u0442\u043a\u0430\u0442\u0430 \u043f\u043e\u0441\u043b\u0435\u0434\u043d\u0435\u0439 \u043c\u0438\u0433\u0440\u0430\u0446\u0438\u0438 TypeORM."
+    },
+    {
+        "path": "backend/src/ingest/matchzy-ingest.controller.ts",
+        "description": "\u041a\u043e\u043d\u0442\u0440\u043e\u043b\u043b\u0435\u0440 `/ingest/matchzy` \u0441 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u043e\u0439 Bearer \u0442\u043e\u043a\u0435\u043d\u0430 \u0438 \u043f\u0443\u0431\u043b\u0438\u043a\u0430\u0446\u0438\u0435\u0439 \u0432 NATS."
+    },
+    {
+        "path": "backend/src/ingest/matchzy-demo.controller.ts",
+        "description": "\u041a\u043e\u043d\u0442\u0440\u043e\u043b\u043b\u0435\u0440 `/ingest/demo` \u0441\u043e streaming-\u0441\u043e\u0445\u0440\u0430\u043d\u0435\u043d\u0438\u0435\u043c ZIP \u0438 \u0437\u0430\u0433\u043e\u043b\u043e\u0432\u043a\u043e\u0432."
+    },
+    {
+        "path": "backend/src/ingest/services/demo-storage.service.ts",
+        "description": "\u0421\u0435\u0440\u0432\u0438\u0441 \u0441\u043e\u0445\u0440\u0430\u043d\u0435\u043d\u0438\u044f \u0434\u0435\u043c\u043e-\u0444\u0430\u0439\u043b\u043e\u0432 \u043d\u0430 \u0434\u0438\u0441\u043a."
+    },
+    {
+        "path": "backend/src/ingest/services/demo-upload.service.ts",
+        "description": "\u0421\u0435\u0440\u0432\u0438\u0441 \u0437\u0430\u043f\u0438\u0441\u0438 \u043c\u0435\u0442\u0430\u0434\u0430\u043d\u043d\u044b\u0445 \u0437\u0430\u0433\u0440\u0443\u0437\u043a\u0438 \u0432 \u0411\u0414."
+    },
+    {
+        "path": "backend/src/ingest/services/matchzy-events.publisher.ts",
+        "description": "\u041f\u0443\u0431\u043b\u0438\u043a\u0430\u0446\u0438\u044f \u0441\u043e\u0431\u044b\u0442\u0438\u0439 MatchZy \u0432 NATS JetStream."
+    },
+    {
+        "path": "backend/src/ingest/matchzy-ingest.controller.spec.ts",
+        "description": "\u0422\u0435\u0441\u0442\u044b \u043a\u043e\u043d\u0442\u0440\u043e\u043b\u043b\u0435\u0440\u0430 MatchZy ingest."
+    },
+    {
+        "path": "backend/src/ingest/matchzy-demo.controller.spec.ts",
+        "description": "\u0422\u0435\u0441\u0442\u044b \u043a\u043e\u043d\u0442\u0440\u043e\u043b\u043b\u0435\u0440\u0430 \u0437\u0430\u0433\u0440\u0443\u0437\u043a\u0438 \u0434\u0435\u043c\u043e."
+    },
+    {
+        "path": "workers/",
+        "description": "\u041a\u0430\u0442\u0430\u043b\u043e\u0433 \u0434\u043b\u044f \u0430\u0441\u0438\u043d\u0445\u0440\u043e\u043d\u043d\u044b\u0445 \u0432\u043e\u0440\u043a\u0435\u0440\u043e\u0432 JetStream."
+    },
+    {
+        "path": "workers/.gitkeep",
+        "description": "\u0417\u0430\u0433\u043b\u0443\u0448\u043a\u0430 \u0434\u043b\u044f \u043e\u0442\u0441\u043b\u0435\u0436\u0438\u0432\u0430\u043d\u0438\u044f \u043a\u0430\u0442\u0430\u043b\u043e\u0433\u0430 workers \u0432 git."
+    },
+    {
+        "path": "frontend/",
+        "description": "\u041a\u0430\u0442\u0430\u043b\u043e\u0433 \u0434\u043b\u044f \u043f\u0430\u043d\u0435\u043b\u0438 \u043d\u0430 Next.js."
+    },
+    {
+        "path": "frontend/.gitkeep",
+        "description": "\u0417\u0430\u0433\u043b\u0443\u0448\u043a\u0430 \u0434\u043b\u044f \u043e\u0442\u0441\u043b\u0435\u0436\u0438\u0432\u0430\u043d\u0438\u044f \u043a\u0430\u0442\u0430\u043b\u043e\u0433\u0430 frontend \u0432 git."
+    },
+    {
+        "path": "bot/",
+        "description": "\u041a\u0430\u0442\u0430\u043b\u043e\u0433 \u0434\u043b\u044f Telegram-\u0431\u043e\u0442\u0430 \u043d\u0430 Telegraf."
+    },
+    {
+        "path": "bot/.gitkeep",
+        "description": "\u0417\u0430\u0433\u043b\u0443\u0448\u043a\u0430 \u0434\u043b\u044f \u043e\u0442\u0441\u043b\u0435\u0436\u0438\u0432\u0430\u043d\u0438\u044f \u043a\u0430\u0442\u0430\u043b\u043e\u0433\u0430 bot \u0432 git."
+    },
+    {
+        "path": "deploy/",
+        "description": "\u041a\u0430\u0442\u0430\u043b\u043e\u0433 \u0434\u043b\u044f \u043a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u0439 \u0434\u0435\u043f\u043b\u043e\u044f (Docker/Compose/Caddy)."
+    },
+    {
+        "path": "deploy/docker-compose.yml",
+        "description": "\u041a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044f Docker Compose \u0434\u043b\u044f \u0441\u0435\u0440\u0432\u0438\u0441\u043e\u0432 Caddy, API, workers, NATS, PostgreSQL, Redis, \u0444\u0440\u043e\u043d\u0442\u0435\u043d\u0434\u0430, \u0431\u043e\u0442\u0430 \u0438 \u0432\u0441\u043f\u043e\u043c\u043e\u0433\u0430\u0442\u0435\u043b\u044c\u043d\u043e\u0433\u043e nats-tools (JetStream)."
+    },
+    {
+        "path": "deploy/Caddyfile",
+        "description": "Caddy-\u043a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044f \u0441 \u043f\u043e\u0434\u0434\u0435\u0440\u0436\u043a\u043e\u0439 \u0440\u0435\u0436\u0438\u043c\u043e\u0432 \u0441 \u0434\u043e\u043c\u0435\u043d\u043e\u043c/\u0431\u0435\u0437 \u0434\u043e\u043c\u0435\u043d\u0430 \u0438 \u043f\u0440\u043e\u043a\u0441\u0438 `/jsz` \u0441 Basic Auth."
+    },
+    {
+        "path": "deploy/.gitkeep",
+        "description": "\u0417\u0430\u0433\u043b\u0443\u0448\u043a\u0430 \u0434\u043b\u044f \u043e\u0442\u0441\u043b\u0435\u0436\u0438\u0432\u0430\u043d\u0438\u044f \u043a\u0430\u0442\u0430\u043b\u043e\u0433\u0430 deploy \u0432 git."
+    },
+    {
+        "path": "scripts/",
+        "description": "\u041a\u0430\u0442\u0430\u043b\u043e\u0433 \u0434\u043b\u044f \u0432\u0441\u043f\u043e\u043c\u043e\u0433\u0430\u0442\u0435\u043b\u044c\u043d\u044b\u0445 \u0441\u043a\u0440\u0438\u043f\u0442\u043e\u0432."
+    },
+    {
+        "path": "scripts/install.sh",
+        "description": "\u0421\u043a\u0440\u0438\u043f\u0442 \u0443\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 Docker Engine/Compose \u0438 \u0437\u0430\u043f\u0443\u0441\u043a\u0430 \u0441\u0442\u0435\u043a\u0430 \u0432 \u0432\u044b\u0431\u0440\u0430\u043d\u043d\u043e\u043c \u0440\u0435\u0436\u0438\u043c\u0435."
+    },
+    {
+        "path": "scripts/.gitkeep",
+        "description": "\u0417\u0430\u0433\u043b\u0443\u0448\u043a\u0430 \u0434\u043b\u044f \u043e\u0442\u0441\u043b\u0435\u0436\u0438\u0432\u0430\u043d\u0438\u044f \u043a\u0430\u0442\u0430\u043b\u043e\u0433\u0430 scripts \u0432 git."
+    },
+    {
+        "path": "start.md",
+        "description": "\u0414\u043e\u043f\u043e\u043b\u043d\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0435 \u0437\u0430\u043c\u0435\u0442\u043a\u0438 (\u0438\u0441\u0445\u043e\u0434\u043d\u044b\u0439 \u0444\u0430\u0439\u043b)."
+    },
+    {
+        "path": "scripts/nats-init.sh",
+        "description": "\u0421\u043a\u0440\u0438\u043f\u0442 \u0441\u043e\u0437\u0434\u0430\u043d\u0438\u044f/\u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0438 Stream MATCHZY.EVENTS \u0432 NATS JetStream \u0447\u0435\u0440\u0435\u0437 nats-box."
+    },
+    {
+        "path": "scripts/nats-smoke.sh",
+        "description": "Smoke-\u0442\u0435\u0441\u0442 \u043f\u0443\u0431\u043b\u0438\u043a\u0430\u0446\u0438\u0438 \u0438 \u0447\u0442\u0435\u043d\u0438\u044f \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0439 \u0438\u0437 Stream MATCHZY.EVENTS."
+    },
+    {
+        "path": "scripts/truncate_tournament_data.sql",
+        "description": "SQL-\u0441\u043a\u0440\u0438\u043f\u0442 TRUNCATE \u0442\u0443\u0440\u043d\u0438\u0440\u043d\u044b\u0445 \u0442\u0430\u0431\u043b\u0438\u0446 \u0431\u0435\u0437 \u0443\u0434\u0430\u043b\u0435\u043d\u0438\u044f servers."
+    }
 ]

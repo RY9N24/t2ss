@@ -126,7 +126,30 @@
 | `SERVER_TOKEN` | Токен авторизации для `/ingest/matchzy` (MatchZy Events & Forwards). |
 | `DEMO_STORAGE_PATH` | Каталог для сохранения загруженных демо. |
 | `NATS_URL`, `NATS_SUBJECT_MATCHZY_EVENTS` | Подключение и subject публикации событий в NATS JetStream. |
-| `POSTGRES_*` | Параметры подключения к PostgreSQL для хранения `demo_uploads`. |
+| `POSTGRES_*` | Параметры подключения к PostgreSQL для хранения таблиц `files`, `events_raw`, статистики и справочников. |
+
+## База данных и миграции
+
+- Миграции TypeORM создают таблицы `tournaments`, `servers`, `teams`, `players`, `matches`, `maps`, `player_stats`, `events_raw`, `files`, `audit_log`, `bot_subscriptions` и поддерживают уникальный `idempotency_key` для сырых событий MatchZy (см. [MatchZy Events & Forwards](https://shobhit-pathak.github.io/MatchZy/events.html)).
+- Выполнить миграции: `cd backend && npm run migration:run`. Для отката последнего шага — `npm run migration:revert`.
+- Бэкапы и восстановление проверяются штатными инструментами PostgreSQL ([pg_dump](https://www.postgresql.org/docs/current/app-pgdump.html), [pg_restore](https://www.postgresql.org/docs/current/app-pgrestore.html)).
+- Скрипт `scripts/truncate_tournament_data.sql` очищает турнирные данные (матчи, карты, статистику, файлы, события, подписки) и не затрагивает таблицу `servers`.
+
+### Таблицы
+
+| Таблица | Назначение |
+|---------|------------|
+| `tournaments` | Турниры и метаданные (название, slug, внешний идентификатор). |
+| `servers` | Выделенные игровые серверы; остаются нетронутыми при очистке. |
+| `teams` | Команды турнира, связаны с `tournaments`. |
+| `players` | Игроки (Steam ID, страна, принадлежность к команде/турниру). |
+| `matches` | Матчи с привязкой к турниру, серверу и командам. |
+| `maps` | Карты матча, хранят MatchZy map number (0-индекс). |
+| `player_stats` | Статистика игроков по картам (K/D/A, рейтинг, ADR и др.). |
+| `events_raw` | Сырые события MatchZy с уникальным `idempotency_key` и полезной нагрузкой JSON. |
+| `files` | Сохранённые демо-файлы и их заголовки из MatchZy GOTV ([документация](https://shobhit-pathak.github.io/MatchZy/gotv/)). |
+| `audit_log` | Журнал действий (GC, админские операции и т.п.). |
+| `bot_subscriptions` | Подписки Telegram-бота на финальные результаты турниров. |
 | `PORT` | Порт HTTP сервера (по умолчанию `3000`). |
 
 ## Правила анти-выдумывания

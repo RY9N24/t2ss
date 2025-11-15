@@ -21,11 +21,18 @@
 - Docker Engine для Ubuntu 24.04: https://docs.docker.com/engine/install/ubuntu/
 - MatchZy Events & Forwards: https://shobhit-pathak.github.io/MatchZy/events.html
 - MatchZy GOTV & Demos: https://shobhit-pathak.github.io/MatchZy/gotv/
+- PostgreSQL pg_dump: https://www.postgresql.org/docs/current/app-pgdump.html
+- PostgreSQL pg_restore: https://www.postgresql.org/docs/current/app-pgrestore.html
 
 ## Шаг 03
 - Настроен поток JetStream `MATCHZY.EVENTS` (Retention=Limits, MaxAge 48h, MaxBytes конфигурируемый) через nats-box CLI.
 - Добавлен прокси `/jsz` в Caddy с Basic Auth и ссылкой на документацию.
 - Подготовлены скрипты `scripts/nats-init.sh` и `scripts/nats-smoke.sh`, обновлена документация и Compose.
 
+## Шаг 04
+- Добавлены сущности TypeORM и миграция `CreateCoreSchema` для таблиц турниров, матчей, карт, статистики игроков, файлов демо, событий и подписок бота.
+- Включён прогон миграций при запуске API, обновлён ingest-сервис для сохранения метаданных файлов (`files`) и рассчитанного размера.
+- Подготовлен скрипт `scripts/truncate_tournament_data.sql`, обновлён README с описанием схемы и командами `npm run migration:*`.
+
 ## Следующие шаги
-- Шаг 04: уточнить требования по live-статистике и storage согласно мастер-контексту.
+- Шаг 05: дождаться инструкций по обработке live-статистики и workers согласно мастер-контексту.

@@ -12,7 +12,9 @@
     "lint": "eslint --ext .ts src",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "migration:run": "ts-node --project tsconfig.json src/database/run-migrations.ts",
+    "migration:revert": "ts-node --project tsconfig.json src/database/revert-last-migration.ts"
   },
   "dependencies": {
     "@fastify/multipart": "^8.1.0",

@@ -4,7 +4,7 @@
 - [x] Шаг 01 — Docker Compose и Caddy
 - [x] Шаг 02 — Backend Ingest/API (NestJS+Fastify)
 - [x] Шаг 03
-- [ ] Шаг 04
+- [x] Шаг 04
 - [ ] Шаг 05
 - [ ] Шаг 06
 - [ ] Шаг 07

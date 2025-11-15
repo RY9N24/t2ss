@@ -39,6 +39,8 @@ describe('DemoIngestController', () => {
       filePath: '/tmp/demos/demo.zip',
       originalFilename: 'demo.zip',
       metaHeaders: headers,
+      contentType: null,
+      sizeBytes: null,
     });
     expect(response).toEqual({ status: 'stored' });
   });
