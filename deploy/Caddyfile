@@ -10,12 +10,15 @@
         respond "ok" 200
     }
 
-    @api {
-        path /ingest/matchzy*
-        path /ingest/demo*
-        path /api/*
+    handle_path /api/* {
+        reverse_proxy {$API_UPSTREAM}
     }
-    handle @api {
+
+    handle /ingest/matchzy* {
+        reverse_proxy {$API_UPSTREAM}
+    }
+
+    handle /ingest/demo* {
         reverse_proxy {$API_UPSTREAM}
     }
 

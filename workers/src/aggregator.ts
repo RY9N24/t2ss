@@ -34,6 +34,7 @@ export class Aggregator {
     }
 
     await this.persistence.incrementAggregate(record);
+    await this.persistence.updateServerHeartbeat(record);
     if (this.finalizer) {
       await this.finalizer.handle(record);
     }

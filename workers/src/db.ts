@@ -76,6 +76,20 @@ export class PostgresPersistence implements PersistenceAdapter {
     }
   }
 
+  async updateServerHeartbeat(record: RawEventRecord): Promise<void> {
+    const client = await this.pool.connect();
+    try {
+      await client.query(
+        `UPDATE servers
+            SET last_seen_at = GREATEST(COALESCE(last_seen_at, '-infinity')::timestamptz, $2::timestamptz)
+          WHERE endpoint = $1`,
+        [record.metadata.serverId, record.metadata.eventTimestamp],
+      );
+    } finally {
+      client.release();
+    }
+  }
+
   async close(): Promise<void> {
     await this.pool.end();
   }

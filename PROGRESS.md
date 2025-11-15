@@ -44,5 +44,17 @@
 - Во `workers/` реализован финализатор CSV (`map_result`/`series_end`) с обработкой неизвестных колонок через `audit_log`, обновлением счётов и заполнением подтверждённых показателей `player_stats`; добавлены модульные тесты и пример `.env`.
 - README обновлён инструкциями по переменным `MATCHZY_STATS_PATH`/`MATCHZY_STATS_HOST_PATH`, стратегии разрешения конфликтов live vs CSV и ссылками на MatchZy Database Stats.
 
+## Шаг 07
+- Собрана панель на Next.js с разделами Live, History, Match, Servers, Disk и Settings, подключёнными к backend REST/SSE эндпоинтам и ролям доступа.
+- Добавлены backend-модуль Dashboard с SSE, сервисами администрирования, хранением токенов серверов и миграцией для статусов/heartbeat.
+- Обновлены воркеры для записи heartbeat, документация по фронтенду и прокси в Caddy; приведены env-примеры и Tailwind-конфигурация.
+
+### Внешние интерфейсы
+- MatchZy Events & Forwards: https://shobhit-pathak.github.io/MatchZy/events.html — live события и контекст для статистики в UI.
+- MatchZy GOTV & Demos: https://shobhit-pathak.github.io/MatchZy/gotv/ — отображение метаданных демо и управление хранением.
+- NATS JetStream Monitoring (`/jsz`): https://docs.nats.io/running-a-nats-service/nats_admin/monitoring/monitoring_jetstream — индикаторы в разделе Disk.
+- PostgreSQL pg_dump: https://www.postgresql.org/docs/current/app-pgdump.html — операции бэкапа в Settings.
+- PostgreSQL pg_restore: https://www.postgresql.org/docs/current/app-pgrestore.html — инструкции по восстановлению.
+
 ## Следующие шаги
-- Шаг 07: реализация live UI/панели истории поверх агрегированных данных и интеграция с Redis/Next.js.
+- Шаг 08: реализация backend API для экспорта/импорта и расширенной истории, интеграция с ботом.

@@ -6,6 +6,7 @@ class InMemoryPersistence implements PersistenceAdapter {
   public inserted: string[] = [];
   public aggregateCalls: number = 0;
   public offsets: Map<string, number> = new Map();
+  public heartbeats: Map<string, string> = new Map();
 
   async recordRawEvent(record: RawEventRecord): Promise<boolean> {
     if (this.inserted.includes(record.idempotencyKey)) {
@@ -22,6 +23,10 @@ class InMemoryPersistence implements PersistenceAdapter {
   async updateOffset(record: RawEventRecord): Promise<void> {
     const key = `${record.metadata.serverId}:${record.metadata.matchId}:${record.metadata.mapNumber}`;
     this.offsets.set(key, record.sequence);
+  }
+
+  async updateServerHeartbeat(record: RawEventRecord): Promise<void> {
+    this.heartbeats.set(record.metadata.serverId, record.metadata.eventTimestamp);
   }
 }
 
@@ -61,5 +66,6 @@ describe('Aggregator idempotency', () => {
     expect(second).toBe('duplicate');
     expect(persistence.aggregateCalls).toBe(1);
     expect(persistence.offsets.get('srv-1:match-1:1')).toBe(2);
+    expect(persistence.heartbeats.get('srv-1')).toBe('2024-03-01T10:00:01Z');
   });
 });

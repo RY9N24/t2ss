@@ -25,4 +25,5 @@ export interface PersistenceAdapter {
   recordRawEvent(record: RawEventRecord): Promise<boolean>;
   incrementAggregate(record: RawEventRecord): Promise<void>;
   updateOffset(record: RawEventRecord): Promise<void>;
+  updateServerHeartbeat(record: RawEventRecord): Promise<void>;
 }

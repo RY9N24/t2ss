@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'node:path';
 import { IngestModule } from './ingest/ingest.module';
 import { StoredFile } from './database/entities/file.entity';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { StoredFile } from './database/entities/file.entity';
       },
     }),
     IngestModule,
+    DashboardModule,
   ],
 })
 export class AppModule {}

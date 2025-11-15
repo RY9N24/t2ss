@@ -59,9 +59,13 @@
 | `MATCHZY_STREAM_MAX_BYTES` | `scripts/nats-init.sh` | Лимит хранения Stream `MATCHZY.EVENTS` в байтах (5–10 ГиБ по https://docs.nats.io/using-nats/developer/develop_jetstream/jetstream_streams). |
 | `MATCHZY_STREAM_MAX_AGE` | `scripts/nats-init.sh` | Максимальный возраст сообщений Stream (по умолчанию `48h`). |
 | `API_ORIGIN` | Frontend/Bot | Базовый URL API для клиентских запросов. |
+| `NEXT_PUBLIC_API_BASE_URL` | Frontend | Публичный базовый путь API для браузерных запросов (по умолчанию `/api`, проксируется через Caddy). |
+| `INTERNAL_API_BASE_URL` | Frontend | Внутренний URL API для server-side запросов Next.js (по умолчанию `http://api:3000`). |
 | `TELEGRAM_BOT_TOKEN` | Bot | Токен Telegram-бота (см. лимиты https://core.telegram.org/bots/faq). |
 | `TELEGRAM_WEBHOOK_URL` | Bot | (Опц.) Вебхук Telegram. |
 | `LOG_LEVEL` | Workers | Уровень логирования воркеров (по умолчанию `info`). |
+| `JSZ_MONITOR_URL` | Backend | Внутренний URL для чтения JetStream `/jsz` (проксируется Caddy, см. https://docs.nats.io/running-a-nats-service/nats_admin/monitoring/monitoring_jetstream). |
+| `ALLOW_DB_DROP` | Backend | Разрешение на сброс схемы через API настроек (по умолчанию `false`, включайте вручную перед выполнением опасных операций). |
 
 Скрипт можно запускать повторно — если Docker уже установлен, блок установки будет пропущен. Для изменения режима достаточно обновить `.env` и снова выполнить `docker compose up -d` в каталоге `deploy/`.
 
@@ -129,6 +133,38 @@
 | `DEMO_STORAGE_PATH` | Каталог для сохранения загруженных демо. |
 | `NATS_URL`, `NATS_SUBJECT_MATCHZY_EVENTS` | Подключение и subject публикации событий в NATS JetStream. |
 | `POSTGRES_*` | Параметры подключения к PostgreSQL для хранения таблиц `files`, `events_raw`, статистики и справочников. |
+| `JSZ_MONITOR_URL` | URL мониторинга JetStream `/jsz` (используется API для раздела Disk, см. https://docs.nats.io/running-a-nats-service/nats_admin/monitoring/monitoring_jetstream). |
+| `ALLOW_DB_DROP` | Флаг, разрешающий опасную операцию «Drop database» в разделе Settings. |
+
+## Frontend (Next.js UI)
+
+- Проект `frontend/` построен на Next.js 14 c Tailwind CSS. Навигация включает страницы **Live**, **History**, **Match**, **Servers**, **Disk** и **Settings** (см. мастер-контекст).
+- Все запросы выполняются через Caddy `/api/*`, причём серверные компоненты используют `INTERNAL_API_BASE_URL`, а браузер — `NEXT_PUBLIC_API_BASE_URL`.
+
+### Страница Live
+- Использует SSE (`/live/stream`) для обновления списка матчей в реальном времени и агрегатов событий MatchZy (см. [MatchZy Events & Forwards](https://shobhit-pathak.github.io/MatchZy/events.html)).
+- Отображает текущие карты, суммарные счёты и счётчики `map_event_aggregates`.
+
+### Страница History
+- Позволяет фильтровать завершённые матчи по турниру, команде, диапазону дат и строке поиска.
+- Экспорт истории в CSV использует данные финальной сверки (`/matches/history/export`).
+
+### Страница Match
+- Отображает детальный боксскор финального матча, таймлайн `events_raw` и список загруженных демо (метаданные получаются из MatchZy GOTV, см. [документацию](https://shobhit-pathak.github.io/MatchZy/gotv/)).
+
+### Страница Servers
+- Управление игровыми серверами: регистрация, активация/деактивация и выдача токенов с SHA-256 хешированием. Токены отображаются один раз — храните безопасно.
+- Статус «last seen» обновляется воркером при поступлении событий MatchZy.
+
+### Страница Disk
+- Показывает использование хранилища демо (`DEMO_STORAGE_PATH`), размер базы (`pg_database_size`) и состояние JetStream `/jsz` (см. [документацию NATS](https://docs.nats.io/running-a-nats-service/nats_admin/monitoring/monitoring_jetstream)).
+- При загрузке ≥90% отображается сворачиваемый баннер с переходом к управлению демками.
+
+### Страница Settings
+- Разделяет функции по управлению данными, резервным копиям и настройкам бота.
+- Кнопка Truncate требует ввода `DELETE` и вызывает SQL-скрипт `truncate_tournament_data.sql` (без удаления серверов).
+- Кнопка Drop database требует двойного подтверждения (`DELETE` и `DROP DATABASE`) и активного `ALLOW_DB_DROP`. Перед использованием выполняйте бэкап (`pg_dump`, `pg_restore`).
+- Раздел Telegram напоминает о лимитах Telegram Bot API ([FAQ](https://core.telegram.org/bots/faq)).
 
 ## База данных и миграции
 

@@ -8,6 +8,7 @@ export * from './player-stat.entity';
 export * from './player.entity';
 export * from './raw-event.entity';
 export * from './server.entity';
+export * from './server-token.entity';
 export * from './team.entity';
 export * from './tournament.entity';
 export * from './event-offset.entity';
