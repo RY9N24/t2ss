@@ -53,6 +53,7 @@
 | `REDIS_URL` | API/Workers | Подключение к Redis (по умолчанию `redis://redis:6379/0`). |
 | `NATS_URL` | API/Workers/Bot | Подключение к NATS JetStream (по умолчанию `nats://nats:4222`). |
 | `NATS_MONITOR_UPSTREAM` | Caddy | Внутренний адрес мониторинга JetStream `/jsz` (по умолчанию `nats:8222`, см. https://docs.nats.io/running-a-nats-service/nats_admin/monitoring/monitoring_jetstream). |
+| `NATS_DURABLE_NAME` | Workers | Имя долговечного консьюмера JetStream (по умолчанию `matchzy-workers`). |
 | `JSZ_BASIC_AUTH_USER` | Caddy | Пользователь Basic Auth для прокси `/jsz`. |
 | `JSZ_BASIC_AUTH_PASSHASH` | Caddy | Хеш пароля Basic Auth (сгенерировать `caddy hash-password --plaintext 'secret'`). |
 | `MATCHZY_STREAM_MAX_BYTES` | `scripts/nats-init.sh` | Лимит хранения Stream `MATCHZY.EVENTS` в байтах (5–10 ГиБ по https://docs.nats.io/using-nats/developer/develop_jetstream/jetstream_streams). |
@@ -60,6 +61,7 @@
 | `API_ORIGIN` | Frontend/Bot | Базовый URL API для клиентских запросов. |
 | `TELEGRAM_BOT_TOKEN` | Bot | Токен Telegram-бота (см. лимиты https://core.telegram.org/bots/faq). |
 | `TELEGRAM_WEBHOOK_URL` | Bot | (Опц.) Вебхук Telegram. |
+| `LOG_LEVEL` | Workers | Уровень логирования воркеров (по умолчанию `info`). |
 
 Скрипт можно запускать повторно — если Docker уже установлен, блок установки будет пропущен. Для изменения режима достаточно обновить `.env` и снова выполнить `docker compose up -d` в каталоге `deploy/`.
 
@@ -130,7 +132,7 @@
 
 ## База данных и миграции
 
-- Миграции TypeORM создают таблицы `tournaments`, `servers`, `teams`, `players`, `matches`, `maps`, `player_stats`, `events_raw`, `files`, `audit_log`, `bot_subscriptions` и поддерживают уникальный `idempotency_key` для сырых событий MatchZy (см. [MatchZy Events & Forwards](https://shobhit-pathak.github.io/MatchZy/events.html)).
+- Миграции TypeORM создают таблицы `tournaments`, `servers`, `teams`, `players`, `matches`, `maps`, `player_stats`, `events_raw`, `files`, `audit_log`, `bot_subscriptions`, `map_event_aggregates`, `event_offsets` и поддерживают уникальный `idempotency_key` для сырых событий MatchZy (см. [MatchZy Events & Forwards](https://shobhit-pathak.github.io/MatchZy/events.html)).
 - Выполнить миграции: `cd backend && npm run migration:run`. Для отката последнего шага — `npm run migration:revert`.
 - Бэкапы и восстановление проверяются штатными инструментами PostgreSQL ([pg_dump](https://www.postgresql.org/docs/current/app-pgdump.html), [pg_restore](https://www.postgresql.org/docs/current/app-pgrestore.html)).
 - Скрипт `scripts/truncate_tournament_data.sql` очищает турнирные данные (матчи, карты, статистику, файлы, события, подписки) и не затрагивает таблицу `servers`.
@@ -146,11 +148,20 @@
 | `matches` | Матчи с привязкой к турниру, серверу и командам. |
 | `maps` | Карты матча, хранят MatchZy map number (0-индекс). |
 | `player_stats` | Статистика игроков по картам (K/D/A, рейтинг, ADR и др.). |
-| `events_raw` | Сырые события MatchZy с уникальным `idempotency_key` и полезной нагрузкой JSON. |
+| `events_raw` | Сырые события MatchZy с уникальным `idempotency_key`, вычисленным по `server_id`, `match_id`, `map_no`, `event_type`, `event_ts` и подмножеству полезной нагрузки. |
 | `files` | Сохранённые демо-файлы и их заголовки из MatchZy GOTV ([документация](https://shobhit-pathak.github.io/MatchZy/gotv/)). |
 | `audit_log` | Журнал действий (GC, админские операции и т.п.). |
 | `bot_subscriptions` | Подписки Telegram-бота на финальные результаты турниров. |
-| `PORT` | Порт HTTP сервера (по умолчанию `3000`). |
+| `map_event_aggregates` | Агрегированные счётчики событий по связке сервер/матч/карта/тип события. |
+| `event_offsets` | Отслеживание последней JetStream последовательности для каждой связки сервер/матч/карта. |
+
+## Workers и агрегация
+
+- Воркеры (`workers/`) подключаются к JetStream subject `matchzy.events.raw`, используя долговечного консьюмера и ручные подтверждения согласно рекомендациям NATS ([документация JetStream](https://docs.nats.io/running-a-nats-service/nats_admin/monitoring/monitoring_jetstream)).
+- Для каждого события вычисляется `idempotency_key` по формуле `hash(server_id|match_id|map_no|event_type|event_ts|payload_subset)`; это гарантирует, что повторные доставки из MatchZy (см. [Events & Forwards](https://shobhit-pathak.github.io/MatchZy/events.html)) не изменяют агрегаты.
+- Новые события сохраняются в `events_raw`, счётчики в `map_event_aggregates` увеличиваются детерминированно, а смещения JetStream фиксируются в `event_offsets` (per-server/match/map offset).
+- При повторной доставке воркер обновляет только `event_offsets`, не меняя агрегаты — поведение покрыто юнит-тестом `workers/src/__tests__/aggregator.spec.ts`.
+- Запуск тестов воркера: `cd workers && npm test`.
 
 ## Правила анти-выдумывания
 - Использовать только подтверждённые источники и спецификации.

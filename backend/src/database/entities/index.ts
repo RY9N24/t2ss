@@ -10,3 +10,5 @@ export * from './raw-event.entity';
 export * from './server.entity';
 export * from './team.entity';
 export * from './tournament.entity';
+export * from './event-offset.entity';
+export * from './map-event-aggregate.entity';
