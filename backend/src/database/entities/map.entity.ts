@@ -3,6 +3,7 @@ import { TimestampedEntity } from './timestamped.entity';
 import { Match } from './match.entity';
 import { StoredFile } from './file.entity';
 import { PlayerStats } from './player-stat.entity';
+import { Team } from './team.entity';
 
 @Entity({ name: 'maps' })
 @Index(['matchId', 'mapNumber'], { unique: true })
@@ -32,6 +33,18 @@ export class Map extends TimestampedEntity {
 
   @Column({ name: 'matchzy_map_number', type: 'smallint', nullable: true })
   matchzyMapNumber?: number | null;
+
+  @Column({ name: 'team1_score', type: 'integer', default: 0 })
+  team1Score!: number;
+
+  @Column({ name: 'team2_score', type: 'integer', default: 0 })
+  team2Score!: number;
+
+  @Column({ name: 'winner_team_id', type: 'uuid', nullable: true })
+  winnerTeamId?: string | null;
+
+  @ManyToOne(() => Team, { nullable: true, onDelete: 'SET NULL' })
+  winnerTeam?: Team | null;
 
   @Column({ type: 'jsonb', default: () => "'{}'::jsonb" })
   metadata!: Record<string, unknown>;

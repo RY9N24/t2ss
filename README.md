@@ -163,6 +163,18 @@
 - При повторной доставке воркер обновляет только `event_offsets`, не меняя агрегаты — поведение покрыто юнит-тестом `workers/src/__tests__/aggregator.spec.ts`.
 - Запуск тестов воркера: `cd workers && npm test`.
 
+### Финальная сверка по CSV MatchZy
+
+- MatchZy после завершения карты сохраняет CSV в `csgo/MatchZy_Stats/match_data_map{mapNumber}_{matchId}.csv`; содержимое соответствует таблице `matchzy_stats_players` (см. [MatchZy README](https://github.com/shobhit-pathak/MatchZy) — раздел Database Stats и CSV описание).
+- Воркеры отслеживают события `map_result` и `series_end` ([Events & Forwards](https://shobhit-pathak.github.io/MatchZy/events.html)). При `map_result` CSV читается из каталога `MATCHZY_STATS_PATH` (по умолчанию `/matchzy_stats` внутри контейнера), после чего:
+  - обновляются `maps.team1_score/team2_score/winner_team_id` и `matches.team1_score/team2_score` (серия) с отметкой `metadata.matchzy_map_result`;
+  - игрокам сопоставляются SteamID, создаются отсутствующие записи в `players`, а `player_stats` наполняется подтверждёнными полями (kills/deaths/assists/damage/utility/entry/клатчи и др. из `matchzy_stats_players`).
+- При `series_end` фиксируется `matches.winner_team_id`, итоговые счёты серии и `metadata.final_series`.
+- Если CSV содержит колонки, отсутствующие в документации, воркер добавляет запись `audit_log` с `TODO(need-confirmation)` и не пытается интерпретировать такие поля.
+- Для доступа к CSV смонтируйте путь сервера MatchZy в контейнер `workers`: используйте переменные `MATCHZY_STATS_HOST_PATH` (хостовый путь) и `MATCHZY_STATS_PATH` (внутри контейнера). По умолчанию docker-compose монтирует `./matchzy_stats:/matchzy_stats:ro`.
+- Тесты финализатора находятся в `workers/src/__tests__/finalizer.spec.ts`.
+- Конфликтная стратегия: live-агрегация продолжает показывать оперативные счётчики, однако финальные данные из CSV имеют приоритет — при расхождениях журнальная запись в `audit_log` облегчает ручную проверку.
+
 ## Правила анти-выдумывания
 - Использовать только подтверждённые источники и спецификации.
 - Любое непроверенное поле или интерфейс помечать как TODO(need-confirmation) и реализовывать безопасную заглушку.

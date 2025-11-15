@@ -9,3 +9,7 @@
 - PostgreSQL pg_restore — восстановление из бэкапов pg_dump остаётся совместимым с добавленными таблицами: https://www.postgresql.org/docs/current/app-pgrestore.html
 - MatchZy Events & Forwards — при агрегации продолжаем использовать официальную схему событий и их поля: https://shobhit-pathak.github.io/MatchZy/events.html
 - NATS JetStream — консьюмеры и подтверждение сообщений реализуем на основе официальных рекомендаций по JetStream: https://docs.nats.io/running-a-nats-service/nats_admin/monitoring/monitoring_jetstream
+
+# Внешние интерфейсы (Шаг 06)
+- MatchZy CSV/Database Stats — финальная сверка использует схему `matchzy_stats_players` и файловую структуру `csgo/MatchZy_Stats` из официального репозитория: https://github.com/shobhit-pathak/MatchZy
+- MatchZy Events & Forwards — обработка `map_result` и `series_end` привязана к официальным событиям MatchZy: https://shobhit-pathak.github.io/MatchZy/events.html

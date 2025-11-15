@@ -81,6 +81,7 @@ services:
       - DATABASE_URL=${DATABASE_URL}
       - REDIS_URL=${REDIS_URL:-redis://redis:6379/0}
       - NATS_URL=${NATS_URL:-nats://nats:4222}
+      - MATCHZY_STATS_PATH=${MATCHZY_STATS_PATH:-/matchzy_stats}
     depends_on:
       nats:
         condition: service_healthy
@@ -88,6 +89,8 @@ services:
         condition: service_healthy
       postgres:
         condition: service_healthy
+    volumes:
+      - ${MATCHZY_STATS_HOST_PATH:-./matchzy_stats}:/matchzy_stats:ro
     healthcheck:
       test: ["CMD-SHELL", "pgrep node"]
       interval: 30s

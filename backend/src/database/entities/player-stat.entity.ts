@@ -86,4 +86,85 @@ export class PlayerStats extends TimestampedEntity {
 
   @Column({ name: 'flash_assists', type: 'integer', default: 0 })
   flashAssists!: number;
+
+  @Column({ type: 'integer', default: 0 })
+  damage!: number;
+
+  @Column({ name: 'enemy_5ks', type: 'integer', default: 0 })
+  enemy5ks!: number;
+
+  @Column({ name: 'enemy_4ks', type: 'integer', default: 0 })
+  enemy4ks!: number;
+
+  @Column({ name: 'enemy_3ks', type: 'integer', default: 0 })
+  enemy3ks!: number;
+
+  @Column({ name: 'enemy_2ks', type: 'integer', default: 0 })
+  enemy2ks!: number;
+
+  @Column({ name: 'utility_count', type: 'integer', default: 0 })
+  utilityCount!: number;
+
+  @Column({ name: 'utility_successes', type: 'integer', default: 0 })
+  utilitySuccesses!: number;
+
+  @Column({ name: 'utility_enemies', type: 'integer', default: 0 })
+  utilityEnemies!: number;
+
+  @Column({ name: 'flash_count', type: 'integer', default: 0 })
+  flashCount!: number;
+
+  @Column({ name: 'flash_successes', type: 'integer', default: 0 })
+  flashSuccesses!: number;
+
+  @Column({ name: 'health_points_removed_total', type: 'integer', default: 0 })
+  healthPointsRemovedTotal!: number;
+
+  @Column({ name: 'health_points_dealt_total', type: 'integer', default: 0 })
+  healthPointsDealtTotal!: number;
+
+  @Column({ name: 'shots_fired_total', type: 'integer', default: 0 })
+  shotsFiredTotal!: number;
+
+  @Column({ name: 'shots_on_target_total', type: 'integer', default: 0 })
+  shotsOnTargetTotal!: number;
+
+  @Column({ name: 'v1_count', type: 'integer', default: 0 })
+  v1Count!: number;
+
+  @Column({ name: 'v1_wins', type: 'integer', default: 0 })
+  v1Wins!: number;
+
+  @Column({ name: 'v2_count', type: 'integer', default: 0 })
+  v2Count!: number;
+
+  @Column({ name: 'v2_wins', type: 'integer', default: 0 })
+  v2Wins!: number;
+
+  @Column({ name: 'entry_count', type: 'integer', default: 0 })
+  entryCount!: number;
+
+  @Column({ name: 'entry_wins', type: 'integer', default: 0 })
+  entryWins!: number;
+
+  @Column({ name: 'equipment_value', type: 'integer', default: 0 })
+  equipmentValue!: number;
+
+  @Column({ name: 'money_saved', type: 'integer', default: 0 })
+  moneySaved!: number;
+
+  @Column({ name: 'kill_reward', type: 'integer', default: 0 })
+  killReward!: number;
+
+  @Column({ name: 'live_time', type: 'integer', default: 0 })
+  liveTime!: number;
+
+  @Column({ name: 'head_shot_kills', type: 'integer', default: 0 })
+  headShotKills!: number;
+
+  @Column({ name: 'cash_earned', type: 'integer', default: 0 })
+  cashEarned!: number;
+
+  @Column({ name: 'enemies_flashed', type: 'integer', default: 0 })
+  enemiesFlashed!: number;
 }

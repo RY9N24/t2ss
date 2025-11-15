@@ -26,12 +26,16 @@ function extractField<T>(source: Record<string, unknown>, key: string, fallback:
 export function extractMetadata(envelope: MatchzyEventEnvelope): AggregationMetadata {
   const body = envelope.body ?? {};
 
-  const serverId = String(body['server_id'] ?? 'unknown');
-  const matchId = String(body['match_id'] ?? 'unknown');
-  const mapNumberRaw = body['map_no'] ?? body['map_number'] ?? 0;
+  const serverId = String(body['server_id'] ?? body['server'] ?? 'unknown');
+  const matchIdentifier =
+    body['match_id'] ?? body['matchid'] ?? body['matchId'] ?? body['match'] ?? 'unknown';
+  const matchId = String(matchIdentifier);
+  const mapNumberRaw = body['map_number'] ?? body['map_no'] ?? body['mapNumber'] ?? 0;
   const mapNumber = typeof mapNumberRaw === 'number' ? mapNumberRaw : Number(mapNumberRaw) || 0;
-  const eventType = String(body['event_type'] ?? 'unknown');
-  const eventTimestamp = String(body['event_ts'] ?? body['timestamp'] ?? new Date().toISOString());
+  const eventType = String(body['event'] ?? body['event_type'] ?? 'unknown');
+  const eventTimestamp = String(
+    body['event_ts'] ?? body['timestamp'] ?? body['occurred_at'] ?? new Date().toISOString(),
+  );
 
   const payloadSubset = normaliseValue(
     body['payload_subset'] ??

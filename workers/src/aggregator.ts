@@ -1,8 +1,9 @@
 import { MatchzyEventEnvelope, PersistenceAdapter, RawEventRecord } from './types';
 import { buildIdempotencyKey, extractMetadata } from './idempotency';
+import { Finalizer } from './finalizer';
 
 export class Aggregator {
-  constructor(private readonly persistence: PersistenceAdapter) {}
+  constructor(private readonly persistence: PersistenceAdapter, private readonly finalizer?: Finalizer) {}
 
   /**
    * MatchZy Events & Forwards: https://shobhit-pathak.github.io/MatchZy/events.html
@@ -33,6 +34,9 @@ export class Aggregator {
     }
 
     await this.persistence.incrementAggregate(record);
+    if (this.finalizer) {
+      await this.finalizer.handle(record);
+    }
     await this.persistence.updateOffset(record);
     return 'processed';
   }

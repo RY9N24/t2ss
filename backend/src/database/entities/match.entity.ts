@@ -73,6 +73,18 @@ export class Match extends TimestampedEntity {
   })
   awayTeam?: Team | null;
 
+  @Column({ name: 'team1_score', type: 'integer', default: 0 })
+  team1Score!: number;
+
+  @Column({ name: 'team2_score', type: 'integer', default: 0 })
+  team2Score!: number;
+
+  @Column({ name: 'winner_team_id', type: 'uuid', nullable: true })
+  winnerTeamId?: string | null;
+
+  @ManyToOne(() => Team, { nullable: true, onDelete: 'SET NULL' })
+  winnerTeam?: Team | null;
+
   @Column({ type: 'jsonb', default: () => "'{}'::jsonb" })
   metadata!: Record<string, unknown>;
 

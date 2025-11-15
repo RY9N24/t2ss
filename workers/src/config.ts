@@ -1,3 +1,4 @@
+import path from 'node:path';
 import 'dotenv/config';
 
 export interface WorkerConfig {
@@ -6,6 +7,7 @@ export interface WorkerConfig {
   durableName: string;
   databaseUrl: string;
   logLevel: string;
+  matchzyStatsPath: string;
 }
 
 export function loadConfig(): WorkerConfig {
@@ -15,5 +17,6 @@ export function loadConfig(): WorkerConfig {
     durableName: process.env.NATS_DURABLE_NAME ?? 'matchzy-workers',
     databaseUrl: process.env.DATABASE_URL ?? 'postgres://matchzy:matchzy@postgres:5432/matchzy',
     logLevel: process.env.LOG_LEVEL ?? 'info',
+    matchzyStatsPath: process.env.MATCHZY_STATS_PATH ?? path.resolve('csgo/MatchZy_Stats'),
   };
 }
