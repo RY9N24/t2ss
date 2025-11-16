@@ -2,13 +2,14 @@ import { Injectable, BadRequestException, ForbiddenException, Logger, NotFoundEx
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HttpService } from '@nestjs/axios';
-import { Repository, DataSource, In } from 'typeorm';
+import { Repository, DataSource, In, EntityManager } from 'typeorm';
 import { firstValueFrom } from 'rxjs';
 import { randomBytes, createHash } from 'node:crypto';
 import { createReadStream, promises as fs } from 'node:fs';
 import { join } from 'node:path';
 import {
   AuditLogEntry,
+  BotSubscription,
   GameServer,
   Map,
   MapEventAggregate,
@@ -22,6 +23,15 @@ import {
   Tournament,
 } from '../database/entities';
 import { EmergencyGcService, DiskStats, EmergencyGcSettings, EmergencyGcRunResult } from './emergency-gc.service';
+import {
+  DataTransferService,
+  TournamentSnapshot,
+  SnapshotTable,
+  SNAPSHOT_TABLE_ORDER,
+  SNAPSHOT_TABLES,
+  SnapshotValue,
+} from './data-transfer.service';
+import { BackupService } from './backup.service';
 
 interface LiveMatchView {
   id: string;
@@ -140,6 +150,16 @@ interface DemoListItem {
   map?: { id: string; name: string; mapNumber: number | null; matchzyMapNumber: number | null } | null;
 }
 
+interface ImportTableSummary {
+  total: number;
+  inserts: number;
+  updates: number;
+}
+
+type ImportSummary = Record<SnapshotTable, ImportTableSummary>;
+
+type ExportFormat = 'csv' | 'xlsx' | 'sqlite';
+
 @Injectable()
 export class DashboardService {
   private readonly logger = new Logger(DashboardService.name);
@@ -158,10 +178,14 @@ export class DashboardService {
     @InjectRepository(GameServer) private readonly serversRepo: Repository<GameServer>,
     @InjectRepository(ServerToken) private readonly tokensRepo: Repository<ServerToken>,
     @InjectRepository(AuditLogEntry) private readonly auditRepo: Repository<AuditLogEntry>,
+    @InjectRepository(BotSubscription)
+    private readonly subscriptionsRepo: Repository<BotSubscription>,
     private readonly dataSource: DataSource,
     private readonly config: ConfigService,
     private readonly http: HttpService,
     private readonly emergencyGc: EmergencyGcService,
+    private readonly dataTransfer: DataTransferService,
+    private readonly backups: BackupService,
   ) {}
 
   async getLiveMatches(): Promise<LiveMatchView[]> {
@@ -222,6 +246,18 @@ export class DashboardService {
           startedAt: map.startedAt ?? null,
         })),
       eventCounts: eventCounts[match.id] ?? {},
+    }));
+  }
+
+  async listTournaments(): Promise<Array<{ id: string; name: string | null; slug: string }>> {
+    const tournaments = await this.tournamentsRepo.find({
+      select: { id: true, name: true, slug: true },
+      order: { createdAt: 'DESC' },
+    });
+    return tournaments.map((tournament) => ({
+      id: tournament.id,
+      name: tournament.name ?? null,
+      slug: tournament.slug,
     }));
   }
 
@@ -794,6 +830,316 @@ export class DashboardService {
       }),
     );
     return { id: file.id, isPinned: file.isPinned, isInUse: file.isInUse };
+  }
+
+  async exportTournamentSnapshot(
+    tournamentId: string,
+    format: ExportFormat,
+  ): Promise<{ filename: string; mimeType: string; buffer: Buffer }> {
+    const snapshot = await this.buildTournamentSnapshot(tournamentId);
+    const tournamentRow = snapshot.tournaments[0];
+    const slug = (tournamentRow?.slug as string | undefined) ?? tournamentId;
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    let filename: string;
+    let mimeType: string;
+    let buffer: Buffer;
+    if (format === 'csv') {
+      filename = `${slug}-${timestamp}.csv.zip`;
+      mimeType = 'application/zip';
+      buffer = await this.dataTransfer.toCsvArchive(snapshot);
+    } else if (format === 'xlsx') {
+      filename = `${slug}-${timestamp}.xlsx`;
+      mimeType =
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+      buffer = Buffer.from(await this.dataTransfer.toXlsx(snapshot));
+    } else {
+      filename = `${slug}-${timestamp}.sqlite`;
+      mimeType = 'application/octet-stream';
+      buffer = await this.dataTransfer.toSqlite(snapshot);
+    }
+    await this.auditRepo.save(
+      this.auditRepo.create({
+        category: 'exports',
+        action: 'tournament_snapshot',
+        entityType: 'tournament',
+        entityId: tournamentId,
+        metadata: {
+          format,
+          tables: SNAPSHOT_TABLE_ORDER.reduce<Record<string, number>>(
+            (acc, table) => {
+              acc[table] = snapshot[table].length;
+              return acc;
+            },
+            {},
+          ),
+        },
+      }),
+    );
+    return { filename, mimeType, buffer };
+  }
+
+  async importTournamentFromCsv(
+    buffer: Buffer,
+    apply: boolean,
+  ): Promise<{ dryRun: boolean; applied: boolean; tables: ImportSummary }> {
+    const snapshot = await this.dataTransfer.fromCsvArchive(buffer);
+    return this.applySnapshot(snapshot, apply, 'csv');
+  }
+
+  async importTournamentFromSqlite(
+    buffer: Buffer,
+    apply: boolean,
+  ): Promise<{ dryRun: boolean; applied: boolean; tables: ImportSummary }> {
+    const snapshot = await this.dataTransfer.fromSqlite(buffer);
+    return this.applySnapshot(snapshot, apply, 'sqlite');
+  }
+
+  async createDatabaseBackup(): Promise<{ filename: string; buffer: Buffer }> {
+    const archive = await this.backups.createArchive();
+    await this.auditRepo.save(
+      this.auditRepo.create({
+        category: 'backup',
+        action: 'pg_dump',
+        metadata: { filename: archive.filename, sizeBytes: archive.buffer.length },
+      }),
+    );
+    return archive;
+  }
+
+  async restoreDatabaseBackup(
+    buffer: Buffer,
+    apply: boolean,
+  ): Promise<
+    | { dryRun: true; items: string[] }
+    | { dryRun: false; restored: boolean; output: string }
+  > {
+    if (!apply) {
+      const dryRun = await this.backups.dryRunRestore(buffer);
+      await this.auditRepo.save(
+        this.auditRepo.create({
+          category: 'backup',
+          action: 'pg_restore_dry_run',
+          metadata: { entries: dryRun.items.length },
+        }),
+      );
+      return dryRun;
+    }
+    const result = await this.backups.restore(buffer);
+    await this.auditRepo.save(
+      this.auditRepo.create({
+        category: 'backup',
+        action: 'pg_restore_apply',
+        metadata: { output: result.output },
+      }),
+    );
+    return { dryRun: false, restored: true, output: result.output };
+  }
+
+  private async buildTournamentSnapshot(tournamentId: string): Promise<TournamentSnapshot> {
+    const tournament = await this.tournamentsRepo.findOne({ where: { id: tournamentId } });
+    if (!tournament) {
+      throw new NotFoundException('Tournament not found');
+    }
+    const teams = await this.teamsRepo.find({ where: { tournamentId } });
+    const players = await this.playersRepo.find({ where: { tournamentId } });
+    const matches = await this.matchesRepo.find({ where: { tournamentId } });
+    const matchIds = matches.map((match) => match.id);
+    const maps = matchIds.length
+      ? await this.mapsRepo.find({ where: { matchId: In(matchIds) } })
+      : [];
+    const mapIds = maps.map((map) => map.id);
+    const stats = mapIds.length
+      ? await this.statsRepo.find({ where: { mapId: In(mapIds) } })
+      : [];
+    const fileWhere: Array<Partial<StoredFile>> = [];
+    if (matchIds.length) {
+      fileWhere.push({ matchId: In(matchIds) as any });
+    }
+    if (mapIds.length) {
+      fileWhere.push({ mapId: In(mapIds) as any });
+    }
+    const files = fileWhere.length
+      ? await this.filesRepo.find({ where: fileWhere as any })
+      : [];
+    const events = matchIds.length
+      ? await this.rawEventsRepo.find({ where: { matchId: In(matchIds) } })
+      : [];
+    const subscriptions = await this.subscriptionsRepo.find({ where: { tournamentId } });
+    return {
+      tournaments: [this.mapEntityToSnapshotRow('tournaments', tournament)],
+      teams: teams.map((team) => this.mapEntityToSnapshotRow('teams', team)),
+      players: players.map((player) => this.mapEntityToSnapshotRow('players', player)),
+      matches: matches.map((match) => this.mapEntityToSnapshotRow('matches', match)),
+      maps: maps.map((map) => this.mapEntityToSnapshotRow('maps', map)),
+      player_stats: stats.map((stat) => this.mapEntityToSnapshotRow('player_stats', stat)),
+      files: files.map((file) => this.mapEntityToSnapshotRow('files', file)),
+      events_raw: events.map((event) => this.mapEntityToSnapshotRow('events_raw', event)),
+      bot_subscriptions: subscriptions.map((sub) =>
+        this.mapEntityToSnapshotRow('bot_subscriptions', sub),
+      ),
+    };
+  }
+
+  private async applySnapshot(
+    snapshot: TournamentSnapshot,
+    apply: boolean,
+    source: 'csv' | 'sqlite',
+  ): Promise<{ dryRun: boolean; applied: boolean; tables: ImportSummary }> {
+    const summary = await this.computeImportSummaries(snapshot);
+    const tournamentId = snapshot.tournaments[0]?.id as string | undefined;
+    if (!apply) {
+      return { dryRun: true, applied: false, tables: summary };
+    }
+    await this.persistSnapshot(snapshot);
+    await this.auditRepo.save(
+      this.auditRepo.create({
+        category: 'imports',
+        action: 'tournament_snapshot',
+        entityType: 'tournament',
+        entityId: tournamentId ?? null,
+        metadata: { source, summary },
+      }),
+    );
+    return { dryRun: false, applied: true, tables: summary };
+  }
+
+  private async computeImportSummaries(snapshot: TournamentSnapshot): Promise<ImportSummary> {
+    const summary = {} as ImportSummary;
+    for (const table of SNAPSHOT_TABLE_ORDER) {
+      const rows = snapshot[table];
+      if (!rows.length) {
+        summary[table] = { total: 0, inserts: 0, updates: 0 };
+        continue;
+      }
+      const ids = rows
+        .map((row) => (row.id as string | undefined) ?? null)
+        .filter((value): value is string => Boolean(value));
+      let inserts = rows.length;
+      if (ids.length) {
+        const repo = this.getRepositoryForTable(table);
+        const existing = await repo.find({
+          where: { id: In(ids) } as any,
+          select: { id: true } as any,
+        });
+        const existingIds = new Set(existing.map((entity) => (entity as { id: string }).id));
+        inserts = rows.filter((row) => !existingIds.has(row.id as string)).length;
+      }
+      summary[table] = { total: rows.length, inserts, updates: rows.length - inserts };
+    }
+    return summary;
+  }
+
+  private async persistSnapshot(snapshot: TournamentSnapshot): Promise<void> {
+    const runner = this.dataSource.createQueryRunner();
+    await runner.connect();
+    await runner.startTransaction();
+    try {
+      for (const table of SNAPSHOT_TABLE_ORDER) {
+        const rows = snapshot[table];
+        if (!rows.length) {
+          continue;
+        }
+        const repo = this.getRepositoryForTable(table, runner.manager);
+        const hydrated = rows.map((row) => this.hydrateRowForPersistence(table, row));
+        await repo.upsert(hydrated, ['id']);
+      }
+      await runner.commitTransaction();
+    } catch (error) {
+      await runner.rollbackTransaction();
+      throw error;
+    } finally {
+      await runner.release();
+    }
+  }
+
+  private mapEntityToSnapshotRow(
+    table: SnapshotTable,
+    entity: unknown,
+  ): Record<string, SnapshotValue> {
+    const columns = SNAPSHOT_TABLES[table];
+    const row: Record<string, SnapshotValue> = {};
+    for (const column of columns) {
+      const value = (entity as Record<string, SnapshotValue>)[column.key];
+      if (value === undefined || value === null) {
+        row[column.key] = null;
+        continue;
+      }
+      if (value instanceof Date) {
+        row[column.key] = value.toISOString();
+        continue;
+      }
+      row[column.key] = value;
+    }
+    return row;
+  }
+
+  private hydrateRowForPersistence(
+    table: SnapshotTable,
+    row: Record<string, SnapshotValue>,
+  ): Record<string, unknown> {
+    const columns = SNAPSHOT_TABLES[table];
+    const hydrated: Record<string, unknown> = {};
+    for (const column of columns) {
+      const value = row[column.key];
+      if (value === null || value === undefined || value === '') {
+        hydrated[column.key] = null;
+        continue;
+      }
+      switch (column.type) {
+        case 'datetime':
+          hydrated[column.key] = typeof value === 'string' ? new Date(value) : value;
+          break;
+        case 'number':
+          hydrated[column.key] = typeof value === 'number' ? value : Number(value);
+          break;
+        case 'boolean':
+          hydrated[column.key] = value === true || value === 'true' || value === 1;
+          break;
+        case 'json':
+          hydrated[column.key] =
+            typeof value === 'string'
+              ? (() => {
+                  try {
+                    return JSON.parse(value);
+                  } catch {
+                    return null;
+                  }
+                })()
+              : value;
+          break;
+        default:
+          hydrated[column.key] = value;
+      }
+    }
+    return hydrated;
+  }
+
+  private getRepositoryForTable(
+    table: SnapshotTable,
+    manager: EntityManager = this.dataSource.manager,
+  ): Repository<any> {
+    switch (table) {
+      case 'tournaments':
+        return manager.getRepository(Tournament);
+      case 'teams':
+        return manager.getRepository(Team);
+      case 'players':
+        return manager.getRepository(Player);
+      case 'matches':
+        return manager.getRepository(Match);
+      case 'maps':
+        return manager.getRepository(Map);
+      case 'player_stats':
+        return manager.getRepository(PlayerStats);
+      case 'files':
+        return manager.getRepository(StoredFile);
+      case 'events_raw':
+        return manager.getRepository(RawEvent);
+      case 'bot_subscriptions':
+        return manager.getRepository(BotSubscription);
+      default:
+        throw new Error(`Unsupported table ${table}`);
+    }
   }
 
   async truncateTournamentData(confirm: string): Promise<{ truncated: boolean }> {

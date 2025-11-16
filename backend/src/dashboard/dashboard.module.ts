@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   AuditLogEntry,
+  BotSubscription,
   GameServer,
   Map,
   MapEventAggregate,
@@ -25,6 +26,8 @@ import { SystemController } from './system.controller';
 import { AdminController } from './admin.controller';
 import { DemosController } from './demos.controller';
 import { EmergencyGcService } from './emergency-gc.service';
+import { DataTransferService } from './data-transfer.service';
+import { BackupService } from './backup.service';
 
 @Module({
   imports: [
@@ -32,6 +35,7 @@ import { EmergencyGcService } from './emergency-gc.service';
     HttpModule,
     TypeOrmModule.forFeature([
       AuditLogEntry,
+      BotSubscription,
       GameServer,
       Map,
       MapEventAggregate,
@@ -54,7 +58,7 @@ import { EmergencyGcService } from './emergency-gc.service';
     AdminController,
     DemosController,
   ],
-  providers: [DashboardService, EmergencyGcService],
+  providers: [DashboardService, EmergencyGcService, DataTransferService, BackupService],
   exports: [DashboardService],
 })
 export class DashboardModule {}

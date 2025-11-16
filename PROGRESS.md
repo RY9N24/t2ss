@@ -68,5 +68,16 @@
 - API `/system/emergency-gc` (GET/PATCH/POST run) и UI на странице Disk позволяют включать/выключать GC, задавать grace-период, запускать очистку вручную и наблюдать последний запуск.
 - Добавлена миграция `1706040005000-AddSystemSettings`, unit-тесты Emergency-GC и документация по безопасным настройкам/переменным окружения.
 
+## Шаг 10
+- Добавлен `DataTransferService` (CSV/XLSX/SQLite) и API `GET /system/tournaments/:id/export/:format`, `POST /system/tournaments/import/{csv|sqlite}` с dry-run, персистентным `ImportSummary` и аудитом.
+- Реализован `BackupService`, маршруты `/system/backup/export` и `/system/backup/restore`, поддержка dry-run (`pg_restore --list`) и новые переменные `PG_DUMP_BIN`/`PG_RESTORE_BIN`.
+- Обновлена страница Settings (Next.js) — появились секции Tournament export/import и Backups & restores с загрузкой файлов и визуализацией сводок.
+- Добавлен e2e-тест `backend/test/export-import.e2e-spec.ts`, покрывающий экспорт и повторный импорт турнира через HTTP-интерфейсы.
+
 ## Следующие шаги
-- Шаг 10: дальнейшие задачи согласно мастер-плану (экспорт/импорт или бот по ТЗ).
+- Шаг 11: дальнейшие задачи согласно мастер-плану.
+
+### Внешние интерфейсы (Шаг 10)
+- MatchZy (README, CSV/SQLite/MySQL): https://github.com/shobhit-pathak/MatchZy — подтверждённые форматы CSV и SQLite, к которым должны соответствовать экспорт/импорт турниров.
+- PostgreSQL pg_dump: https://www.postgresql.org/docs/current/app-pgdump.html — официальные параметры архивного формата для резервного копирования.
+- PostgreSQL pg_restore: https://www.postgresql.org/docs/current/app-pgrestore.html — инструкция по проверке (`--list`) и восстановлению архивов перед применением.

@@ -9,11 +9,17 @@ import type {
   StoredFile,
   GameServer,
   ServerToken,
+  Tournament,
+  Team,
+  Player,
+  BotSubscription,
 } from '../database/entities';
 import type { Repository, DataSource } from 'typeorm';
 import type { ConfigService } from '@nestjs/config';
 import type { HttpService } from '@nestjs/axios';
 import type { EmergencyGcService } from './emergency-gc.service';
+import type { DataTransferService } from './data-transfer.service';
+import type { BackupService } from './backup.service';
 
 jest.mock('node:fs', () => ({
   promises: {
@@ -46,17 +52,24 @@ function createQueryBuilder<T>(options: {
 describe('DashboardService (unit)', () => {
   let service: DashboardService;
   let matchesRepo: jest.Mocked<Repository<Match>>;
+  let tournamentsRepo: jest.Mocked<Repository<Tournament>>;
+  let teamsRepo: jest.Mocked<Repository<Team>>;
+  let mapsRepo: jest.Mocked<Repository<Map>>;
   let aggregatesRepo: jest.Mocked<Repository<MapEventAggregate>>;
   let statsRepo: jest.Mocked<Repository<PlayerStats>>;
+  let playersRepo: jest.Mocked<Repository<Player>>;
   let rawRepo: jest.Mocked<Repository<RawEvent>>;
   let filesRepo: jest.Mocked<Repository<StoredFile>>;
   let serversRepo: jest.Mocked<Repository<GameServer>>;
   let tokensRepo: jest.Mocked<Repository<ServerToken>>;
   let auditRepo: jest.Mocked<Repository<any>>;
+  let subscriptionsRepo: jest.Mocked<Repository<BotSubscription>>;
   let dataSource: jest.Mocked<DataSource>;
   let config: jest.Mocked<ConfigService>;
   let http: jest.Mocked<HttpService>;
   let emergencyGc: jest.Mocked<EmergencyGcService>;
+  let dataTransfer: jest.Mocked<DataTransferService>;
+  let backups: jest.Mocked<BackupService>;
   const now = new Date('2024-01-02T12:00:00Z');
 
   const liveMatch: Partial<Match> & { id: string; maps: Partial<Map>[] } = {
@@ -98,10 +111,21 @@ describe('DashboardService (unit)', () => {
 
   beforeEach(() => {
     matchesRepo = {
-      createQueryBuilder: jest.fn()
+      createQueryBuilder: jest.fn(),
     } as unknown as jest.Mocked<Repository<Match>>;
+    tournamentsRepo = {
+      findOne: jest.fn(async () => ({ id: 'tour-1', name: 'LAN Finals', slug: 'lan-finals' } as Tournament)),
+      find: jest.fn(async () => [{ id: 'tour-1', name: 'LAN Finals', slug: 'lan-finals' } as Tournament]),
+    } as unknown as jest.Mocked<Repository<Tournament>>;
+    teamsRepo = {
+      find: jest.fn(async () => []),
+    } as unknown as jest.Mocked<Repository<Team>>;
+    mapsRepo = {
+      find: jest.fn(async () => []),
+    } as unknown as jest.Mocked<Repository<Map>>;
     aggregatesRepo = { createQueryBuilder: jest.fn(() => ({ where: jest.fn(() => ({ getMany: jest.fn(async () => [{ matchId: liveMatch.id, eventType: 'player_kill', count: 7 } as any ]) })) })) } as unknown as jest.Mocked<Repository<MapEventAggregate>>;
     statsRepo = { find: jest.fn(async () => [{ matchId: completedMatch.id, playerId: 'player-1', player: { nickname: 'Ace' }, teamId: 'team-a', kills: 20, deaths: 10, assists: 5, damage: 2500 } as any]) } as unknown as jest.Mocked<Repository<PlayerStats>>;
+    playersRepo = { find: jest.fn(async () => []) } as unknown as jest.Mocked<Repository<Player>>;
     rawRepo = { find: jest.fn(async () => [{ id: 'event-1', createdAt: new Date('2024-01-02T11:05:00Z'), subject: 'round_end', payload: { winner: 'team-a' } } as any]) } as unknown as jest.Mocked<Repository<RawEvent>>;
     const matchFiles = [
       {
@@ -205,6 +229,7 @@ describe('DashboardService (unit)', () => {
       create: jest.fn((payload) => payload),
       save: jest.fn(async () => ({} as any)),
     } as unknown as jest.Mocked<Repository<any>>;
+    subscriptionsRepo = { find: jest.fn(async () => []) } as unknown as jest.Mocked<Repository<BotSubscription>>;
     dataSource = {
       query: jest.fn(async (sql) => {
         if (typeof sql === 'string' && sql.includes('pg_database_size')) {
@@ -246,24 +271,39 @@ describe('DashboardService (unit)', () => {
       updateSettings: jest.fn(async () => ({ enabled: true, graceMinutes: 20, notifyPanel: true, notifyBot: false, lastRun: null })),
       triggerManualRun: jest.fn(async () => ({ ran: false, deleted: [], finalUsagePercent: 50, reason: 'disabled', trigger: 'manual' })),
     } as unknown as jest.Mocked<EmergencyGcService>;
+    dataTransfer = {
+      toCsvArchive: jest.fn(async () => Buffer.from('csv')),
+      toXlsx: jest.fn(async () => Buffer.from('xlsx')),
+      toSqlite: jest.fn(async () => Buffer.from('sqlite')),
+      fromCsvArchive: jest.fn(),
+      fromSqlite: jest.fn(),
+    } as unknown as jest.Mocked<DataTransferService>;
+    backups = {
+      createArchive: jest.fn(async () => ({ filename: 'backup.dump', buffer: Buffer.from('dump') })),
+      dryRunRestore: jest.fn(async () => ({ dryRun: true, items: [] })),
+      restore: jest.fn(async () => ({ restored: true, output: 'ok' })),
+    } as unknown as jest.Mocked<BackupService>;
 
     service = new DashboardService(
       matchesRepo,
-      {} as any,
-      {} as any,
-      {} as any,
+      tournamentsRepo,
+      teamsRepo,
+      mapsRepo,
       statsRepo,
-      {} as any,
+      playersRepo,
       aggregatesRepo,
       rawRepo,
       filesRepo,
       serversRepo,
       tokensRepo,
       auditRepo,
+      subscriptionsRepo,
       dataSource,
       config,
       http,
       emergencyGc,
+      dataTransfer,
+      backups,
     );
   });
 

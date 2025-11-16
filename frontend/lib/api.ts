@@ -6,9 +6,13 @@ import type {
   EmergencyGcSettings,
   GameServer,
   HistoryMatch,
+  ImportSummaryResponse,
+  BackupDryRunResponse,
+  BackupRestoreResponse,
   LiveMatch,
   MatchDetail,
   ServerToken,
+  TournamentOption,
 } from './types';
 
 const PUBLIC_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '/api';
@@ -52,11 +56,26 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
   return (await response.text()) as T;
 }
 
+async function uploadFile<T>(path: string, file: File | Blob): Promise<T> {
+  const formData = new FormData();
+  formData.append('file', file);
+  const response = await fetch(resolveUrl(path), {
+    method: 'POST',
+    body: formData,
+  });
+  if (!response.ok) {
+    throw new Error(`Upload failed: ${response.status}`);
+  }
+  return (await response.json()) as T;
+}
+
 export const api = {
   fetchLiveMatches: () => apiFetch<LiveMatch[]>('/matches/live'),
   fetchHistory: (params: URLSearchParams) => apiFetch<{ total: number; results: HistoryMatch[] }>(`/matches/history?${params.toString()}`),
   exportHistory: (params: URLSearchParams) => fetch(resolveUrl(`/matches/history/export?${params.toString()}`)),
   fetchMatch: (id: string) => apiFetch<MatchDetail>(`/matches/${id}`),
+  fetchTournaments: () => apiFetch<TournamentOption[]>('/system/tournaments'),
+  exportTournament: (id: string, format: 'csv' | 'xlsx' | 'sqlite') => fetch(resolveUrl(`/system/tournaments/${id}/export/${format}`)),
   fetchDisk: () => apiFetch<DiskStats>('/system/disk'),
   fetchJetStream: () => apiFetch<Record<string, unknown>>('/system/jsz'),
   fetchDatabase: () => apiFetch<{ sizeBytes: number }>('/system/database'),
@@ -91,4 +110,14 @@ export const api = {
     apiFetch<{ truncated: boolean }>('/admin/truncate', { method: 'POST', body: JSON.stringify({ confirm }) }),
   dropDatabase: (confirm: string, finalConfirm: string) =>
     apiFetch<{ dropped: boolean }>('/admin/drop-database', { method: 'POST', body: JSON.stringify({ confirm, finalConfirm }) }),
+  importTournamentCsv: (file: File | Blob, apply: boolean) =>
+    uploadFile<ImportSummaryResponse>(`/system/tournaments/import/csv?apply=${apply}`, file),
+  importTournamentSqlite: (file: File | Blob, apply: boolean) =>
+    uploadFile<ImportSummaryResponse>(`/system/tournaments/import/sqlite?apply=${apply}`, file),
+  downloadBackup: () =>
+    fetch(resolveUrl('/system/backup/export'), {
+      method: 'POST',
+    }),
+  restoreBackup: (file: File | Blob, apply: boolean) =>
+    uploadFile<BackupDryRunResponse | BackupRestoreResponse>(`/system/backup/restore?apply=${apply}`, file),
 };

@@ -157,3 +157,26 @@ export interface GameServer {
   tokens: ServerToken[];
   createdAt: string;
 }
+
+export interface TournamentOption {
+  id: string;
+  name: string | null;
+  slug: string;
+}
+
+export interface ImportSummaryResponse {
+  dryRun: boolean;
+  applied: boolean;
+  tables: Record<string, { total: number; inserts: number; updates: number }>;
+}
+
+export interface BackupDryRunResponse {
+  dryRun: true;
+  items: string[];
+}
+
+export interface BackupRestoreResponse {
+  dryRun: false;
+  restored: boolean;
+  output: string;
+}

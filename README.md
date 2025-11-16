@@ -141,6 +141,7 @@
 | `POSTGRES_*` | Параметры подключения к PostgreSQL для хранения таблиц `files`, `events_raw`, статистики и справочников. |
 | `JSZ_MONITOR_URL` | URL мониторинга JetStream `/jsz` (используется API для раздела Disk, см. https://docs.nats.io/running-a-nats-service/nats_admin/monitoring/monitoring_jetstream). |
 | `ALLOW_DB_DROP` | Флаг, разрешающий опасную операцию «Drop database» в разделе Settings. |
+| `PG_DUMP_BIN`, `PG_RESTORE_BIN` | Пути до `pg_dump`/`pg_restore` (по умолчанию бинарники в PATH; см. https://www.postgresql.org/docs/current/app-pgdump.html и https://www.postgresql.org/docs/current/app-pgrestore.html). |
 
 ## Frontend (Next.js UI)
 
@@ -195,6 +196,32 @@
 - Кнопка Truncate требует ввода `DELETE` и вызывает SQL-скрипт `truncate_tournament_data.sql` (без удаления серверов).
 - Кнопка Drop database требует двойного подтверждения (`DELETE` и `DROP DATABASE`) и активного `ALLOW_DB_DROP`. Перед использованием выполняйте бэкап (`pg_dump`, `pg_restore`).
 - Раздел Telegram напоминает о лимитах Telegram Bot API ([FAQ](https://core.telegram.org/bots/faq)).
+
+## Экспорт и импорт турниров
+
+- Форматы экспорта (CSV ZIP, XLSX и SQLite) соответствуют подтверждённым схемам MatchZy (см. [MatchZy README](https://github.com/shobhit-pathak/MatchZy)).
+- API маршруты:
+  - `GET /system/tournaments/:id/export/{csv|xlsx|sqlite}` — скачивание архива или файла.
+  - `POST /system/tournaments/import/csv?apply={true|false}` — загрузка ZIP с CSV (по умолчанию dry-run, ответ содержит сводку по таблицам).
+  - `POST /system/tournaments/import/sqlite?apply={true|false}` — импорт SQLite-снимка.
+- Пример dry-run через curl:
+  ```bash
+  curl -X POST \
+    -F "file=@tournament-export.csv.zip" \
+    "http://localhost:3000/system/tournaments/import/csv?apply=false"
+  ```
+- В UI раздел Settings → «Tournament export / Tournament import» позволяет выбрать турнир, формат файла и отобразить таблицу с количеством вставленных/обновлённых строк после dry-run.
+
+## Резервные копии (pg_dump / pg_restore)
+
+- `POST /system/backup/export` и кнопка «Download pg_dump archive» запускают `pg_dump --format=custom` (см. официальную документацию https://www.postgresql.org/docs/current/app-pgdump.html).
+- `POST /system/backup/restore?apply=false` выполняет безопасный `pg_restore --list`, а `apply=true` запускает `pg_restore --clean --if-exists --no-owner` (см. https://www.postgresql.org/docs/current/app-pgrestore.html).
+- Пример в контейнере Docker:
+  ```bash
+  docker compose exec postgres pg_dump --format=custom --file=/backups/tournament.dump --dbname=matchzy
+  docker compose exec postgres pg_restore --clean --if-exists --dbname=matchzy /backups/tournament.dump
+  ```
+- UI раздел Settings → «Backups & restores» показывает результат dry-run (список объектов из `pg_restore --list`) и статус последнего применения.
 
 ## База данных и миграции
 
