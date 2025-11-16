@@ -30,6 +30,7 @@ describe('DemoIngestController', () => {
     const headers = {
       'matchzy-filename': 'demo.zip',
       'matchzy-matchid': 'abc',
+      'matchzy-mapnumber': '1',
     } as Record<string, string>;
 
     const response = await controller.ingestDemo(request, headers);
@@ -41,6 +42,8 @@ describe('DemoIngestController', () => {
       metaHeaders: headers,
       contentType: null,
       sizeBytes: null,
+      matchzyMatchId: 'abc',
+      matchzyMapNumber: 1,
     });
     expect(response).toEqual({ status: 'stored' });
   });

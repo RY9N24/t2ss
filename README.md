@@ -131,6 +131,9 @@
 |------------|------------|
 | `SERVER_TOKEN` | Токен авторизации для `/ingest/matchzy` (MatchZy Events & Forwards). |
 | `DEMO_STORAGE_PATH` | Каталог для сохранения загруженных демо. |
+| `DEMO_REUPLOAD_INGEST_URL` | URL, на который игровой агент повторно отправляет ZIP демо (обычно `http://api:3000/ingest/demo`). |
+| `DEMO_REUPLOAD_AGENT_PATH` | Путь на игровом сервере, куда API шлёт запрос `POST` для повторной выгрузки (`/agent/reupload` по умолчанию). |
+| `DEMO_REUPLOAD_API_KEY` | (Опц.) Общий API-ключ, добавляемый в заголовок `X-API-Key` при запросе к агенту повторной загрузки. |
 | `NATS_URL`, `NATS_SUBJECT_MATCHZY_EVENTS` | Подключение и subject публикации событий в NATS JetStream. |
 | `POSTGRES_*` | Параметры подключения к PostgreSQL для хранения таблиц `files`, `events_raw`, статистики и справочников. |
 | `JSZ_MONITOR_URL` | URL мониторинга JetStream `/jsz` (используется API для раздела Disk, см. https://docs.nats.io/running-a-nats-service/nats_admin/monitoring/monitoring_jetstream). |
@@ -159,6 +162,24 @@
 ### Страница Disk
 - Показывает использование хранилища демо (`DEMO_STORAGE_PATH`), размер базы (`pg_database_size`) и состояние JetStream `/jsz` (см. [документацию NATS](https://docs.nats.io/running-a-nats-service/nats_admin/monitoring/monitoring_jetstream)).
 - При загрузке ≥90% отображается сворачиваемый баннер с переходом к управлению демками.
+- Секция «Demo storage» дополнена таблицей с фильтрами по турниру, дате, размеру, статусу, pinned/in_use — вся мета берётся из заголовков MatchZy GOTV ([MatchZy GOTV & Demos](https://shobhit-pathak.github.io/MatchZy/gotv/)).
+- Доступны быстрые действия: скачивание, повторная загрузка через агент игрового сервера и массовое удаление с проверкой pinned/in_use/незавершённых матчей.
+
+### Управление демками
+- Backend предоставляет REST-эндпоинты `/demos` (листинг, фильтры, скачивание, массовое удаление) и логирует все действия в `audit_log`.
+- Флаг `is_pinned` защищает важные демки от удаления, `is_in_use` можно временно включить при экспортах/ревью; оба флага доступны из UI.
+- Массовое удаление игнорирует pinned/in_use и файлы, привязанные к незавершённым матчам; результат операции отображает списки `deleted/skipped`.
+- Повторная загрузка отправляет HTTP POST на `server.endpoint + DEMO_REUPLOAD_AGENT_PATH` с параметрами `match_id`, `map_number` и `ingest_url` (тот же `/ingest/demo`). Агент должен переслать демку обратно в API; при отсутствии сервера или конфигурации пользователю возвращается явная ошибка.
+
+#### Контракт агента повторной загрузки
+- Агент реализуется на стороне игрового сервера и принимает `POST` запрос от API по пути `DEMO_REUPLOAD_AGENT_PATH`.
+- Параметры тела: `match_id`, `map_number`, `ingest_url`, `meta_headers` — это данные MatchZy (см. [GOTV & Demos](https://shobhit-pathak.github.io/MatchZy/gotv/)) и URL загрузки обратно в `/ingest/demo`.
+- Агент обязан вернуть 2xx при успешном запуске выгрузки. Неизвестные ответы помечаются как `TODO(need-confirmation)` в логах и UI, чтобы не придумывать дополнительные поля.
+- TODO(need-confirmation): описать структуру ответа агента, когда он подтверждает завершение загрузки — сейчас в README только требования к запросу.
+
+#### Тесты API управления демками
+- Интеграционный тест `backend/test/demos.e2e-spec.ts` поднимает NestJS+Fastify с sqlite in-memory и проверяет фильтры, скачивание и правила удаления демо-файлов.
+- Запуск: `npm run test:e2e --prefix backend` (создаёт временное хранилище и очищает его после теста).
 
 ### Страница Settings
 - Разделяет функции по управлению данными, резервным копиям и настройкам бота.

@@ -1,6 +1,7 @@
 import { Column, Entity, Index, ManyToOne } from 'typeorm';
 import { TimestampedEntity } from './timestamped.entity';
 import { Match } from './match.entity';
+import { JSONB_COLUMN_TYPE, JSONB_DEFAULT_EXPRESSION } from './column-types';
 
 @Entity({ name: 'events_raw' })
 export class RawEvent extends TimestampedEntity {
@@ -11,10 +12,10 @@ export class RawEvent extends TimestampedEntity {
   @Index({ unique: true })
   idempotencyKey!: string;
 
-  @Column({ name: 'payload', type: 'jsonb' })
+  @Column({ name: 'payload', type: JSONB_COLUMN_TYPE })
   payload!: Record<string, unknown>;
 
-  @Column({ name: 'headers', type: 'jsonb', default: () => "'{}'::jsonb" })
+  @Column({ name: 'headers', type: JSONB_COLUMN_TYPE, default: () => JSONB_DEFAULT_EXPRESSION })
   headers!: Record<string, unknown>;
 
   @Column({ name: 'matchzy_match_id', type: 'text', nullable: true })

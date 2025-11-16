@@ -10,7 +10,9 @@ jest.mock('node:fs', () => ({
     readFile: jest.fn(async () => 'SELECT 1;'),
     access: jest.fn(async () => undefined),
     mkdir: jest.fn(async () => undefined),
+    unlink: jest.fn(async () => undefined),
   },
+  createReadStream: jest.fn(() => ({ on: jest.fn(), pipe: jest.fn() })),
 }));
 
 function createQueryBuilder<T>(options: {
@@ -44,6 +46,7 @@ describe('DashboardService (unit)', () => {
   let dataSource: jest.Mocked<DataSource>;
   let config: jest.Mocked<ConfigService>;
   let http: jest.Mocked<HttpService>;
+  const now = new Date('2024-01-02T12:00:00Z');
 
   const liveMatch: Partial<Match> & { id: string; maps: Partial<Map>[] } = {
     id: 'live-1',
@@ -89,7 +92,88 @@ describe('DashboardService (unit)', () => {
     aggregatesRepo = { createQueryBuilder: jest.fn(() => ({ where: jest.fn(() => ({ getMany: jest.fn(async () => [{ matchId: liveMatch.id, eventType: 'player_kill', count: 7 } as any ]) })) })) } as unknown as jest.Mocked<Repository<MapEventAggregate>>;
     statsRepo = { find: jest.fn(async () => [{ matchId: completedMatch.id, playerId: 'player-1', player: { nickname: 'Ace' }, teamId: 'team-a', kills: 20, deaths: 10, assists: 5, damage: 2500 } as any]) } as unknown as jest.Mocked<Repository<PlayerStats>>;
     rawRepo = { find: jest.fn(async () => [{ id: 'event-1', createdAt: new Date('2024-01-02T11:05:00Z'), subject: 'round_end', payload: { winner: 'team-a' } } as any]) } as unknown as jest.Mocked<Repository<RawEvent>>;
-    filesRepo = { find: jest.fn(async () => [{ id: 'file-1', originalFilename: 'demo.zip', storagePath: '/tmp/demo.zip', createdAt: new Date('2024-01-02T12:05:00Z') } as any]) } as unknown as jest.Mocked<Repository<StoredFile>>;
+    const matchFiles = [
+      {
+        id: 'file-1',
+        originalFilename: 'demo.zip',
+        storagePath: '/tmp/demo.zip',
+        createdAt: new Date('2024-01-02T12:05:00Z'),
+      } as StoredFile,
+    ];
+    const deleteTargets = [
+      {
+        id: 'file-delete',
+        storagePath: '/tmp/demo-delete.zip',
+        status: 'stored',
+        isPinned: false,
+        isInUse: false,
+        match: { completedAt: now, id: completedMatch.id } as any,
+      } as StoredFile,
+      {
+        id: 'file-pinned',
+        storagePath: '/tmp/demo-pinned.zip',
+        status: 'stored',
+        isPinned: true,
+        isInUse: false,
+        match: { completedAt: now, id: completedMatch.id } as any,
+      } as StoredFile,
+    ];
+    const fileListRow = {
+      id: 'file-list-1',
+      originalFilename: 'demo-list.zip',
+      createdAt: now,
+      status: 'stored',
+      sizeBytes: '2048',
+      isPinned: false,
+      isInUse: false,
+      matchzyMatchId: 'ext-123',
+      matchzyMapNumber: 0,
+      deletedAt: null,
+      match: {
+        id: completedMatch.id,
+        status: 'completed',
+        completedAt: now,
+        title: 'Grand Final',
+        tournament: { id: 'tour-1', name: 'LAN Finals' },
+      } as any,
+      map: { id: 'map-final', name: 'de_mirage', mapNumber: 0, matchzyMapNumber: 0 } as any,
+    } as StoredFile;
+    filesRepo = {
+      find: jest.fn(async (options?: any) => {
+        if (options?.where?.matchId) {
+          return matchFiles;
+        }
+        if (options?.where && Object.prototype.hasOwnProperty.call(options.where, 'id')) {
+          return deleteTargets;
+        }
+        return [];
+      }),
+      findOne: jest.fn(async ({ where: { id } }) => {
+        if (id === 'file-reupload') {
+          return {
+            id,
+            storagePath: '/tmp/demo-reupload.zip',
+            status: 'stored',
+            isPinned: false,
+            isInUse: false,
+            matchzyMatchId: 'ext-123',
+            matchzyMapNumber: 0,
+            metaHeaders: {},
+            match: {
+              id: completedMatch.id,
+              externalId: 'ext-123',
+              server: { endpoint: 'http://agent.local' },
+            } as any,
+            map: { id: 'map-final', matchzyMapNumber: 0, mapNumber: 0 } as any,
+          } as StoredFile;
+        }
+        return null;
+      }),
+      createQueryBuilder: jest
+        .fn()
+        .mockImplementation(() => createQueryBuilder<StoredFile>({ getManyAndCount: async () => [[fileListRow], 1] })),
+      save: jest.fn(async (file) => file as StoredFile),
+    } as unknown as jest.Mocked<Repository<StoredFile>>;
     serversRepo = {
       find: jest.fn(async () => [{ id: 'server-1', name: 'Server One', endpoint: 'srv-1', isActive: true, tokens: [] } as any]),
       findOne: jest.fn(async ({ where: { id, endpoint } }) => {
@@ -122,11 +206,15 @@ describe('DashboardService (unit)', () => {
       get: jest.fn((key: string, fallback?: unknown) => {
         if (key === 'ALLOW_DB_DROP') return 'true';
         if (key === 'JSZ_MONITOR_URL') return 'http://nats:8222/jsz?state=summary';
+        if (key === 'DEMO_REUPLOAD_INGEST_URL') return 'http://api.local/ingest/demo';
+        if (key === 'DEMO_REUPLOAD_AGENT_PATH') return '/agent/reupload';
+        if (key === 'DEMO_REUPLOAD_API_KEY') return 'secret';
         return fallback;
       }),
     } as unknown as jest.Mocked<ConfigService>;
     http = {
       get: jest.fn(() => of({ data: { streams: [{ name: 'MATCHZY.EVENTS', state: { messages: 42 } }] } })),
+      post: jest.fn(() => of({ data: {} })),
     } as unknown as jest.Mocked<HttpService>;
 
     const sharedBuilder = createQueryBuilder<Match>({
@@ -192,5 +280,25 @@ describe('DashboardService (unit)', () => {
     expect(tokensRepo.save).toHaveBeenCalled();
     await service.truncateTournamentData('DELETE');
     expect(auditRepo.save).toHaveBeenCalled();
+  });
+
+  it('lists demos with derived flags and filters', async () => {
+    const list = await service.listDemoFiles({ status: 'stored' });
+    expect(list.total).toBe(1);
+    expect(list.results[0].canDelete).toBe(true);
+    expect(list.results[0].sizeBytes).toBe(2048);
+  });
+
+  it('deletes demos while skipping pinned ones', async () => {
+    const result = await service.deleteDemoFiles(['file-delete', 'file-pinned', 'missing']);
+    expect(result.deleted).toEqual(['file-delete']);
+    expect(result.skipped.find((row) => row.id === 'file-pinned')?.reason).toBe('pinned');
+    expect(result.skipped.find((row) => row.id === 'missing')?.reason).toBe('not_found');
+  });
+
+  it('requests demo reupload through agent', async () => {
+    await service.requestDemoReupload('file-reupload');
+    expect(http.post).toHaveBeenCalled();
+    expect(filesRepo.save).toHaveBeenCalled();
   });
 });

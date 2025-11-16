@@ -81,6 +81,39 @@ export interface DiskStats {
   usagePercent: number;
 }
 
+export interface DemoFile {
+  id: string;
+  originalFilename: string | null;
+  uploadedAt: string;
+  status: string;
+  sizeBytes: number | null;
+  isPinned: boolean;
+  isInUse: boolean;
+  effectiveInUse: boolean;
+  matchzyMatchId: string | null;
+  matchzyMapNumber: number | null;
+  downloadable: boolean;
+  canDelete: boolean;
+  match?: {
+    id: string;
+    title: string | null;
+    status: string;
+    completedAt: string | null;
+    tournament?: { id: string; name: string | null } | null;
+  } | null;
+  map?: { id: string; name: string; mapNumber: number | null; matchzyMapNumber: number | null } | null;
+}
+
+export interface DemoListResponse {
+  total: number;
+  results: DemoFile[];
+}
+
+export interface DemoFilterOptions {
+  statuses: string[];
+  tournaments: Array<{ id: string; name: string | null }>;
+}
+
 export interface ServerToken {
   id: string;
   label?: string | null;

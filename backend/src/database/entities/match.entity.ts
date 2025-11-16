@@ -13,6 +13,7 @@ import { Map } from './map.entity';
 import { StoredFile } from './file.entity';
 import { PlayerStats } from './player-stat.entity';
 import { RawEvent } from './raw-event.entity';
+import { JSONB_COLUMN_TYPE, JSONB_DEFAULT_EXPRESSION, TIMESTAMP_COLUMN_TYPE } from './column-types';
 
 @Entity({ name: 'matches' })
 @Index(['tournamentId', 'externalId'], { unique: true })
@@ -46,13 +47,13 @@ export class Match extends TimestampedEntity {
   @Column({ name: 'best_of', type: 'smallint', default: 1 })
   bestOf!: number;
 
-  @Column({ name: 'scheduled_at', type: 'timestamptz', nullable: true })
+  @Column({ name: 'scheduled_at', type: TIMESTAMP_COLUMN_TYPE, nullable: true })
   scheduledAt?: Date | null;
 
-  @Column({ name: 'started_at', type: 'timestamptz', nullable: true })
+  @Column({ name: 'started_at', type: TIMESTAMP_COLUMN_TYPE, nullable: true })
   startedAt?: Date | null;
 
-  @Column({ name: 'completed_at', type: 'timestamptz', nullable: true })
+  @Column({ name: 'completed_at', type: TIMESTAMP_COLUMN_TYPE, nullable: true })
   completedAt?: Date | null;
 
   @Column({ name: 'home_team_id', type: 'uuid', nullable: true })
@@ -85,7 +86,7 @@ export class Match extends TimestampedEntity {
   @ManyToOne(() => Team, { nullable: true, onDelete: 'SET NULL' })
   winnerTeam?: Team | null;
 
-  @Column({ type: 'jsonb', default: () => "'{}'::jsonb" })
+  @Column({ type: JSONB_COLUMN_TYPE, default: () => JSONB_DEFAULT_EXPRESSION })
   metadata!: Record<string, unknown>;
 
   @OneToMany(() => Map, (map) => map.match)

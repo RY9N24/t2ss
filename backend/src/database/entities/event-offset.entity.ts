@@ -1,5 +1,6 @@
 import { Column, Entity, Index } from 'typeorm';
 import { TimestampedEntity } from './timestamped.entity';
+import { TIMESTAMP_COLUMN_TYPE } from './column-types';
 
 @Entity({ name: 'event_offsets' })
 @Index(['serverId', 'matchId', 'mapNo'], { unique: true })
@@ -16,6 +17,6 @@ export class EventOffset extends TimestampedEntity {
   @Column({ name: 'last_sequence', type: 'bigint', default: 0 })
   lastSequence!: string;
 
-  @Column({ name: 'last_event_ts', type: 'timestamptz', nullable: true })
+  @Column({ name: 'last_event_ts', type: TIMESTAMP_COLUMN_TYPE, nullable: true })
   lastEventTs?: Date | null;
 }

@@ -1,4 +1,13 @@
-import type { DiskStats, GameServer, HistoryMatch, LiveMatch, MatchDetail, ServerToken } from './types';
+import type {
+  DemoFilterOptions,
+  DemoListResponse,
+  DiskStats,
+  GameServer,
+  HistoryMatch,
+  LiveMatch,
+  MatchDetail,
+  ServerToken,
+} from './types';
 
 const PUBLIC_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '/api';
 const INTERNAL_BASE =
@@ -49,6 +58,19 @@ export const api = {
   fetchDisk: () => apiFetch<DiskStats>('/system/disk'),
   fetchJetStream: () => apiFetch<Record<string, unknown>>('/system/jsz'),
   fetchDatabase: () => apiFetch<{ sizeBytes: number }>('/system/database'),
+  fetchDemoFilters: () => apiFetch<DemoFilterOptions>('/demos/options'),
+  fetchDemos: (params: URLSearchParams) => apiFetch<DemoListResponse>(`/demos?${params.toString()}`),
+  deleteDemos: (ids: string[]) =>
+    apiFetch<{ deleted: string[]; skipped: Array<{ id: string; reason: string }> }>('/demos/delete', {
+      method: 'POST',
+      body: JSON.stringify({ ids }),
+    }),
+  reuploadDemo: (id: string) => apiFetch<{ queued: boolean }>(`/demos/${id}/reupload`, { method: 'POST', body: JSON.stringify({}) }),
+  updateDemoFlags: (id: string, payload: { isPinned?: boolean; isInUse?: boolean }) =>
+    apiFetch<{ id: string; isPinned: boolean; isInUse: boolean }>(`/demos/${id}/flags`, {
+      method: 'PATCH',
+      body: JSON.stringify(payload),
+    }),
   fetchServers: () => apiFetch<GameServer[]>('/servers'),
   createServer: (payload: { name: string; endpoint: string; location?: string; notes?: string }) =>
     apiFetch<GameServer>('/servers', { method: 'POST', body: JSON.stringify(payload) }),

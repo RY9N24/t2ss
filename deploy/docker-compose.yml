@@ -48,6 +48,9 @@ services:
       - DATABASE_URL=${DATABASE_URL}
       - REDIS_URL=${REDIS_URL:-redis://redis:6379/0}
       - NATS_URL=${NATS_URL:-nats://nats:4222}
+      - DEMO_REUPLOAD_INGEST_URL=${DEMO_REUPLOAD_INGEST_URL:-http://api:3000/ingest/demo}
+      - DEMO_REUPLOAD_AGENT_PATH=${DEMO_REUPLOAD_AGENT_PATH:-/agent/reupload}
+      - DEMO_REUPLOAD_API_KEY=${DEMO_REUPLOAD_API_KEY:-}
     depends_on:
       postgres:
         condition: service_healthy

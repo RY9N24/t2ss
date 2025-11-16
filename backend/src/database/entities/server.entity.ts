@@ -2,6 +2,7 @@ import { Column, Entity, Index, OneToMany } from 'typeorm';
 import { TimestampedEntity } from './timestamped.entity';
 import { Match } from './match.entity';
 import { ServerToken } from './server-token.entity';
+import { TIMESTAMP_COLUMN_TYPE } from './column-types';
 
 @Entity({ name: 'servers' })
 export class GameServer extends TimestampedEntity {
@@ -21,7 +22,7 @@ export class GameServer extends TimestampedEntity {
   @Column({ type: 'boolean', name: 'is_active', default: true })
   isActive!: boolean;
 
-  @Column({ name: 'last_seen_at', type: 'timestamptz', nullable: true })
+  @Column({ name: 'last_seen_at', type: TIMESTAMP_COLUMN_TYPE, nullable: true })
   lastSeenAt?: Date | null;
 
   @OneToMany(() => Match, (match) => match.server)

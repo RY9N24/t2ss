@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Query, Res } from '@nestjs/common';
-import { Response } from 'express';
+import type { FastifyReply } from 'fastify';
 import { DashboardService } from './dashboard.service';
 
 @Controller('matches')
@@ -33,7 +33,7 @@ export class MatchesController {
   }
 
   @Get('history/export')
-  async historyExport(@Res() res: Response, @Query() query: Record<string, string>) {
+  async historyExport(@Res({ passthrough: false }) reply: FastifyReply, @Query() query: Record<string, string>) {
     const csv = await this.dashboard.exportHistoryCsv({
       tournamentId: query['tournamentId'] || undefined,
       teamId: query['teamId'] || undefined,
@@ -41,9 +41,9 @@ export class MatchesController {
       to: query['to'] ? new Date(query['to']) : undefined,
       search: query['search'] || undefined,
     });
-    res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-Disposition', 'attachment; filename="match-history.csv"');
-    res.send(csv);
+    reply.header('Content-Type', 'text/csv');
+    reply.header('Content-Disposition', 'attachment; filename="match-history.csv"');
+    return reply.send(csv);
   }
 
   @Get(':id')

@@ -22,6 +22,7 @@ import { MatchesController } from './matches.controller';
 import { ServersController } from './servers.controller';
 import { SystemController } from './system.controller';
 import { AdminController } from './admin.controller';
+import { DemosController } from './demos.controller';
 
 @Module({
   imports: [
@@ -42,7 +43,14 @@ import { AdminController } from './admin.controller';
       Tournament,
     ]),
   ],
-  controllers: [LiveController, MatchesController, ServersController, SystemController, AdminController],
+  controllers: [
+    LiveController,
+    MatchesController,
+    ServersController,
+    SystemController,
+    AdminController,
+    DemosController,
+  ],
   providers: [DashboardService],
   exports: [DashboardService],
 })

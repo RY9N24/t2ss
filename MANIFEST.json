@@ -1,482 +1,502 @@
 [
     {
         "path": "README.md",
-        "description": "\u041e\u0441\u043d\u043e\u0432\u043d\u043e\u0439 \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442 \u0441 \u043c\u0430\u0441\u0442\u0435\u0440-\u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u043e\u043c, \u0432\u0435\u0440\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u0435\u0439, \u043f\u0440\u0430\u0432\u0438\u043b\u0430\u043c\u0438 \u0438 \u0438\u043d\u0441\u0442\u0440\u0443\u043a\u0446\u0438\u044f\u043c\u0438 \u043f\u043e \u0440\u0430\u0437\u0432\u0451\u0440\u0442\u044b\u0432\u0430\u043d\u0438\u044e \u0438 backend-\u0438\u043d\u0442\u0435\u0433\u0440\u0430\u0446\u0438\u0438."
+        "description": "Основной документ с мастер-контекстом, верификацией, правилами и инструкциями по развёртыванию и backend-интеграции."
     },
     {
         "path": "PROGRESS.md",
-        "description": "\u0416\u0443\u0440\u043d\u0430\u043b \u0432\u044b\u043f\u043e\u043b\u043d\u0435\u043d\u0438\u044f \u0448\u0430\u0433\u043e\u0432, \u0441\u043f\u0438\u0441\u043e\u043a \u0432\u043d\u0435\u0448\u043d\u0438\u0445 \u0438\u043d\u0442\u0435\u0440\u0444\u0435\u0439\u0441\u043e\u0432 \u0438 \u043f\u043b\u0430\u043d \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u0445 \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0439."
+        "description": "Журнал выполнения шагов, список внешних интерфейсов и план следующих действий."
     },
     {
         "path": "CHECKLIST.md",
-        "description": "\u0427\u0435\u043a\u043b\u0438\u0441\u0442 \u0448\u0430\u0433\u043e\u0432 \u043f\u0440\u043e\u0435\u043a\u0442\u0430 \u0441 \u043e\u0442\u043c\u0435\u0442\u043a\u0430\u043c\u0438 \u0432\u044b\u043f\u043e\u043b\u043d\u0435\u043d\u0438\u044f."
+        "description": "Чеклист шагов проекта с отметками выполнения."
     },
     {
         "path": "MANIFEST.json",
-        "description": "\u041f\u0435\u0440\u0435\u0447\u0435\u043d\u044c \u043a\u043b\u044e\u0447\u0435\u0432\u044b\u0445 \u0444\u0430\u0439\u043b\u043e\u0432 \u0438 \u043a\u0430\u0442\u0430\u043b\u043e\u0433\u043e\u0432 \u0441 \u043e\u043f\u0438\u0441\u0430\u043d\u0438\u0435\u043c."
+        "description": "Перечень ключевых файлов и каталогов с описанием."
     },
     {
         "path": "backend/",
-        "description": "\u041a\u0430\u0442\u0430\u043b\u043e\u0433 \u0441\u0435\u0440\u0432\u0435\u0440\u043d\u043e\u0439 \u0447\u0430\u0441\u0442\u0438 (NestJS + Fastify ingest API)."
+        "description": "Каталог серверной части (NestJS + Fastify ingest API)."
     },
     {
         "path": "backend/EXTERNAL_INTERFACES.md",
-        "description": "\u0421\u0441\u044b\u043b\u043a\u0438 \u043d\u0430 \u0432\u043d\u0435\u0448\u043d\u0438\u0435 \u0438\u043d\u0442\u0435\u0440\u0444\u0435\u0439\u0441\u044b, \u0437\u0430\u0434\u0435\u0439\u0441\u0442\u0432\u043e\u0432\u0430\u043d\u043d\u044b\u0435 \u043d\u0430 \u0448\u0430\u0433\u0435 02."
+        "description": "Ссылки на внешние интерфейсы, задействованные на шаге 02."
     },
     {
         "path": "backend/package.json",
-        "description": "\u041a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044f NPM \u043f\u0430\u043a\u0435\u0442\u0430 backend-\u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u044f."
+        "description": "Конфигурация NPM пакета backend-приложения."
     },
     {
         "path": "backend/package-lock.json",
-        "description": "\u0417\u0430\u0444\u0438\u043a\u0441\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u043e\u0435 \u0434\u0435\u0440\u0435\u0432\u043e \u0437\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0441\u0442\u0435\u0439 backend-\u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u044f."
+        "description": "Зафиксированное дерево зависимостей backend-приложения."
     },
     {
         "path": "backend/tsconfig.json",
-        "description": "\u041e\u0431\u0449\u0438\u0435 \u043d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 TypeScript \u0434\u043b\u044f backend."
+        "description": "Общие настройки TypeScript для backend."
     },
     {
         "path": "backend/tsconfig.build.json",
-        "description": "\u041a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044f \u043a\u043e\u043c\u043f\u0438\u043b\u044f\u0446\u0438\u0438 \u0434\u043b\u044f \u0441\u0431\u043e\u0440\u043a\u0438 backend."
+        "description": "Конфигурация компиляции для сборки backend."
     },
     {
         "path": "backend/nest-cli.json",
-        "description": "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 Nest CLI (sourceRoot)."
+        "description": "Настройки Nest CLI (sourceRoot)."
     },
     {
         "path": "backend/jest.config.js",
-        "description": "\u041a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044f Jest \u0434\u043b\u044f \u043c\u043e\u0434\u0443\u043b\u044c\u043d\u044b\u0445 \u0442\u0435\u0441\u0442\u043e\u0432 backend."
+        "description": "Конфигурация Jest для модульных тестов backend."
+    },
+    {
+        "path": "backend/test/jest-e2e.json",
+        "description": "Конфигурация Jest для e2e-тестов Fastify/NestJS (sqlite in-memory)."
+    },
+    {
+        "path": "backend/test/demos.e2e-spec.ts",
+        "description": "Интеграционный тест `/demos` (листинг и правила удаления демо-файлов)."
     },
     {
         "path": "backend/.eslintrc.js",
-        "description": "\u041f\u0440\u0430\u0432\u0438\u043b\u0430 ESLint \u0434\u043b\u044f TypeScript backend."
+        "description": "Правила ESLint для TypeScript backend."
     },
     {
         "path": "backend/.prettierrc",
-        "description": "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 \u0444\u043e\u0440\u043c\u0430\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u044f \u043a\u043e\u0434\u0430 backend."
+        "description": "Настройки форматирования кода backend."
     },
     {
         "path": "backend/.gitignore",
-        "description": "\u0418\u0433\u043d\u043e\u0440\u0438\u0440\u0443\u0435\u043c\u044b\u0435 \u0444\u0430\u0439\u043b\u044b \u0438 \u043a\u0430\u0442\u0430\u043b\u043e\u0433\u0438 backend."
+        "description": "Игнорируемые файлы и каталоги backend."
     },
     {
         "path": "backend/.env.example",
-        "description": "\u041f\u0440\u0438\u043c\u0435\u0440 \u043f\u0435\u0440\u0435\u043c\u0435\u043d\u043d\u044b\u0445 \u043e\u043a\u0440\u0443\u0436\u0435\u043d\u0438\u044f \u0434\u043b\u044f ingest API."
+        "description": "Пример переменных окружения для ingest API."
     },
     {
         "path": "backend/src/main.ts",
-        "description": "\u0422\u043e\u0447\u043a\u0430 \u0432\u0445\u043e\u0434\u0430 NestJS \u0441 Fastify \u0438 \u0433\u043b\u043e\u0431\u0430\u043b\u044c\u043d\u044b\u043c\u0438 \u043f\u0430\u0439\u043f\u0430\u043c\u0438."
+        "description": "Точка входа NestJS с Fastify и глобальными пайпами."
     },
     {
         "path": "backend/src/app.module.ts",
-        "description": "\u041a\u043e\u0440\u043d\u0435\u0432\u043e\u0439 \u043c\u043e\u0434\u0443\u043b\u044c \u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u044f \u0441 \u043a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u0435\u0439 TypeORM (migrationsRun, \u0430\u0432\u0442\u043e-\u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u0435 \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u0435\u0439)."
+        "description": "Корневой модуль приложения с конфигурацией TypeORM (migrationsRun, авто-подключение сущностей)."
     },
     {
         "path": "backend/src/ingest/ingest.module.ts",
-        "description": "\u041c\u043e\u0434\u0443\u043b\u044c ingest-\u044d\u043d\u0434\u043f\u043e\u0438\u043d\u0442\u043e\u0432 \u0438 \u0441\u0435\u0440\u0432\u0438\u0441\u043e\u0432."
+        "description": "Модуль ingest-эндпоинтов и сервисов."
     },
     {
         "path": "backend/src/database/entities/",
-        "description": "TypeORM \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u0438 \u043e\u0441\u043d\u043e\u0432\u043d\u043e\u0439 \u0441\u0445\u0435\u043c\u044b (\u0442\u0443\u0440\u043d\u0438\u0440\u044b, \u043a\u043e\u043c\u0430\u043d\u0434\u044b, \u0438\u0433\u0440\u043e\u043a\u0438, \u043c\u0430\u0442\u0447\u0438, \u043a\u0430\u0440\u0442\u044b, \u0441\u0442\u0430\u0442\u0438\u0441\u0442\u0438\u043a\u0430, \u0444\u0430\u0439\u043b\u044b, \u0441\u043e\u0431\u044b\u0442\u0438\u044f, \u043f\u043e\u0434\u043f\u0438\u0441\u043a\u0438)."
+        "description": "TypeORM сущности основной схемы (турниры, команды, игроки, матчи, карты, статистика, файлы, события, подписки)."
+    },
+    {
+        "path": "backend/src/database/entities/column-types.ts",
+        "description": "Константы типов колонок (timestamp/jsonb) с fallback для sqlite-тестов."
     },
     {
         "path": "backend/src/database/entities/tournament.entity.ts",
-        "description": "\u0421\u0443\u0449\u043d\u043e\u0441\u0442\u044c \u0442\u0443\u0440\u043d\u0438\u0440\u043e\u0432 (\u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435, slug, \u0432\u043d\u0435\u0448\u043d\u0438\u0439 \u0438\u0434\u0435\u043d\u0442\u0438\u0444\u0438\u043a\u0430\u0442\u043e\u0440)."
+        "description": "Сущность турниров (название, slug, внешний идентификатор)."
     },
     {
         "path": "backend/src/database/entities/server.entity.ts",
-        "description": "\u0421\u0443\u0449\u043d\u043e\u0441\u0442\u044c \u0438\u0433\u0440\u043e\u0432\u044b\u0445 \u0441\u0435\u0440\u0432\u0435\u0440\u043e\u0432 \u0441 endpoint \u0438 \u0441\u0442\u0430\u0442\u0443\u0441\u043e\u043c \u0430\u043a\u0442\u0438\u0432\u043d\u043e\u0441\u0442\u0438."
+        "description": "Сущность игровых серверов с endpoint и статусом активности."
     },
     {
         "path": "backend/src/database/entities/team.entity.ts",
-        "description": "\u0421\u0443\u0449\u043d\u043e\u0441\u0442\u044c \u043a\u043e\u043c\u0430\u043d\u0434 \u0441 \u043f\u0440\u0438\u0432\u044f\u0437\u043a\u043e\u0439 \u043a \u0442\u0443\u0440\u043d\u0438\u0440\u0443."
+        "description": "Сущность команд с привязкой к турниру."
     },
     {
         "path": "backend/src/database/entities/player.entity.ts",
-        "description": "\u0421\u0443\u0449\u043d\u043e\u0441\u0442\u044c \u0438\u0433\u0440\u043e\u043a\u043e\u0432 (Steam ID, \u0441\u0442\u0440\u0430\u043d\u0430, \u043a\u043e\u043c\u0430\u043d\u0434\u0430, \u0442\u0443\u0440\u043d\u0438\u0440)."
+        "description": "Сущность игроков (Steam ID, страна, команда, турнир)."
     },
     {
         "path": "backend/src/database/entities/match.entity.ts",
-        "description": "\u0421\u0443\u0449\u043d\u043e\u0441\u0442\u044c \u043c\u0430\u0442\u0447\u0435\u0439 \u0441 \u0441\u0441\u044b\u043b\u043a\u0430\u043c\u0438 \u043d\u0430 \u0442\u0443\u0440\u043d\u0438\u0440\u044b, \u0441\u0435\u0440\u0432\u0435\u0440\u044b \u0438 \u043a\u043e\u043c\u0430\u043d\u0434\u044b."
+        "description": "Сущность матчей с ссылками на турниры, серверы и команды."
     },
     {
         "path": "backend/src/database/entities/map.entity.ts",
-        "description": "\u0421\u0443\u0449\u043d\u043e\u0441\u0442\u044c \u043a\u0430\u0440\u0442 \u043c\u0430\u0442\u0447\u0430 \u0441 \u043d\u043e\u043c\u0435\u0440\u043e\u043c \u0438 \u0441\u0442\u0430\u0442\u0443\u0441\u043e\u043c."
+        "description": "Сущность карт матча с номером и статусом."
     },
     {
         "path": "backend/src/database/entities/player-stat.entity.ts",
-        "description": "\u0421\u0443\u0449\u043d\u043e\u0441\u0442\u044c \u0441\u0442\u0430\u0442\u0438\u0441\u0442\u0438\u043a\u0438 \u0438\u0433\u0440\u043e\u043a\u043e\u0432 \u043f\u043e \u043a\u0430\u0440\u0442\u0430\u043c (K/D/A, \u0440\u0435\u0439\u0442\u0438\u043d\u0433 \u0438 \u0434\u0440.)."
+        "description": "Сущность статистики игроков по картам (K/D/A, рейтинг и др.)."
     },
     {
         "path": "backend/src/database/entities/raw-event.entity.ts",
-        "description": "\u0421\u0443\u0449\u043d\u043e\u0441\u0442\u044c `events_raw` \u0441 \u0443\u043d\u0438\u043a\u0430\u043b\u044c\u043d\u044b\u043c `idempotency_key` \u0438 payload JSON."
+        "description": "Сущность `events_raw` с уникальным `idempotency_key` и payload JSON."
     },
     {
         "path": "backend/src/database/entities/map-event-aggregate.entity.ts",
-        "description": "\u0421\u0443\u0449\u043d\u043e\u0441\u0442\u044c `map_event_aggregates` \u0441 \u0441\u0447\u0451\u0442\u0447\u0438\u043a\u0430\u043c\u0438 \u043f\u043e \u0441\u0435\u0440\u0432\u0435\u0440\u0443/\u043c\u0430\u0442\u0447\u0443/\u043a\u0430\u0440\u0442\u0435/\u0442\u0438\u043f\u0443 \u0441\u043e\u0431\u044b\u0442\u0438\u044f."
+        "description": "Сущность `map_event_aggregates` с счётчиками по серверу/матчу/карте/типу события."
     },
     {
         "path": "backend/src/database/entities/event-offset.entity.ts",
-        "description": "\u0421\u0443\u0449\u043d\u043e\u0441\u0442\u044c `event_offsets` \u0434\u043b\u044f \u0445\u0440\u0430\u043d\u0435\u043d\u0438\u044f JetStream \u043f\u043e\u0441\u043b\u0435\u0434\u043d\u0438\u0445 \u043f\u043e\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u0435\u0439 per server/match/map."
+        "description": "Сущность `event_offsets` для хранения JetStream последних последовательностей per server/match/map."
     },
     {
         "path": "backend/src/database/entities/audit-log-entry.entity.ts",
-        "description": "\u0421\u0443\u0449\u043d\u043e\u0441\u0442\u044c \u0436\u0443\u0440\u043d\u0430\u043b\u0430 \u0430\u0443\u0434\u0438\u0442\u0430 \u0434\u043b\u044f \u0441\u0438\u0441\u0442\u0435\u043c\u043d\u044b\u0445 \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0439."
+        "description": "Сущность журнала аудита для системных действий."
     },
     {
         "path": "backend/src/database/entities/bot-subscription.entity.ts",
-        "description": "\u0421\u0443\u0449\u043d\u043e\u0441\u0442\u044c \u043f\u043e\u0434\u043f\u0438\u0441\u043e\u043a Telegram-\u0431\u043e\u0442\u0430 \u043d\u0430 \u0442\u0443\u0440\u043d\u0438\u0440\u044b."
+        "description": "Сущность подписок Telegram-бота на турниры."
     },
     {
         "path": "backend/src/database/entities/file.entity.ts",
-        "description": "\u0421\u0443\u0449\u043d\u043e\u0441\u0442\u044c `files` \u0434\u043b\u044f \u0441\u043e\u0445\u0440\u0430\u043d\u0451\u043d\u043d\u044b\u0445 \u0434\u0435\u043c\u043e \u0438 \u0437\u0430\u0433\u043e\u043b\u043e\u0432\u043a\u043e\u0432 MatchZy."
+        "description": "Сущность `files` для сохранённых демо и заголовков MatchZy."
     },
     {
         "path": "backend/src/database/entities/index.ts",
-        "description": "\u041f\u0435\u0440\u0435\u044d\u043a\u0441\u043f\u043e\u0440\u0442 \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u0435\u0439 \u0434\u043b\u044f \u043c\u043e\u0434\u0443\u043b\u0435\u0439 NestJS."
+        "description": "Переэкспорт сущностей для модулей NestJS."
     },
     {
         "path": "backend/src/database/entities/timestamped.entity.ts",
-        "description": "\u0411\u0430\u0437\u043e\u0432\u044b\u0439 \u043a\u043b\u0430\u0441\u0441 \u0441 UUID \u0438 \u0432\u0440\u0435\u043c\u0435\u043d\u043d\u044b\u043c\u0438 \u043c\u0435\u0442\u043a\u0430\u043c\u0438 \u0434\u043b\u044f \u0441\u0443\u0449\u043d\u043e\u0441\u0442\u0435\u0439."
+        "description": "Базовый класс с UUID и временными метками для сущностей."
     },
     {
         "path": "backend/src/database/migrations/1706040000000-CreateCoreSchema.ts",
-        "description": "\u041d\u0430\u0447\u0430\u043b\u044c\u043d\u0430\u044f \u043c\u0438\u0433\u0440\u0430\u0446\u0438\u044f PostgreSQL-\u0441\u0445\u0435\u043c\u044b (\u0442\u0443\u0440\u043d\u0438\u0440\u044b, \u043c\u0430\u0442\u0447\u0438, \u043a\u0430\u0440\u0442\u044b, \u0441\u0442\u0430\u0442\u0438\u0441\u0442\u0438\u043a\u0430, \u0441\u043e\u0431\u044b\u0442\u0438\u044f, \u0444\u0430\u0439\u043b\u044b, \u043f\u043e\u0434\u043f\u0438\u0441\u043a\u0438)."
+        "description": "Начальная миграция PostgreSQL-схемы (турниры, матчи, карты, статистика, события, файлы, подписки)."
     },
     {
         "path": "backend/src/database/migrations/1706040001000-CreateAggregationState.ts",
-        "description": "\u041c\u0438\u0433\u0440\u0430\u0446\u0438\u044f \u0434\u043b\u044f \u0442\u0430\u0431\u043b\u0438\u0446 map_event_aggregates \u0438 event_offsets."
+        "description": "Миграция для таблиц map_event_aggregates и event_offsets."
     },
     {
         "path": "backend/src/database/migrations/1706040002000-AddMatchFinalisationColumns.ts",
-        "description": "\u041c\u0438\u0433\u0440\u0430\u0446\u0438\u044f, \u0434\u043e\u0431\u0430\u0432\u043b\u044f\u044e\u0449\u0430\u044f \u0438\u0442\u043e\u0433\u043e\u0432\u044b\u0435 \u0441\u0447\u0451\u0442\u044b \u043c\u0430\u0442\u0447\u0435\u0439/\u043a\u0430\u0440\u0442 \u0438 \u0440\u0430\u0441\u0448\u0438\u0440\u0435\u043d\u043d\u044b\u0435 \u043f\u043e\u043b\u044f player_stats \u0434\u043b\u044f \u0441\u0432\u0435\u0440\u043a\u0438 \u043f\u043e CSV MatchZy."
+        "description": "Миграция, добавляющая итоговые счёты матчей/карт и расширенные поля player_stats для сверки по CSV MatchZy."
     },
     {
         "path": "backend/src/database/data-source.ts",
-        "description": "\u041a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044f TypeORM DataSource \u0434\u043b\u044f CLI-\u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0439 \u0438 \u0441\u043a\u0440\u0438\u043f\u0442\u043e\u0432 \u043c\u0438\u0433\u0440\u0430\u0446\u0438\u0439."
+        "description": "Конфигурация TypeORM DataSource для CLI-операций и скриптов миграций."
     },
     {
         "path": "backend/src/database/run-migrations.ts",
-        "description": "\u0421\u043a\u0440\u0438\u043f\u0442 \u0437\u0430\u043f\u0443\u0441\u043a\u0430 \u043c\u0438\u0433\u0440\u0430\u0446\u0438\u0439 TypeORM."
+        "description": "Скрипт запуска миграций TypeORM."
     },
     {
         "path": "backend/src/database/revert-last-migration.ts",
-        "description": "\u0421\u043a\u0440\u0438\u043f\u0442 \u043e\u0442\u043a\u0430\u0442\u0430 \u043f\u043e\u0441\u043b\u0435\u0434\u043d\u0435\u0439 \u043c\u0438\u0433\u0440\u0430\u0446\u0438\u0438 TypeORM."
+        "description": "Скрипт отката последней миграции TypeORM."
     },
     {
         "path": "backend/src/ingest/matchzy-ingest.controller.ts",
-        "description": "\u041a\u043e\u043d\u0442\u0440\u043e\u043b\u043b\u0435\u0440 `/ingest/matchzy` \u0441 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u043e\u0439 Bearer \u0442\u043e\u043a\u0435\u043d\u0430 \u0438 \u043f\u0443\u0431\u043b\u0438\u043a\u0430\u0446\u0438\u0435\u0439 \u0432 NATS."
+        "description": "Контроллер `/ingest/matchzy` с проверкой Bearer токена и публикацией в NATS."
     },
     {
         "path": "backend/src/ingest/matchzy-demo.controller.ts",
-        "description": "\u041a\u043e\u043d\u0442\u0440\u043e\u043b\u043b\u0435\u0440 `/ingest/demo` \u0441\u043e streaming-\u0441\u043e\u0445\u0440\u0430\u043d\u0435\u043d\u0438\u0435\u043c ZIP \u0438 \u0437\u0430\u0433\u043e\u043b\u043e\u0432\u043a\u043e\u0432."
+        "description": "Контроллер `/ingest/demo` со streaming-сохранением ZIP и заголовков."
     },
     {
         "path": "backend/src/ingest/services/demo-storage.service.ts",
-        "description": "\u0421\u0435\u0440\u0432\u0438\u0441 \u0441\u043e\u0445\u0440\u0430\u043d\u0435\u043d\u0438\u044f \u0434\u0435\u043c\u043e-\u0444\u0430\u0439\u043b\u043e\u0432 \u043d\u0430 \u0434\u0438\u0441\u043a."
+        "description": "Сервис сохранения демо-файлов на диск."
     },
     {
         "path": "backend/src/ingest/services/demo-upload.service.ts",
-        "description": "\u0421\u0435\u0440\u0432\u0438\u0441 \u0437\u0430\u043f\u0438\u0441\u0438 \u043c\u0435\u0442\u0430\u0434\u0430\u043d\u043d\u044b\u0445 \u0437\u0430\u0433\u0440\u0443\u0437\u043a\u0438 \u0432 \u0411\u0414."
+        "description": "Сервис записи метаданных загрузки в БД."
     },
     {
         "path": "backend/src/ingest/services/matchzy-events.publisher.ts",
-        "description": "\u041f\u0443\u0431\u043b\u0438\u043a\u0430\u0446\u0438\u044f \u0441\u043e\u0431\u044b\u0442\u0438\u0439 MatchZy \u0432 NATS JetStream."
+        "description": "Публикация событий MatchZy в NATS JetStream."
     },
     {
         "path": "backend/src/ingest/matchzy-ingest.controller.spec.ts",
-        "description": "\u0422\u0435\u0441\u0442\u044b \u043a\u043e\u043d\u0442\u0440\u043e\u043b\u043b\u0435\u0440\u0430 MatchZy ingest."
+        "description": "Тесты контроллера MatchZy ingest."
     },
     {
         "path": "backend/src/ingest/matchzy-demo.controller.spec.ts",
-        "description": "\u0422\u0435\u0441\u0442\u044b \u043a\u043e\u043d\u0442\u0440\u043e\u043b\u043b\u0435\u0440\u0430 \u0437\u0430\u0433\u0440\u0443\u0437\u043a\u0438 \u0434\u0435\u043c\u043e."
+        "description": "Тесты контроллера загрузки демо."
     },
     {
         "path": "workers/",
-        "description": "\u041a\u0430\u0442\u0430\u043b\u043e\u0433 \u0432\u043e\u0440\u043a\u0435\u0440\u043e\u0432 JetStream \u0434\u043b\u044f \u0430\u0433\u0440\u0435\u0433\u0430\u0446\u0438\u0438 \u0441\u043e\u0431\u044b\u0442\u0438\u0439 MatchZy."
+        "description": "Каталог воркеров JetStream для агрегации событий MatchZy."
     },
     {
         "path": "workers/package.json",
-        "description": "\u041a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044f NPM \u0434\u043b\u044f \u0441\u0435\u0440\u0432\u0438\u0441\u0430 \u0432\u043e\u0440\u043a\u0435\u0440\u043e\u0432."
+        "description": "Конфигурация NPM для сервиса воркеров."
     },
     {
         "path": "workers/package-lock.json",
-        "description": "\u0417\u0430\u0444\u0438\u043a\u0441\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u043e\u0435 \u0434\u0435\u0440\u0435\u0432\u043e \u0437\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0441\u0442\u0435\u0439 \u0434\u043b\u044f \u0432\u043e\u0440\u043a\u0435\u0440\u043e\u0432."
+        "description": "Зафиксированное дерево зависимостей для воркеров."
     },
     {
         "path": "workers/.env.example",
-        "description": "\u041f\u0440\u0438\u043c\u0435\u0440 \u043a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u0438 \u043e\u043a\u0440\u0443\u0436\u0435\u043d\u0438\u044f \u0432\u043e\u0440\u043a\u0435\u0440\u043e\u0432 \u0441 \u043f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u0430\u043c\u0438 NATS/PostgreSQL \u0438 \u043f\u0443\u0442\u0451\u043c \u043a CSV MatchZy."
+        "description": "Пример конфигурации окружения воркеров с параметрами NATS/PostgreSQL и путём к CSV MatchZy."
     },
     {
         "path": "workers/tsconfig.json",
-        "description": "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 TypeScript \u0434\u043b\u044f \u0441\u0431\u043e\u0440\u043a\u0438 \u0432\u043e\u0440\u043a\u0435\u0440\u043e\u0432."
+        "description": "Настройки TypeScript для сборки воркеров."
     },
     {
         "path": "workers/jest.config.js",
-        "description": "\u041a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044f Jest \u0434\u043b\u044f \u0442\u0435\u0441\u0442\u043e\u0432 \u0438\u0434\u0435\u043c\u043f\u043e\u0442\u0435\u043d\u0442\u043d\u043e\u0441\u0442\u0438."
+        "description": "Конфигурация Jest для тестов идемпотентности."
     },
     {
         "path": "workers/src/index.ts",
-        "description": "\u0422\u043e\u0447\u043a\u0430 \u0432\u0445\u043e\u0434\u0430: bootstrap \u0432\u043e\u0440\u043a\u0435\u0440\u043e\u0432 \u0438 \u043e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 SIGINT/SIGTERM."
+        "description": "Точка входа: bootstrap воркеров и обработка SIGINT/SIGTERM."
     },
     {
         "path": "workers/src/finalizer.ts",
-        "description": "CSV-\u0444\u0438\u043d\u0430\u043b\u0438\u0437\u0430\u0442\u043e\u0440, \u0437\u0430\u043f\u0443\u0441\u043a\u0430\u044e\u0449\u0438\u0439 \u0441\u0432\u0435\u0440\u043a\u0443 \u0434\u0430\u043d\u043d\u044b\u0445 MatchZy \u043f\u0440\u0438 \u0441\u043e\u0431\u044b\u0442\u0438\u044f\u0445 `map_result`/`series_end`."
+        "description": "CSV-финализатор, запускающий сверку данных MatchZy при событиях `map_result`/`series_end`."
     },
     {
         "path": "workers/src/finalizer-store.ts",
-        "description": "PostgreSQL-\u0440\u0435\u043f\u043e\u0437\u0438\u0442\u043e\u0440\u0438\u0439 \u0434\u043b\u044f \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u044f \u0441\u0447\u0451\u0442\u043e\u0432, \u0438\u0433\u0440\u043e\u043a\u043e\u0432 \u0438 \u0430\u0443\u0434\u0438\u0442\u0430 \u043f\u0440\u0438 \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0438\u0438 \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u043e\u0432 MatchZy."
+        "description": "PostgreSQL-репозиторий для обновления счётов, игроков и аудита при подтверждении результатов MatchZy."
     },
     {
         "path": "workers/src/config.ts",
-        "description": "\u0417\u0430\u0433\u0440\u0443\u0437\u043a\u0430 \u043d\u0430\u0441\u0442\u0440\u043e\u0435\u043a (NATS, PostgreSQL, log level) \u0438\u0437 env."
+        "description": "Загрузка настроек (NATS, PostgreSQL, log level) из env."
     },
     {
         "path": "workers/src/logger.ts",
-        "description": "\u0424\u0430\u0431\u0440\u0438\u043a\u0430 pino-\u043b\u043e\u0433\u0433\u0435\u0440\u0430 \u0434\u043b\u044f \u0432\u043e\u0440\u043a\u0435\u0440\u043e\u0432."
+        "description": "Фабрика pino-логгера для воркеров."
     },
     {
         "path": "workers/src/types.ts",
-        "description": "\u0418\u043d\u0442\u0435\u0440\u0444\u0435\u0439\u0441\u044b \u043c\u0435\u0442\u0430\u0434\u0430\u043d\u043d\u044b\u0445 \u0438 \u043f\u0435\u0440\u0441\u0438\u0441\u0442\u0435\u043d\u0442\u043d\u043e\u0433\u043e \u0430\u0434\u0430\u043f\u0442\u0435\u0440\u0430."
+        "description": "Интерфейсы метаданных и персистентного адаптера."
     },
     {
         "path": "workers/src/idempotency.ts",
-        "description": "\u0412\u044b\u0447\u0438\u0441\u043b\u0435\u043d\u0438\u0435 idempotency_key \u0438 \u0432\u044b\u0442\u044f\u0436\u043a\u0430 \u043c\u0435\u0442\u0430\u0434\u0430\u043d\u043d\u044b\u0445 MatchZy."
+        "description": "Вычисление idempotency_key и вытяжка метаданных MatchZy."
     },
     {
         "path": "workers/src/aggregator.ts",
-        "description": "\u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u0441\u043e\u0431\u044b\u0442\u0438\u0439: \u0441\u043e\u0445\u0440\u0430\u043d\u0435\u043d\u0438\u0435 raw, \u0438\u0434\u0435\u043c\u043f\u043e\u0442\u0435\u043d\u0442\u043d\u0430\u044f \u0430\u0433\u0440\u0435\u0433\u0430\u0446\u0438\u044f."
+        "description": "Обработка событий: сохранение raw, идемпотентная агрегация."
     },
     {
         "path": "workers/src/db.ts",
-        "description": "\u0410\u0434\u0430\u043f\u0442\u0435\u0440 PostgreSQL \u0434\u043b\u044f events_raw, map_event_aggregates, event_offsets."
+        "description": "Адаптер PostgreSQL для events_raw, map_event_aggregates, event_offsets."
     },
     {
         "path": "workers/src/nats-consumer.ts",
-        "description": "\u041a\u043e\u043d\u0441\u044e\u043c\u0435\u0440 JetStream \u0441 manual ack \u0438 durable \u0438\u043c\u0435\u043d\u0435\u043c."
+        "description": "Консюмер JetStream с manual ack и durable именем."
     },
     {
         "path": "workers/src/__tests__/aggregator.spec.ts",
-        "description": "\u042e\u043d\u0438\u0442-\u0442\u0435\u0441\u0442\u044b \u043d\u0430 \u043e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0443 \u0434\u0443\u0431\u043b\u0438\u043a\u0430\u0442\u043e\u0432."
+        "description": "Юнит-тесты на обработку дубликатов."
     },
     {
         "path": "workers/src/__tests__/finalizer.spec.ts",
-        "description": "\u0422\u0435\u0441\u0442\u044b \u0444\u0438\u043d\u0430\u043b\u0438\u0437\u0430\u0442\u043e\u0440\u0430 CSV: \u043f\u0430\u0440\u0441\u0438\u043d\u0433 MatchZy \u0438 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043f\u0435\u0440\u0435\u0434\u0430\u0447\u0438 \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0439 \u0432 \u0445\u0440\u0430\u043d\u0438\u043b\u0438\u0449\u0435."
+        "description": "Тесты финализатора CSV: парсинг MatchZy и проверка передачи обновлений в хранилище."
     },
     {
         "path": "frontend/",
-        "description": "\u041a\u0430\u0442\u0430\u043b\u043e\u0433 \u0434\u043b\u044f \u043f\u0430\u043d\u0435\u043b\u0438 \u043d\u0430 Next.js."
+        "description": "Каталог для панели на Next.js."
     },
     {
         "path": "frontend/.gitkeep",
-        "description": "\u0417\u0430\u0433\u043b\u0443\u0448\u043a\u0430 \u0434\u043b\u044f \u043e\u0442\u0441\u043b\u0435\u0436\u0438\u0432\u0430\u043d\u0438\u044f \u043a\u0430\u0442\u0430\u043b\u043e\u0433\u0430 frontend \u0432 git."
+        "description": "Заглушка для отслеживания каталога frontend в git."
     },
     {
         "path": "bot/",
-        "description": "\u041a\u0430\u0442\u0430\u043b\u043e\u0433 \u0434\u043b\u044f Telegram-\u0431\u043e\u0442\u0430 \u043d\u0430 Telegraf."
+        "description": "Каталог для Telegram-бота на Telegraf."
     },
     {
         "path": "bot/.gitkeep",
-        "description": "\u0417\u0430\u0433\u043b\u0443\u0448\u043a\u0430 \u0434\u043b\u044f \u043e\u0442\u0441\u043b\u0435\u0436\u0438\u0432\u0430\u043d\u0438\u044f \u043a\u0430\u0442\u0430\u043b\u043e\u0433\u0430 bot \u0432 git."
+        "description": "Заглушка для отслеживания каталога bot в git."
     },
     {
         "path": "deploy/",
-        "description": "\u041a\u0430\u0442\u0430\u043b\u043e\u0433 \u0434\u043b\u044f \u043a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u0439 \u0434\u0435\u043f\u043b\u043e\u044f (Docker/Compose/Caddy)."
+        "description": "Каталог для конфигураций деплоя (Docker/Compose/Caddy)."
     },
     {
         "path": "deploy/docker-compose.yml",
-        "description": "\u041a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044f Docker Compose \u0434\u043b\u044f \u0441\u0435\u0440\u0432\u0438\u0441\u043e\u0432 Caddy, API, workers, NATS, PostgreSQL, Redis, \u0444\u0440\u043e\u043d\u0442\u0435\u043d\u0434\u0430, \u0431\u043e\u0442\u0430 \u0438 \u0432\u0441\u043f\u043e\u043c\u043e\u0433\u0430\u0442\u0435\u043b\u044c\u043d\u043e\u0433\u043e nats-tools (JetStream)."
+        "description": "Конфигурация Docker Compose для сервисов Caddy, API, workers, NATS, PostgreSQL, Redis, фронтенда, бота и вспомогательного nats-tools (JetStream)."
     },
     {
         "path": "deploy/Caddyfile",
-        "description": "Caddy-\u043a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044f \u0441 \u043f\u043e\u0434\u0434\u0435\u0440\u0436\u043a\u043e\u0439 \u0440\u0435\u0436\u0438\u043c\u043e\u0432 \u0441 \u0434\u043e\u043c\u0435\u043d\u043e\u043c/\u0431\u0435\u0437 \u0434\u043e\u043c\u0435\u043d\u0430 \u0438 \u043f\u0440\u043e\u043a\u0441\u0438 `/jsz` \u0441 Basic Auth."
+        "description": "Caddy-конфигурация с поддержкой режимов с доменом/без домена и прокси `/jsz` с Basic Auth."
     },
     {
         "path": "deploy/.gitkeep",
-        "description": "\u0417\u0430\u0433\u043b\u0443\u0448\u043a\u0430 \u0434\u043b\u044f \u043e\u0442\u0441\u043b\u0435\u0436\u0438\u0432\u0430\u043d\u0438\u044f \u043a\u0430\u0442\u0430\u043b\u043e\u0433\u0430 deploy \u0432 git."
+        "description": "Заглушка для отслеживания каталога deploy в git."
     },
     {
         "path": "scripts/",
-        "description": "\u041a\u0430\u0442\u0430\u043b\u043e\u0433 \u0434\u043b\u044f \u0432\u0441\u043f\u043e\u043c\u043e\u0433\u0430\u0442\u0435\u043b\u044c\u043d\u044b\u0445 \u0441\u043a\u0440\u0438\u043f\u0442\u043e\u0432."
+        "description": "Каталог для вспомогательных скриптов."
     },
     {
         "path": "scripts/install.sh",
-        "description": "\u0421\u043a\u0440\u0438\u043f\u0442 \u0443\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 Docker Engine/Compose \u0438 \u0437\u0430\u043f\u0443\u0441\u043a\u0430 \u0441\u0442\u0435\u043a\u0430 \u0432 \u0432\u044b\u0431\u0440\u0430\u043d\u043d\u043e\u043c \u0440\u0435\u0436\u0438\u043c\u0435."
+        "description": "Скрипт установки Docker Engine/Compose и запуска стека в выбранном режиме."
     },
     {
         "path": "scripts/.gitkeep",
-        "description": "\u0417\u0430\u0433\u043b\u0443\u0448\u043a\u0430 \u0434\u043b\u044f \u043e\u0442\u0441\u043b\u0435\u0436\u0438\u0432\u0430\u043d\u0438\u044f \u043a\u0430\u0442\u0430\u043b\u043e\u0433\u0430 scripts \u0432 git."
+        "description": "Заглушка для отслеживания каталога scripts в git."
     },
     {
         "path": "start.md",
-        "description": "\u0414\u043e\u043f\u043e\u043b\u043d\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0435 \u0437\u0430\u043c\u0435\u0442\u043a\u0438 (\u0438\u0441\u0445\u043e\u0434\u043d\u044b\u0439 \u0444\u0430\u0439\u043b)."
+        "description": "Дополнительные заметки (исходный файл)."
     },
     {
         "path": "scripts/nats-init.sh",
-        "description": "\u0421\u043a\u0440\u0438\u043f\u0442 \u0441\u043e\u0437\u0434\u0430\u043d\u0438\u044f/\u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0438 Stream MATCHZY.EVENTS \u0432 NATS JetStream \u0447\u0435\u0440\u0435\u0437 nats-box."
+        "description": "Скрипт создания/проверки Stream MATCHZY.EVENTS в NATS JetStream через nats-box."
     },
     {
         "path": "scripts/nats-smoke.sh",
-        "description": "Smoke-\u0442\u0435\u0441\u0442 \u043f\u0443\u0431\u043b\u0438\u043a\u0430\u0446\u0438\u0438 \u0438 \u0447\u0442\u0435\u043d\u0438\u044f \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0439 \u0438\u0437 Stream MATCHZY.EVENTS."
+        "description": "Smoke-тест публикации и чтения сообщений из Stream MATCHZY.EVENTS."
     },
     {
         "path": "scripts/truncate_tournament_data.sql",
-        "description": "SQL-\u0441\u043a\u0440\u0438\u043f\u0442 TRUNCATE \u0442\u0443\u0440\u043d\u0438\u0440\u043d\u044b\u0445 \u0442\u0430\u0431\u043b\u0438\u0446 (events_raw, map_event_aggregates, event_offsets \u0438 \u0434\u0440.) \u0431\u0435\u0437 \u0443\u0434\u0430\u043b\u0435\u043d\u0438\u044f servers."
+        "description": "SQL-скрипт TRUNCATE турнирных таблиц (events_raw, map_event_aggregates, event_offsets и др.) без удаления servers."
     },
     {
         "path": "backend/src/dashboard/dashboard.module.ts",
-        "description": "NestJS-\u043c\u043e\u0434\u0443\u043b\u044c \u043f\u0430\u043d\u0435\u043b\u0438 \u0441 \u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u0435\u0439 \u043a\u043e\u043d\u0442\u0440\u043e\u043b\u043b\u0435\u0440\u043e\u0432 \u0438 \u0441\u0435\u0440\u0432\u0438\u0441\u043e\u0432 Dashboard."
+        "description": "NestJS-модуль панели с регистрацией контроллеров и сервисов Dashboard."
     },
     {
         "path": "backend/src/dashboard/dashboard.service.ts",
-        "description": "\u0421\u0435\u0440\u0432\u0438\u0441 Dashboard, \u0430\u0433\u0440\u0435\u0433\u0438\u0440\u0443\u044e\u0449\u0438\u0439 \u0434\u0430\u043d\u043d\u044b\u0435 \u0434\u043b\u044f UI \u0438 \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0439 \u0430\u0434\u043c\u0438\u043d\u0438\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u044f."
+        "description": "Сервис Dashboard, агрегирующий данные для UI и операций администрирования."
     },
     {
         "path": "backend/src/dashboard/dashboard.service.spec.ts",
-        "description": "\u041c\u043e\u0434\u0443\u043b\u044c\u043d\u044b\u0435 \u0442\u0435\u0441\u0442\u044b \u0441\u0435\u0440\u0432\u0438\u0441\u043d\u043e\u0433\u043e \u0441\u043b\u043e\u044f Dashboard."
+        "description": "Модульные тесты сервисного слоя Dashboard."
     },
     {
         "path": "backend/src/dashboard/admin.controller.ts",
-        "description": "REST-\u043a\u043e\u043d\u0442\u0440\u043e\u043b\u043b\u0435\u0440 \u0430\u0434\u043c\u0438\u043d\u0438\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u044f (TRUNCATE, drop \u0411\u0414, \u0443\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u0431\u044d\u043a\u0430\u043f\u0430\u043c\u0438)."
+        "description": "REST-контроллер администрирования (TRUNCATE, drop БД, управление бэкапами)."
     },
     {
         "path": "backend/src/dashboard/live.controller.ts",
-        "description": "SSE/REST-\u043a\u043e\u043d\u0442\u0440\u043e\u043b\u043b\u0435\u0440 live-\u0441\u0442\u0430\u0442\u0438\u0441\u0442\u0438\u043a\u0438 \u043c\u0430\u0442\u0447\u0435\u0439 \u0434\u043b\u044f \u0444\u0440\u043e\u043d\u0442\u0435\u043d\u0434\u0430."
+        "description": "SSE/REST-контроллер live-статистики матчей для фронтенда."
     },
     {
         "path": "backend/src/dashboard/matches.controller.ts",
-        "description": "REST-\u043a\u043e\u043d\u0442\u0440\u043e\u043b\u043b\u0435\u0440 \u0438\u0441\u0442\u043e\u0440\u0438\u0438 \u043c\u0430\u0442\u0447\u0435\u0439 \u0438 \u043f\u043e\u0434\u0440\u043e\u0431\u043d\u043e\u0441\u0442\u0435\u0439 \u0432\u0441\u0442\u0440\u0435\u0447."
+        "description": "REST-контроллер истории матчей и подробностей встреч."
     },
     {
         "path": "backend/src/dashboard/servers.controller.ts",
-        "description": "REST-\u043a\u043e\u043d\u0442\u0440\u043e\u043b\u043b\u0435\u0440 \u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u0438 \u0441\u0435\u0440\u0432\u0435\u0440\u043e\u0432 \u0438 \u0442\u043e\u043a\u0435\u043d\u043e\u0432, \u0441\u0442\u0430\u0442\u0443\u0441\u044b \u0438 heartbeats."
+        "description": "REST-контроллер регистрации серверов и токенов, статусы и heartbeats."
     },
     {
         "path": "backend/src/dashboard/system.controller.ts",
-        "description": "REST-\u043a\u043e\u043d\u0442\u0440\u043e\u043b\u043b\u0435\u0440 \u0441\u0432\u0435\u0434\u0435\u043d\u0438\u0439 \u043e \u0434\u0438\u0441\u043a\u0435, JetStream /jsz \u0438 \u043d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0430\u0445 \u0441\u0438\u0441\u0442\u0435\u043c\u044b."
+        "description": "REST-контроллер сведений о диске, JetStream /jsz и настройках системы."
     },
     {
         "path": "backend/src/database/entities/server-token.entity.ts",
-        "description": "TypeORM-\u0441\u0443\u0449\u043d\u043e\u0441\u0442\u044c \u0442\u043e\u043a\u0435\u043d\u043e\u0432 \u0441\u0435\u0440\u0432\u0435\u0440\u043e\u0432 \u0441 \u043c\u0435\u0442\u0430\u0434\u0430\u043d\u043d\u044b\u043c\u0438 \u0438 \u0434\u0430\u0442\u0430\u043c\u0438 \u0432\u044b\u0434\u0430\u0447\u0438."
+        "description": "TypeORM-сущность токенов серверов с метаданными и датами выдачи."
     },
     {
         "path": "backend/src/database/migrations/1706040003000-AddServerTokensAndStatus.ts",
-        "description": "\u041c\u0438\u0433\u0440\u0430\u0446\u0438\u044f, \u0434\u043e\u0431\u0430\u0432\u043b\u044f\u044e\u0449\u0430\u044f \u0442\u0430\u0431\u043b\u0438\u0446\u0443 server_tokens \u0438 \u043f\u043e\u043b\u044f \u0441\u0442\u0430\u0442\u0443\u0441\u0430/heartbeat \u0441\u0435\u0440\u0432\u0435\u0440\u043e\u0432."
+        "description": "Миграция, добавляющая таблицу server_tokens и поля статуса/heartbeat серверов."
     },
     {
         "path": "frontend/.env.example",
-        "description": "\u041f\u0440\u0438\u043c\u0435\u0440 \u043f\u0435\u0440\u0435\u043c\u0435\u043d\u043d\u044b\u0445 \u043e\u043a\u0440\u0443\u0436\u0435\u043d\u0438\u044f \u0434\u043b\u044f \u0444\u0440\u043e\u043d\u0442\u0435\u043d\u0434\u0430 (API_ORIGIN \u0438 \u0440\u043e\u043b\u0438)."
+        "description": "Пример переменных окружения для фронтенда (API_ORIGIN и роли)."
     },
     {
         "path": "frontend/.eslintrc.json",
-        "description": "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 ESLint \u0434\u043b\u044f Next.js \u043f\u0440\u043e\u0435\u043a\u0442\u0430."
+        "description": "Настройки ESLint для Next.js проекта."
     },
     {
         "path": "frontend/.gitignore",
-        "description": "\u0418\u0433\u043d\u043e\u0440-\u043b\u0438\u0441\u0442 \u0444\u0440\u043e\u043d\u0442\u0435\u043d\u0434\u0430 (node_modules, .next, build.log \u0438 \u0434\u0440.)."
+        "description": "Игнор-лист фронтенда (node_modules, .next, build.log и др.)."
     },
     {
         "path": "frontend/package.json",
-        "description": "\u041a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044f npm \u043f\u0430\u043a\u0435\u0442\u0430 \u0444\u0440\u043e\u043d\u0442\u0435\u043d\u0434\u0430 \u0441 Next.js/Tailwind."
+        "description": "Конфигурация npm пакета фронтенда с Next.js/Tailwind."
     },
     {
         "path": "frontend/package-lock.json",
-        "description": "\u0414\u0435\u0440\u0435\u0432\u043e \u0437\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0441\u0442\u0435\u0439 \u0444\u0440\u043e\u043d\u0442\u0435\u043d\u0434\u0430."
+        "description": "Дерево зависимостей фронтенда."
     },
     {
         "path": "frontend/tsconfig.json",
-        "description": "TypeScript-\u043a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044f Next.js \u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u044f."
+        "description": "TypeScript-конфигурация Next.js приложения."
     },
     {
         "path": "frontend/next-env.d.ts",
-        "description": "\u0410\u0432\u0442\u043e\u0433\u0435\u043d\u0435\u0440\u0438\u0440\u0443\u0435\u043c\u044b\u0435 \u0442\u0438\u043f\u044b Next.js \u0434\u043b\u044f TypeScript."
+        "description": "Автогенерируемые типы Next.js для TypeScript."
     },
     {
         "path": "frontend/next.config.js",
-        "description": "\u041a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044f Next.js (\u043f\u0440\u043e\u043a\u0441\u0438 API, strict mode)."
+        "description": "Конфигурация Next.js (прокси API, strict mode)."
     },
     {
         "path": "frontend/postcss.config.js",
-        "description": "\u041a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044f PostCSS \u0441 Tailwind \u0438 Autoprefixer."
+        "description": "Конфигурация PostCSS с Tailwind и Autoprefixer."
     },
     {
         "path": "frontend/tailwind.config.ts",
-        "description": "Tailwind \u0442\u0435\u043c\u0430 \u0438 \u0440\u0430\u0441\u0448\u0438\u0440\u0435\u043d\u0438\u044f \u0434\u043b\u044f \u0438\u043d\u0442\u0435\u0440\u0444\u0435\u0439\u0441\u0430."
+        "description": "Tailwind тема и расширения для интерфейса."
     },
     {
         "path": "frontend/app/globals.css",
-        "description": "\u0413\u043b\u043e\u0431\u0430\u043b\u044c\u043d\u044b\u0435 \u0441\u0442\u0438\u043b\u0438 Next.js, \u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0430\u044e\u0449\u0438\u0435 Tailwind."
+        "description": "Глобальные стили Next.js, подключающие Tailwind."
     },
     {
         "path": "frontend/app/layout.tsx",
-        "description": "\u0411\u0430\u0437\u043e\u0432\u044b\u0439 layout \u0444\u0440\u043e\u043d\u0442\u0435\u043d\u0434\u0430 \u0441 Sidebar \u0438 \u043c\u0435\u0442\u0430\u0434\u0430\u043d\u043d\u044b\u043c\u0438."
+        "description": "Базовый layout фронтенда с Sidebar и метаданными."
     },
     {
         "path": "frontend/app/providers.tsx",
-        "description": "\u041a\u043e\u043c\u043f\u043e\u043d\u0435\u043d\u0442 \u043f\u0440\u043e\u0432\u0430\u0439\u0434\u0435\u0440\u043e\u0432 \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 (SWR/SSE, \u0442\u0435\u043c\u044b)."
+        "description": "Компонент провайдеров контекста (SWR/SSE, темы)."
     },
     {
         "path": "frontend/app/page.tsx",
-        "description": "\u0420\u0435\u0434\u0438\u0440\u0435\u043a\u0442/\u0434\u043e\u043c\u0430\u0448\u043d\u044f\u044f \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0430 \u043f\u0430\u043d\u0435\u043b\u0438 (Live \u043f\u043e \u0443\u043c\u043e\u043b\u0447\u0430\u043d\u0438\u044e)."
+        "description": "Редирект/домашняя страница панели (Live по умолчанию)."
     },
     {
         "path": "frontend/app/live/page.tsx",
-        "description": "\u0421\u0442\u0440\u0430\u043d\u0438\u0446\u0430 Live \u0441 \u043f\u043e\u0442\u043e\u043a\u043e\u0432\u044b\u043c \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0435\u043c \u043c\u0430\u0442\u0447\u0435\u0439."
+        "description": "Страница Live с потоковым обновлением матчей."
     },
     {
         "path": "frontend/app/history/page.tsx",
-        "description": "\u0421\u0442\u0440\u0430\u043d\u0438\u0446\u0430 History \u0441 \u0444\u0438\u043b\u044c\u0442\u0440\u0430\u043c\u0438 \u0438 \u044d\u043a\u0441\u043f\u043e\u0440\u0442\u043e\u043c \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u043e\u0432."
+        "description": "Страница History с фильтрами и экспортом результатов."
     },
     {
         "path": "frontend/app/match/[id]/page.tsx",
-        "description": "\u0414\u0435\u0442\u0430\u043b\u044c\u043d\u0430\u044f \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0430 \u043c\u0430\u0442\u0447\u0430 \u0441 \u043a\u0430\u0440\u0442\u0430\u043c\u0438, boxscore \u0438 \u0442\u0430\u0439\u043c\u043b\u0430\u0439\u043d\u043e\u043c."
+        "description": "Детальная страница матча с картами, boxscore и таймлайном."
     },
     {
         "path": "frontend/app/servers/page.tsx",
-        "description": "\u0421\u0442\u0440\u0430\u043d\u0438\u0446\u0430 \u0443\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u044f \u0441\u0435\u0440\u0432\u0435\u0440\u0430\u043c\u0438 \u0438 \u0442\u043e\u043a\u0435\u043d\u0430\u043c\u0438."
+        "description": "Страница управления серверами и токенами."
     },
     {
         "path": "frontend/app/disk/page.tsx",
-        "description": "\u0420\u0430\u0437\u0434\u0435\u043b Disk \u0441 \u043c\u043e\u043d\u0438\u0442\u043e\u0440\u0438\u043d\u0433\u043e\u043c \u0445\u0440\u0430\u043d\u0438\u043b\u0438\u0449\u0430 \u0438 \u0441\u0441\u044b\u043b\u043a\u0430\u043c\u0438 \u043d\u0430 \u0434\u0435\u043c\u043a\u0438."
+        "description": "Раздел Disk с мониторингом хранилища и ссылками на демки."
     },
     {
         "path": "frontend/app/settings/page.tsx",
-        "description": "\u0420\u0430\u0437\u0434\u0435\u043b Settings \u0441 \u0431\u044d\u043a\u0430\u043f\u0430\u043c\u0438, \u0431\u043e\u0442\u043e\u043c \u0438 \u0430\u0434\u043c\u0438\u043d-\u043e\u043f\u0435\u0440\u0430\u0446\u0438\u044f\u043c\u0438."
+        "description": "Раздел Settings с бэкапами, ботом и админ-операциями."
     },
     {
         "path": "frontend/components/SidebarNav.tsx",
-        "description": "\u041a\u043e\u043c\u043f\u043e\u043d\u0435\u043d\u0442 \u0431\u043e\u043a\u043e\u0432\u043e\u0439 \u043d\u0430\u0432\u0438\u0433\u0430\u0446\u0438\u0438 \u043f\u043e \u0440\u0430\u0437\u0434\u0435\u043b\u0430\u043c \u043f\u0430\u043d\u0435\u043b\u0438."
+        "description": "Компонент боковой навигации по разделам панели."
     },
     {
         "path": "frontend/components/PageHeader.tsx",
-        "description": "\u0417\u0430\u0433\u043e\u043b\u043e\u0432\u043e\u043a \u0440\u0430\u0437\u0434\u0435\u043b\u043e\u0432 \u0441 \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044f\u043c\u0438 \u0438 \u043e\u043f\u0438\u0441\u0430\u043d\u0438\u044f\u043c\u0438."
+        "description": "Заголовок разделов с действиями и описаниями."
     },
     {
         "path": "frontend/components/InfoCard.tsx",
-        "description": "\u041a\u0430\u0440\u0442\u043e\u0447\u043a\u0430 \u0441\u0442\u0430\u0442\u0438\u0441\u0442\u0438\u043a\u0438 \u0434\u043b\u044f live/\u0438\u0441\u0442\u043e\u0440\u0438\u0438."
+        "description": "Карточка статистики для live/истории."
     },
     {
         "path": "frontend/components/DiskUsageBanner.tsx",
-        "description": "\u0421\u0432\u043e\u0440\u0430\u0447\u0438\u0432\u0430\u0435\u043c\u044b\u0439 \u0431\u0430\u043d\u043d\u0435\u0440 \u043f\u0440\u0435\u0434\u0443\u043f\u0440\u0435\u0436\u0434\u0435\u043d\u0438\u044f \u043e \u0437\u0430\u043f\u043e\u043b\u043d\u0435\u043d\u0438\u0438 \u0434\u0438\u0441\u043a\u0430."
+        "description": "Сворачиваемый баннер предупреждения о заполнении диска."
     },
     {
         "path": "frontend/components/ConfirmDialog.tsx",
-        "description": "\u0414\u0438\u0430\u043b\u043e\u0433 \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0438\u044f \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0439 (TRUNCATE, drop \u0411\u0414)."
+        "description": "Диалог подтверждения действий (TRUNCATE, drop БД)."
     },
     {
         "path": "frontend/lib/types.ts",
-        "description": "\u0422\u0438\u043f\u044b \u0434\u0430\u043d\u043d\u044b\u0445 \u0444\u0440\u043e\u043d\u0442\u0435\u043d\u0434\u0430 \u0434\u043b\u044f \u043c\u0430\u0442\u0447\u0435\u0439, \u0441\u0435\u0440\u0432\u0435\u0440\u043e\u0432, \u0441\u0438\u0441\u0442\u0435\u043c\u043d\u043e\u0439 \u0438\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u0438."
+        "description": "Типы данных фронтенда для матчей, серверов, системной информации."
     },
     {
         "path": "frontend/lib/api.ts",
-        "description": "\u041e\u0431\u0451\u0440\u0442\u043a\u0438 fetch/SSE \u0434\u043b\u044f \u0437\u0430\u043f\u0440\u043e\u0441\u043e\u0432 \u043a backend Dashboard API."
+        "description": "Обёртки fetch/SSE для запросов к backend Dashboard API."
     },
     {
         "path": "frontend/lib/hooks.ts",
-        "description": "\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\u0441\u043a\u0438\u0435 \u0445\u0443\u043a\u0438 SWR/SSE \u0434\u043b\u044f Live/History/Settings."
+        "description": "Пользовательские хуки SWR/SSE для Live/History/Settings."
     },
     {
         "path": "workers/.gitignore",
-        "description": "\u0418\u0433\u043d\u043e\u0440-\u043b\u0438\u0441\u0442 \u0432\u043e\u0440\u043a\u0435\u0440\u043e\u0432 (node_modules, coverage, *.log)."
+        "description": "Игнор-лист воркеров (node_modules, coverage, *.log)."
+    },
+    {
+        "path": "backend/src/dashboard/demos.controller.ts",
+        "description": "REST-контроллер /demos для фильтрации, скачивания, удаления и повторной загрузки демок."
+    },
+    {
+        "path": "backend/src/database/migrations/1706040004000-AddDemoManagementColumns.ts",
+        "description": "Миграция, добавляющая статус/флаги и MatchZy-колонки в таблицу files для управления демками."
     }
 ]

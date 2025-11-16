@@ -43,12 +43,26 @@ export class DemoIngestController {
       Object.entries(headers).map(([key, value]) => [key, value]),
     ) as Record<string, unknown>;
 
+    const matchzyMatchIdHeader = headers['matchzy-matchid'];
+    const matchzyMatchId = Array.isArray(matchzyMatchIdHeader)
+      ? (matchzyMatchIdHeader[0] as string)
+      : (matchzyMatchIdHeader as string | undefined) ?? null;
+    const matchzyMapHeader = headers['matchzy-mapnumber'];
+    const mapNumberValue = Array.isArray(matchzyMapHeader)
+      ? matchzyMapHeader[0]
+      : matchzyMapHeader;
+    const matchzyMapNumber = mapNumberValue !== undefined ? Number(mapNumberValue) : null;
+
     await this.uploads.recordUpload({
       filePath,
       originalFilename,
       metaHeaders: normalizedHeaders,
       contentType,
       sizeBytes,
+      matchzyMatchId,
+      matchzyMapNumber: Number.isFinite(matchzyMapNumber ?? NaN)
+        ? (matchzyMapNumber as number)
+        : null,
     });
 
     return { status: 'stored' };

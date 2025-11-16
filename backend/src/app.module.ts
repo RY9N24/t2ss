@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'node:path';
+import { existsSync, mkdirSync } from 'node:fs';
 import { IngestModule } from './ingest/ingest.module';
-import { StoredFile } from './database/entities/file.entity';
 import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
@@ -15,11 +15,18 @@ import { DashboardModule } from './dashboard/dashboard.module';
       useFactory: (config: ConfigService) => {
         const isTest = config.get('NODE_ENV') === 'test';
         if (isTest) {
+          const tmpDir = join(process.cwd(), 'tmp');
+          if (!existsSync(tmpDir)) {
+            mkdirSync(tmpDir, { recursive: true });
+          }
+          const testDbPath = join(tmpDir, 'backend-e2e.sqlite');
           return {
             type: 'sqlite',
-            database: ':memory:',
-            entities: [StoredFile],
+            database: testDbPath,
+            dropSchema: true,
+            entities: [join(__dirname, '**/*.entity.{ts,js}')],
             synchronize: true,
+            autoLoadEntities: true,
           };
         }
 
