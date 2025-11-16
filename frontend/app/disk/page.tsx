@@ -38,12 +38,25 @@ export default function DiskPage() {
   const [filters, setFilters] = useState<DemoFiltersState>(initialFilters);
   const [selected, setSelected] = useState<string[]>([]);
   const [feedback, setFeedback] = useState<string | null>(null);
+  const [gcForm, setGcForm] = useState({ enabled: false, graceMinutes: 30, notifyPanel: true, notifyBot: false });
   const [actionStatuses, setActionStatuses] = useState<Record<string, { type: 'pending' | 'success' | 'error'; message: string; expiresAt: number }>>({});
 
   const diskQuery = useQuery({ queryKey: ['disk'], queryFn: () => api.fetchDisk() as Promise<DiskStats> });
   const dbQuery = useQuery({ queryKey: ['db-size'], queryFn: () => api.fetchDatabase() as Promise<{ sizeBytes: number }> });
   const jszQuery = useQuery({ queryKey: ['jsz'], queryFn: () => api.fetchJetStream() as Promise<Record<string, unknown>> });
   const demoFiltersQuery = useQuery({ queryKey: ['demo-filter-options'], queryFn: () => api.fetchDemoFilters() as Promise<DemoFilterOptions> });
+  const gcQuery = useQuery({ queryKey: ['emergency-gc'], queryFn: () => api.fetchEmergencyGc() });
+
+  useEffect(() => {
+    if (gcQuery.data) {
+      setGcForm({
+        enabled: gcQuery.data.enabled,
+        graceMinutes: gcQuery.data.graceMinutes,
+        notifyPanel: gcQuery.data.notifyPanel,
+        notifyBot: gcQuery.data.notifyBot,
+      });
+    }
+  }, [gcQuery.data]);
 
   const registerStatus = useCallback((ids: string[], type: 'pending' | 'success' | 'error', message: string) => {
     if (ids.length === 0) return;
@@ -163,6 +176,37 @@ export default function DiskPage() {
     },
   });
 
+  const updateGcMutation = useMutation({
+    mutationFn: () =>
+      api.updateEmergencyGc({
+        enabled: gcForm.enabled,
+        graceMinutes: gcForm.graceMinutes,
+        notifyPanel: gcForm.notifyPanel,
+        notifyBot: gcForm.notifyBot,
+      }),
+    onSuccess: () => {
+      setFeedback('Emergency GC configuration saved');
+      queryClient.invalidateQueries({ queryKey: ['emergency-gc'] });
+    },
+    onError: (error) => setFeedback((error as Error).message),
+  });
+
+  const runGcMutation = useMutation({
+    mutationFn: () => api.runEmergencyGc(true),
+    onSuccess: (result) => {
+      const deletedCount = result.deleted.length;
+      setFeedback(
+        deletedCount > 0
+          ? `Emergency GC removed ${deletedCount} demo(s) and usage is ${result.finalUsagePercent.toFixed(1)}%.`
+          : `Emergency GC finished with reason: ${result.reason}.`,
+      );
+      queryClient.invalidateQueries({ queryKey: ['disk'] });
+      queryClient.invalidateQueries({ queryKey: ['demos'] });
+      queryClient.invalidateQueries({ queryKey: ['emergency-gc'] });
+    },
+    onError: (error) => setFeedback((error as Error).message),
+  });
+
   function formatBytes(bytes: number) {
     const units = ['B', 'KB', 'MB', 'GB', 'TB'];
     let value = bytes;
@@ -211,6 +255,7 @@ export default function DiskPage() {
 
   const demos = demosQuery.data?.results ?? [];
   const filtersData = demoFiltersQuery.data;
+  const lastGcRun = gcQuery.data?.lastRun;
 
   return (
     <div>
@@ -261,6 +306,89 @@ export default function DiskPage() {
         <p className="mt-4 text-xs text-gray-500">
           Source: NATS JetStream Monitoring (/jsz). Adjust credentials via Caddy configuration.
         </p>
+      </section>
+
+      <section className="mt-8 rounded-xl border border-secondary bg-surface p-6 shadow-lg space-y-4">
+        <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h3 className="text-xl font-semibold">Emergency cleanup (97% → 95%)</h3>
+            <p className="text-sm text-gray-400">
+              Automatically deletes the oldest finished demos when disk usage crosses 97% until it falls under 95%.
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <button
+              className="rounded border border-secondary px-4 py-2 text-sm"
+              onClick={() => updateGcMutation.mutate()}
+              disabled={updateGcMutation.isLoading}
+            >
+              Save config
+            </button>
+            <button
+              className="rounded bg-danger px-4 py-2 text-sm font-semibold text-black disabled:opacity-40"
+              onClick={() => runGcMutation.mutate()}
+              disabled={runGcMutation.isLoading}
+            >
+              Run now
+            </button>
+          </div>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          <label className="text-sm text-gray-300 flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={gcForm.enabled}
+              onChange={(event) => setGcForm((prev) => ({ ...prev, enabled: event.target.checked }))}
+            />
+            Enable emergency GC (OFF by default)
+          </label>
+          <label className="text-sm text-gray-300">
+            Grace period (minutes)
+            <input
+              type="number"
+              min={0}
+              className="mt-1 w-full rounded border border-secondary bg-background/60 p-2"
+              value={gcForm.graceMinutes}
+              onChange={(event) =>
+                setGcForm((prev) => ({ ...prev, graceMinutes: Math.max(0, Number(event.target.value) || 0) }))
+              }
+            />
+          </label>
+          <label className="text-sm text-gray-300 flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={gcForm.notifyPanel}
+              onChange={(event) => setGcForm((prev) => ({ ...prev, notifyPanel: event.target.checked }))}
+            />
+            Log banner warnings in the panel
+          </label>
+          <label className="text-sm text-gray-300 flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={gcForm.notifyBot}
+              onChange={(event) => setGcForm((prev) => ({ ...prev, notifyBot: event.target.checked }))}
+            />
+            Notify the Telegram bot when demos are removed
+          </label>
+        </div>
+        <div className="rounded border border-secondary/60 bg-background/40 p-3 text-xs text-gray-400">
+          {gcQuery.isLoading ? (
+            'Loading emergency GC status...'
+          ) : lastGcRun ? (
+            <>
+              <div>
+                Last run {new Date(lastGcRun.lastRunAt).toLocaleString()} ({lastGcRun.trigger}) — {lastGcRun.reason}.
+              </div>
+              <div>
+                Deleted demos: {lastGcRun.deleted.length}{' '}
+                {lastGcRun.deleted.slice(0, 3).map((item) => item.filename ?? item.id).join(', ')}
+              </div>
+              <div>Usage after cleanup: {lastGcRun.finalUsagePercent.toFixed(1)}%</div>
+            </>
+          ) : (
+            'Emergency GC has not been executed yet.'
+          )}
+        </div>
       </section>
 
       <section ref={tableRef} className="mt-8 rounded-xl border border-secondary bg-surface p-6 shadow-lg">

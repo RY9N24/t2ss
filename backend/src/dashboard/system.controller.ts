@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
 import { DashboardService } from './dashboard.service';
 
 @Controller('system')
@@ -21,5 +21,20 @@ export class SystemController {
   @Get('database')
   async database() {
     return this.dashboard.getDatabaseSize();
+  }
+
+  @Get('emergency-gc')
+  async emergencyGcSettings() {
+    return this.dashboard.getEmergencyGcSettings();
+  }
+
+  @Patch('emergency-gc')
+  async updateEmergencyGc(@Body() body: { enabled?: boolean; graceMinutes?: number; notifyPanel?: boolean; notifyBot?: boolean }) {
+    return this.dashboard.updateEmergencyGcSettings(body ?? {});
+  }
+
+  @Post('emergency-gc/run')
+  async runEmergencyGc(@Body('force') force?: boolean) {
+    return this.dashboard.triggerEmergencyGc(Boolean(force));
   }
 }

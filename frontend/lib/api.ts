@@ -2,6 +2,8 @@ import type {
   DemoFilterOptions,
   DemoListResponse,
   DiskStats,
+  EmergencyGcRunResult,
+  EmergencyGcSettings,
   GameServer,
   HistoryMatch,
   LiveMatch,
@@ -60,6 +62,11 @@ export const api = {
   fetchDatabase: () => apiFetch<{ sizeBytes: number }>('/system/database'),
   fetchDemoFilters: () => apiFetch<DemoFilterOptions>('/demos/options'),
   fetchDemos: (params: URLSearchParams) => apiFetch<DemoListResponse>(`/demos?${params.toString()}`),
+  fetchEmergencyGc: () => apiFetch<EmergencyGcSettings>('/system/emergency-gc'),
+  updateEmergencyGc: (payload: Partial<EmergencyGcSettings>) =>
+    apiFetch<EmergencyGcSettings>('/system/emergency-gc', { method: 'PATCH', body: JSON.stringify(payload) }),
+  runEmergencyGc: (force?: boolean) =>
+    apiFetch<EmergencyGcRunResult>('/system/emergency-gc/run', { method: 'POST', body: JSON.stringify({ force }) }),
   deleteDemos: (ids: string[]) =>
     apiFetch<{ deleted: string[]; skipped: Array<{ id: string; reason: string }> }>('/demos/delete', {
       method: 'POST',

@@ -1,9 +1,19 @@
 import { of } from 'rxjs';
 import { DashboardService } from './dashboard.service';
-import type { Match, Map, MapEventAggregate, PlayerStats, RawEvent, StoredFile, GameServer, ServerToken } from '../database/entities';
+import type {
+  Match,
+  Map,
+  MapEventAggregate,
+  PlayerStats,
+  RawEvent,
+  StoredFile,
+  GameServer,
+  ServerToken,
+} from '../database/entities';
 import type { Repository, DataSource } from 'typeorm';
 import type { ConfigService } from '@nestjs/config';
 import type { HttpService } from '@nestjs/axios';
+import type { EmergencyGcService } from './emergency-gc.service';
 
 jest.mock('node:fs', () => ({
   promises: {
@@ -46,6 +56,7 @@ describe('DashboardService (unit)', () => {
   let dataSource: jest.Mocked<DataSource>;
   let config: jest.Mocked<ConfigService>;
   let http: jest.Mocked<HttpService>;
+  let emergencyGc: jest.Mocked<EmergencyGcService>;
   const now = new Date('2024-01-02T12:00:00Z');
 
   const liveMatch: Partial<Match> & { id: string; maps: Partial<Map>[] } = {
@@ -229,6 +240,13 @@ describe('DashboardService (unit)', () => {
       return null;
     }) as any;
 
+    emergencyGc = {
+      getDiskStats: jest.fn(async () => ({ totalBytes: 1000, usedBytes: 500, availableBytes: 500, usagePercent: 50 })),
+      getSettings: jest.fn(async () => ({ enabled: false, graceMinutes: 30, notifyPanel: true, notifyBot: false, lastRun: null })),
+      updateSettings: jest.fn(async () => ({ enabled: true, graceMinutes: 20, notifyPanel: true, notifyBot: false, lastRun: null })),
+      triggerManualRun: jest.fn(async () => ({ ran: false, deleted: [], finalUsagePercent: 50, reason: 'disabled', trigger: 'manual' })),
+    } as unknown as jest.Mocked<EmergencyGcService>;
+
     service = new DashboardService(
       matchesRepo,
       {} as any,
@@ -245,6 +263,7 @@ describe('DashboardService (unit)', () => {
       dataSource,
       config,
       http,
+      emergencyGc,
     );
   });
 
@@ -300,5 +319,16 @@ describe('DashboardService (unit)', () => {
     await service.requestDemoReupload('file-reupload');
     expect(http.post).toHaveBeenCalled();
     expect(filesRepo.save).toHaveBeenCalled();
+  });
+
+  it('proxies emergency GC settings and manual triggers', async () => {
+    await service.getDiskStats();
+    expect(emergencyGc.getDiskStats).toHaveBeenCalled();
+    await service.getEmergencyGcSettings();
+    expect(emergencyGc.getSettings).toHaveBeenCalled();
+    await service.updateEmergencyGcSettings({ enabled: true });
+    expect(emergencyGc.updateSettings).toHaveBeenCalledWith({ enabled: true });
+    await service.triggerEmergencyGc(true);
+    expect(emergencyGc.triggerManualRun).toHaveBeenCalledWith(true);
   });
 });

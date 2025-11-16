@@ -13,6 +13,7 @@ import {
   RawEvent,
   ServerToken,
   StoredFile,
+  SystemSetting,
   Team,
   Tournament,
 } from '../database/entities';
@@ -23,6 +24,7 @@ import { ServersController } from './servers.controller';
 import { SystemController } from './system.controller';
 import { AdminController } from './admin.controller';
 import { DemosController } from './demos.controller';
+import { EmergencyGcService } from './emergency-gc.service';
 
 @Module({
   imports: [
@@ -39,6 +41,7 @@ import { DemosController } from './demos.controller';
       RawEvent,
       ServerToken,
       StoredFile,
+      SystemSetting,
       Team,
       Tournament,
     ]),
@@ -51,7 +54,7 @@ import { DemosController } from './demos.controller';
     AdminController,
     DemosController,
   ],
-  providers: [DashboardService],
+  providers: [DashboardService, EmergencyGcService],
   exports: [DashboardService],
 })
 export class DashboardModule {}

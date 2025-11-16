@@ -81,6 +81,30 @@ export interface DiskStats {
   usagePercent: number;
 }
 
+export interface EmergencyGcState {
+  lastRunAt: string;
+  trigger: 'auto' | 'manual';
+  deleted: Array<{ id: string; filename: string | null }>;
+  finalUsagePercent: number;
+  reason: string;
+}
+
+export interface EmergencyGcSettings {
+  enabled: boolean;
+  graceMinutes: number;
+  notifyPanel: boolean;
+  notifyBot: boolean;
+  lastRun: EmergencyGcState | null;
+}
+
+export interface EmergencyGcRunResult {
+  ran: boolean;
+  deleted: Array<{ id: string; filename: string | null }>;
+  finalUsagePercent: number;
+  reason: string;
+  trigger: 'auto' | 'manual';
+}
+
 export interface DemoFile {
   id: string;
   originalFilename: string | null;

@@ -5,8 +5,6 @@ import { HttpService } from '@nestjs/axios';
 import { Repository, DataSource, In } from 'typeorm';
 import { firstValueFrom } from 'rxjs';
 import { randomBytes, createHash } from 'node:crypto';
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
 import { createReadStream, promises as fs } from 'node:fs';
 import { join } from 'node:path';
 import {
@@ -23,8 +21,7 @@ import {
   Team,
   Tournament,
 } from '../database/entities';
-
-const execFileAsync = promisify(execFile);
+import { EmergencyGcService, DiskStats, EmergencyGcSettings, EmergencyGcRunResult } from './emergency-gc.service';
 
 interface LiveMatchView {
   id: string;
@@ -106,13 +103,6 @@ interface MatchDetail extends HistoryRow {
   }>;
 }
 
-interface DiskStats {
-  totalBytes: number;
-  usedBytes: number;
-  availableBytes: number;
-  usagePercent: number;
-}
-
 interface DemoFilters {
   tournamentId?: string;
   status?: string;
@@ -171,6 +161,7 @@ export class DashboardService {
     private readonly dataSource: DataSource,
     private readonly config: ConfigService,
     private readonly http: HttpService,
+    private readonly emergencyGc: EmergencyGcService,
   ) {}
 
   async getLiveMatches(): Promise<LiveMatchView[]> {
@@ -433,24 +424,21 @@ export class DashboardService {
   }
 
   async getDiskStats(): Promise<DiskStats> {
-    const storagePath = this.config.get<string>('DEMO_STORAGE_PATH', join(process.cwd(), 'storage/demos'));
-    try {
-      await fs.access(storagePath);
-    } catch {
-      await fs.mkdir(storagePath, { recursive: true });
-    }
+    return this.emergencyGc.getDiskStats();
+  }
 
-    const { stdout } = await execFileAsync('df', ['-Pk', storagePath]);
-    const [, ...rows] = stdout.trim().split('\n');
-    if (!rows.length) {
-      throw new Error('Unable to determine disk usage');
-    }
-    const parts = rows[0].trim().split(/\s+/);
-    const total = Number(parts[1]) * 1024;
-    const used = Number(parts[2]) * 1024;
-    const available = Number(parts[3]) * 1024;
-    const usagePercent = total > 0 ? Math.round((used / total) * 1000) / 10 : 0;
-    return { totalBytes: total, usedBytes: used, availableBytes: available, usagePercent };
+  async getEmergencyGcSettings(): Promise<EmergencyGcSettings> {
+    return this.emergencyGc.getSettings();
+  }
+
+  async updateEmergencyGcSettings(
+    patch: Partial<Pick<EmergencyGcSettings, 'enabled' | 'graceMinutes' | 'notifyPanel' | 'notifyBot'>>,
+  ): Promise<EmergencyGcSettings> {
+    return this.emergencyGc.updateSettings(patch);
+  }
+
+  async triggerEmergencyGc(force = false): Promise<EmergencyGcRunResult> {
+    return this.emergencyGc.triggerManualRun(force);
   }
 
   async getJetStreamSummary(): Promise<Record<string, unknown>> {

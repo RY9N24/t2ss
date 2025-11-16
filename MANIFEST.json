@@ -498,5 +498,21 @@
     {
         "path": "backend/src/database/migrations/1706040004000-AddDemoManagementColumns.ts",
         "description": "Миграция, добавляющая статус/флаги и MatchZy-колонки в таблицу files для управления демками."
+    },
+    {
+        "path": "backend/src/database/entities/system-setting.entity.ts",
+        "description": "Entity system_settings для хранения конфигурации Emergency-GC и других глобальных настроек."
+    },
+    {
+        "path": "backend/src/database/migrations/1706040005000-AddSystemSettings.ts",
+        "description": "Миграция, создающая таблицу system_settings с JSON-значениями."
+    },
+    {
+        "path": "backend/src/dashboard/emergency-gc.service.ts",
+        "description": "Сервис аварийной очистки демок (97%→95%) с конфигурированием и аудитом."
+    },
+    {
+        "path": "backend/src/dashboard/emergency-gc.service.spec.ts",
+        "description": "Юнит-тесты Emergency-GC: сценарии отключения и успешного удаления демок."
     }
 ]

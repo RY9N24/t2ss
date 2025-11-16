@@ -134,6 +134,9 @@
 | `DEMO_REUPLOAD_INGEST_URL` | URL, на который игровой агент повторно отправляет ZIP демо (обычно `http://api:3000/ingest/demo`). |
 | `DEMO_REUPLOAD_AGENT_PATH` | Путь на игровом сервере, куда API шлёт запрос `POST` для повторной выгрузки (`/agent/reupload` по умолчанию). |
 | `DEMO_REUPLOAD_API_KEY` | (Опц.) Общий API-ключ, добавляемый в заголовок `X-API-Key` при запросе к агенту повторной загрузки. |
+| `EMERGENCY_GC_POLL_INTERVAL_MS` | Интервал проверки диска Emergency-GC (OFF по умолчанию, 60s). |
+| `EMERGENCY_GC_DEFAULT_GRACE_MINUTES` | Минимальный возраст демо перед автоматическим удалением (минуты). |
+| `EMERGENCY_GC_DEFAULT_ENABLED` | Первоначальное состояние Emergency-GC (`false`, чтобы соблюдать требование OFF по умолчанию). |
 | `NATS_URL`, `NATS_SUBJECT_MATCHZY_EVENTS` | Подключение и subject публикации событий в NATS JetStream. |
 | `POSTGRES_*` | Параметры подключения к PostgreSQL для хранения таблиц `files`, `events_raw`, статистики и справочников. |
 | `JSZ_MONITOR_URL` | URL мониторинга JetStream `/jsz` (используется API для раздела Disk, см. https://docs.nats.io/running-a-nats-service/nats_admin/monitoring/monitoring_jetstream). |
@@ -164,6 +167,12 @@
 - При загрузке ≥90% отображается сворачиваемый баннер с переходом к управлению демками.
 - Секция «Demo storage» дополнена таблицей с фильтрами по турниру, дате, размеру, статусу, pinned/in_use — вся мета берётся из заголовков MatchZy GOTV ([MatchZy GOTV & Demos](https://shobhit-pathak.github.io/MatchZy/gotv/)).
 - Доступны быстрые действия: скачивание, повторная загрузка через агент игрового сервера и массовое удаление с проверкой pinned/in_use/незавершённых матчей.
+- Emergency-GC (OFF по умолчанию) мониторит `df -Pk <DEMO_STORAGE_PATH>` и при ≥97% автоматически удаляет одну самую старую демку, которая не pinned, не in_use и старше grace-периода, повторяя цикл до снижения <95%. Все удаления записываются в `audit_log` и отображаются в UI.
+
+#### Emergency GC (97% → 95%)
+- Конфигурация доступна через `GET/PATCH /system/emergency-gc` и UI «Emergency cleanup»: можно включить/выключить GC, изменить `graceMinutes` и просмотреть последний запуск.
+- «Run now» вызывает `POST /system/emergency-gc/run`; операция уважает правила хранения MatchZy GOTV (см. [MatchZy GOTV & Demos](https://shobhit-pathak.github.io/MatchZy/gotv/)) — pinned/in_use демки и незавершённые карты не затрагиваются.
+- Среда исполнения (docker-compose) передаёт переменные `EMERGENCY_GC_POLL_INTERVAL_MS`, `EMERGENCY_GC_DEFAULT_GRACE_MINUTES`, `EMERGENCY_GC_DEFAULT_ENABLED`; можно отключить автозапуск через `EMERGENCY_GC_DISABLE_AUTORUN=true`, оставив ручное управление в панели.
 
 ### Управление демками
 - Backend предоставляет REST-эндпоинты `/demos` (листинг, фильтры, скачивание, массовое удаление) и логирует все действия в `audit_log`.
