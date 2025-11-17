@@ -1,0 +1,251 @@
+version: "3.9"
+
+services:
+  caddy:
+    image: caddy:2.7
+    container_name: matchzy-caddy
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+      frontend:
+        condition: service_started
+    environment:
+      - CADDY_SITE_ADDRESS=${CADDY_SITE_ADDRESS}
+      - CADDY_AUTO_HTTPS_DIRECTIVE=${CADDY_AUTO_HTTPS_DIRECTIVE}
+      - FRONTEND_UPSTREAM=${FRONTEND_UPSTREAM:-frontend:3000}
+      - API_UPSTREAM=${API_UPSTREAM:-api:3000}
+      - NATS_MONITOR_UPSTREAM=${NATS_MONITOR_UPSTREAM:-nats:8222}
+      - JSZ_BASIC_AUTH_USER=${JSZ_BASIC_AUTH_USER:-nats}
+      - JSZ_BASIC_AUTH_PASSHASH=${JSZ_BASIC_AUTH_PASSHASH:-$$2b$$12$$AoLmj.J8qA2kMaWzzzvuSuPBtsRIjX3V19KXLPDhUrVjobEOQxify}
+      # Basic Auth хеш получен командой `caddy hash-password --plaintext changeme` — замените на свой.
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    ports:
+      - "80:80"
+      - "443:443"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep caddy"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  api:
+    build:
+      context: ../backend
+    container_name: matchzy-api
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379/0}
+      - NATS_URL=${NATS_URL:-nats://nats:4222}
+      - DEMO_REUPLOAD_INGEST_URL=${DEMO_REUPLOAD_INGEST_URL:-http://api:3000/ingest/demo}
+      - DEMO_REUPLOAD_AGENT_PATH=${DEMO_REUPLOAD_AGENT_PATH:-/agent/reupload}
+      - DEMO_REUPLOAD_API_KEY=${DEMO_REUPLOAD_API_KEY:-}
+      - EMERGENCY_GC_POLL_INTERVAL_MS=${EMERGENCY_GC_POLL_INTERVAL_MS:-60000}
+      - EMERGENCY_GC_DEFAULT_GRACE_MINUTES=${EMERGENCY_GC_DEFAULT_GRACE_MINUTES:-30}
+      - EMERGENCY_GC_DEFAULT_ENABLED=${EMERGENCY_GC_DEFAULT_ENABLED:-false}
+      - EMERGENCY_GC_DISABLE_AUTORUN=${EMERGENCY_GC_DISABLE_AUTORUN:-false}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      nats:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "require('http').get('http://localhost:3000/health', res => {process.exit(res.statusCode < 400 ? 0 : 1);}).on('error', () => process.exit(1));"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  workers:
+    build:
+      context: ../workers
+    container_name: matchzy-workers
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379/0}
+      - NATS_URL=${NATS_URL:-nats://nats:4222}
+      - MATCHZY_STATS_PATH=${MATCHZY_STATS_PATH:-/matchzy_stats}
+    depends_on:
+      nats:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ${MATCHZY_STATS_HOST_PATH:-./matchzy_stats}:/matchzy_stats:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep node"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  nats:
+    image: nats:2.10
+    container_name: matchzy-nats
+    restart: unless-stopped
+    command: ["-js", "-m", "8222"] # JetStream enabled; monitoring endpoint per https://docs.nats.io/running-a-nats-service/nats_admin/monitoring/monitoring_jetstream
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    volumes:
+      - nats-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8222/jsz?state=summary >/dev/null"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  postgres:
+    image: postgres:16
+    container_name: matchzy-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-matchzy}
+      - POSTGRES_USER=${POSTGRES_USER:-matchzy}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-matchzy}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB:-matchzy}"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  redis:
+    image: redis:7-alpine
+    container_name: matchzy-redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  frontend:
+    build:
+      context: ../frontend
+    container_name: matchzy-frontend
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - API_ORIGIN=${API_ORIGIN:-http://api:3000}
+      - NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL:-/api}
+      - INTERNAL_API_BASE_URL=${INTERNAL_API_BASE_URL:-http://api:3000}
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "require('http').get('http://localhost:3000/health', res => {process.exit(res.statusCode < 400 ? 0 : 1);}).on('error', () => process.exit(1));"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  bot:
+    build:
+      context: ../bot
+    container_name: matchzy-bot
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_WEBHOOK_URL=${TELEGRAM_WEBHOOK_URL:-}
+      - API_ORIGIN=${API_ORIGIN:-http://api:3000}
+      - NATS_URL=${NATS_URL:-nats://nats:4222}
+    depends_on:
+      api:
+        condition: service_healthy
+      nats:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep node"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  nats-tools:
+    image: natsio/nats-box:0.15.0
+    depends_on:
+      nats:
+        condition: service_healthy
+    environment:
+      - NATS_URL=${NATS_URL:-nats://nats:4222}
+
+
+volumes:
+  caddy-data:
+  caddy-config:
+  nats-data:
+  postgres-data:
+  redis-data:

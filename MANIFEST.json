@@ -1,0 +1,530 @@
+[
+    {
+        "path": "README.md",
+        "description": "Основной документ с мастер-контекстом, верификацией, правилами и инструкциями по развёртыванию и backend-интеграции."
+    },
+    {
+        "path": "PROGRESS.md",
+        "description": "Журнал выполнения шагов, список внешних интерфейсов и план следующих действий."
+    },
+    {
+        "path": "CHECKLIST.md",
+        "description": "Чеклист шагов проекта с отметками выполнения."
+    },
+    {
+        "path": "MANIFEST.json",
+        "description": "Перечень ключевых файлов и каталогов с описанием."
+    },
+    {
+        "path": "backend/",
+        "description": "Каталог серверной части (NestJS + Fastify ingest API)."
+    },
+    {
+        "path": "backend/EXTERNAL_INTERFACES.md",
+        "description": "Ссылки на внешние интерфейсы, задействованные на шаге 02."
+    },
+    {
+        "path": "backend/package.json",
+        "description": "Конфигурация NPM пакета backend-приложения."
+    },
+    {
+        "path": "backend/package-lock.json",
+        "description": "Зафиксированное дерево зависимостей backend-приложения."
+    },
+    {
+        "path": "backend/tsconfig.json",
+        "description": "Общие настройки TypeScript для backend."
+    },
+    {
+        "path": "backend/tsconfig.build.json",
+        "description": "Конфигурация компиляции для сборки backend."
+    },
+    {
+        "path": "backend/nest-cli.json",
+        "description": "Настройки Nest CLI (sourceRoot)."
+    },
+    {
+        "path": "backend/jest.config.js",
+        "description": "Конфигурация Jest для модульных тестов backend."
+    },
+    {
+        "path": "backend/test/jest-e2e.json",
+        "description": "Конфигурация Jest для e2e-тестов Fastify/NestJS (sqlite in-memory)."
+    },
+    {
+        "path": "backend/test/demos.e2e-spec.ts",
+        "description": "Интеграционный тест `/demos` (листинг и правила удаления демо-файлов)."
+    },
+    {
+        "path": "backend/.eslintrc.js",
+        "description": "Правила ESLint для TypeScript backend."
+    },
+    {
+        "path": "backend/.prettierrc",
+        "description": "Настройки форматирования кода backend."
+    },
+    {
+        "path": "backend/.gitignore",
+        "description": "Игнорируемые файлы и каталоги backend."
+    },
+    {
+        "path": "backend/.env.example",
+        "description": "Пример переменных окружения для ingest API."
+    },
+    {
+        "path": "backend/src/main.ts",
+        "description": "Точка входа NestJS с Fastify и глобальными пайпами."
+    },
+    {
+        "path": "backend/src/app.module.ts",
+        "description": "Корневой модуль приложения с конфигурацией TypeORM (migrationsRun, авто-подключение сущностей)."
+    },
+    {
+        "path": "backend/src/ingest/ingest.module.ts",
+        "description": "Модуль ingest-эндпоинтов и сервисов."
+    },
+    {
+        "path": "backend/src/database/entities/",
+        "description": "TypeORM сущности основной схемы (турниры, команды, игроки, матчи, карты, статистика, файлы, события, подписки)."
+    },
+    {
+        "path": "backend/src/database/entities/column-types.ts",
+        "description": "Константы типов колонок (timestamp/jsonb) с fallback для sqlite-тестов."
+    },
+    {
+        "path": "backend/src/database/entities/tournament.entity.ts",
+        "description": "Сущность турниров (название, slug, внешний идентификатор)."
+    },
+    {
+        "path": "backend/src/database/entities/server.entity.ts",
+        "description": "Сущность игровых серверов с endpoint и статусом активности."
+    },
+    {
+        "path": "backend/src/database/entities/team.entity.ts",
+        "description": "Сущность команд с привязкой к турниру."
+    },
+    {
+        "path": "backend/src/database/entities/player.entity.ts",
+        "description": "Сущность игроков (Steam ID, страна, команда, турнир)."
+    },
+    {
+        "path": "backend/src/database/entities/match.entity.ts",
+        "description": "Сущность матчей с ссылками на турниры, серверы и команды."
+    },
+    {
+        "path": "backend/src/database/entities/map.entity.ts",
+        "description": "Сущность карт матча с номером и статусом."
+    },
+    {
+        "path": "backend/src/database/entities/player-stat.entity.ts",
+        "description": "Сущность статистики игроков по картам (K/D/A, рейтинг и др.)."
+    },
+    {
+        "path": "backend/src/database/entities/raw-event.entity.ts",
+        "description": "Сущность `events_raw` с уникальным `idempotency_key` и payload JSON."
+    },
+    {
+        "path": "backend/src/database/entities/map-event-aggregate.entity.ts",
+        "description": "Сущность `map_event_aggregates` с счётчиками по серверу/матчу/карте/типу события."
+    },
+    {
+        "path": "backend/src/database/entities/event-offset.entity.ts",
+        "description": "Сущность `event_offsets` для хранения JetStream последних последовательностей per server/match/map."
+    },
+    {
+        "path": "backend/src/database/entities/audit-log-entry.entity.ts",
+        "description": "Сущность журнала аудита для системных действий."
+    },
+    {
+        "path": "backend/src/database/entities/bot-subscription.entity.ts",
+        "description": "Сущность подписок Telegram-бота на турниры."
+    },
+    {
+        "path": "backend/src/database/entities/file.entity.ts",
+        "description": "Сущность `files` для сохранённых демо и заголовков MatchZy."
+    },
+    {
+        "path": "backend/src/database/entities/index.ts",
+        "description": "Переэкспорт сущностей для модулей NestJS."
+    },
+    {
+        "path": "backend/src/database/entities/timestamped.entity.ts",
+        "description": "Базовый класс с UUID и временными метками для сущностей."
+    },
+    {
+        "path": "backend/src/database/migrations/1706040000000-CreateCoreSchema.ts",
+        "description": "Начальная миграция PostgreSQL-схемы (турниры, матчи, карты, статистика, события, файлы, подписки)."
+    },
+    {
+        "path": "backend/src/database/migrations/1706040001000-CreateAggregationState.ts",
+        "description": "Миграция для таблиц map_event_aggregates и event_offsets."
+    },
+    {
+        "path": "backend/src/database/migrations/1706040002000-AddMatchFinalisationColumns.ts",
+        "description": "Миграция, добавляющая итоговые счёты матчей/карт и расширенные поля player_stats для сверки по CSV MatchZy."
+    },
+    {
+        "path": "backend/src/database/data-source.ts",
+        "description": "Конфигурация TypeORM DataSource для CLI-операций и скриптов миграций."
+    },
+    {
+        "path": "backend/src/database/run-migrations.ts",
+        "description": "Скрипт запуска миграций TypeORM."
+    },
+    {
+        "path": "backend/src/database/revert-last-migration.ts",
+        "description": "Скрипт отката последней миграции TypeORM."
+    },
+    {
+        "path": "backend/src/ingest/matchzy-ingest.controller.ts",
+        "description": "Контроллер `/ingest/matchzy` с проверкой Bearer токена и публикацией в NATS."
+    },
+    {
+        "path": "backend/src/ingest/matchzy-demo.controller.ts",
+        "description": "Контроллер `/ingest/demo` со streaming-сохранением ZIP и заголовков."
+    },
+    {
+        "path": "backend/src/ingest/services/demo-storage.service.ts",
+        "description": "Сервис сохранения демо-файлов на диск."
+    },
+    {
+        "path": "backend/src/ingest/services/demo-upload.service.ts",
+        "description": "Сервис записи метаданных загрузки в БД."
+    },
+    {
+        "path": "backend/src/ingest/services/matchzy-events.publisher.ts",
+        "description": "Публикация событий MatchZy в NATS JetStream."
+    },
+    {
+        "path": "backend/src/ingest/matchzy-ingest.controller.spec.ts",
+        "description": "Тесты контроллера MatchZy ingest."
+    },
+    {
+        "path": "backend/src/ingest/matchzy-demo.controller.spec.ts",
+        "description": "Тесты контроллера загрузки демо."
+    },
+    {
+        "path": "workers/",
+        "description": "Каталог воркеров JetStream для агрегации событий MatchZy."
+    },
+    {
+        "path": "workers/package.json",
+        "description": "Конфигурация NPM для сервиса воркеров."
+    },
+    {
+        "path": "workers/package-lock.json",
+        "description": "Зафиксированное дерево зависимостей для воркеров."
+    },
+    {
+        "path": "workers/.env.example",
+        "description": "Пример конфигурации окружения воркеров с параметрами NATS/PostgreSQL и путём к CSV MatchZy."
+    },
+    {
+        "path": "workers/tsconfig.json",
+        "description": "Настройки TypeScript для сборки воркеров."
+    },
+    {
+        "path": "workers/jest.config.js",
+        "description": "Конфигурация Jest для тестов идемпотентности."
+    },
+    {
+        "path": "workers/src/index.ts",
+        "description": "Точка входа: bootstrap воркеров и обработка SIGINT/SIGTERM."
+    },
+    {
+        "path": "workers/src/finalizer.ts",
+        "description": "CSV-финализатор, запускающий сверку данных MatchZy при событиях `map_result`/`series_end`."
+    },
+    {
+        "path": "workers/src/finalizer-store.ts",
+        "description": "PostgreSQL-репозиторий для обновления счётов, игроков и аудита при подтверждении результатов MatchZy."
+    },
+    {
+        "path": "workers/src/config.ts",
+        "description": "Загрузка настроек (NATS, PostgreSQL, log level) из env."
+    },
+    {
+        "path": "workers/src/logger.ts",
+        "description": "Фабрика pino-логгера для воркеров."
+    },
+    {
+        "path": "workers/src/types.ts",
+        "description": "Интерфейсы метаданных и персистентного адаптера."
+    },
+    {
+        "path": "workers/src/idempotency.ts",
+        "description": "Вычисление idempotency_key и вытяжка метаданных MatchZy."
+    },
+    {
+        "path": "workers/src/aggregator.ts",
+        "description": "Обработка событий: сохранение raw, идемпотентная агрегация."
+    },
+    {
+        "path": "workers/src/db.ts",
+        "description": "Адаптер PostgreSQL для events_raw, map_event_aggregates, event_offsets."
+    },
+    {
+        "path": "workers/src/nats-consumer.ts",
+        "description": "Консюмер JetStream с manual ack и durable именем."
+    },
+    {
+        "path": "workers/src/__tests__/aggregator.spec.ts",
+        "description": "Юнит-тесты на обработку дубликатов."
+    },
+    {
+        "path": "workers/src/__tests__/finalizer.spec.ts",
+        "description": "Тесты финализатора CSV: парсинг MatchZy и проверка передачи обновлений в хранилище."
+    },
+    {
+        "path": "frontend/",
+        "description": "Каталог для панели на Next.js."
+    },
+    {
+        "path": "frontend/.gitkeep",
+        "description": "Заглушка для отслеживания каталога frontend в git."
+    },
+    {
+        "path": "bot/",
+        "description": "Каталог для Telegram-бота на Telegraf."
+    },
+    {
+        "path": "bot/.gitkeep",
+        "description": "Заглушка для отслеживания каталога bot в git."
+    },
+    {
+        "path": "deploy/",
+        "description": "Каталог для конфигураций деплоя (Docker/Compose/Caddy)."
+    },
+    {
+        "path": "deploy/docker-compose.yml",
+        "description": "Конфигурация Docker Compose для сервисов Caddy, API, workers, NATS, PostgreSQL, Redis, фронтенда, бота и вспомогательного nats-tools (JetStream)."
+    },
+    {
+        "path": "deploy/Caddyfile",
+        "description": "Caddy-конфигурация с поддержкой режимов с доменом/без домена и прокси `/jsz` с Basic Auth."
+    },
+    {
+        "path": "deploy/.gitkeep",
+        "description": "Заглушка для отслеживания каталога deploy в git."
+    },
+    {
+        "path": "scripts/",
+        "description": "Каталог для вспомогательных скриптов."
+    },
+    {
+        "path": "scripts/install.sh",
+        "description": "Скрипт установки Docker Engine/Compose и запуска стека в выбранном режиме."
+    },
+    {
+        "path": "scripts/.gitkeep",
+        "description": "Заглушка для отслеживания каталога scripts в git."
+    },
+    {
+        "path": "start.md",
+        "description": "Дополнительные заметки (исходный файл)."
+    },
+    {
+        "path": "scripts/nats-init.sh",
+        "description": "Скрипт создания/проверки Stream MATCHZY.EVENTS в NATS JetStream через nats-box."
+    },
+    {
+        "path": "scripts/nats-smoke.sh",
+        "description": "Smoke-тест публикации и чтения сообщений из Stream MATCHZY.EVENTS."
+    },
+    {
+        "path": "scripts/truncate_tournament_data.sql",
+        "description": "SQL-скрипт TRUNCATE турнирных таблиц (events_raw, map_event_aggregates, event_offsets и др.) без удаления servers."
+    },
+    {
+        "path": "backend/src/dashboard/dashboard.module.ts",
+        "description": "NestJS-модуль панели с регистрацией контроллеров и сервисов Dashboard."
+    },
+    {
+        "path": "backend/src/dashboard/dashboard.service.ts",
+        "description": "Сервис Dashboard, агрегирующий данные для UI и операций администрирования."
+    },
+    {
+        "path": "backend/src/dashboard/dashboard.service.spec.ts",
+        "description": "Модульные тесты сервисного слоя Dashboard."
+    },
+    {
+        "path": "backend/src/dashboard/admin.controller.ts",
+        "description": "REST-контроллер администрирования (TRUNCATE, drop БД, управление бэкапами)."
+    },
+    {
+        "path": "backend/src/dashboard/live.controller.ts",
+        "description": "SSE/REST-контроллер live-статистики матчей для фронтенда."
+    },
+    {
+        "path": "backend/src/dashboard/matches.controller.ts",
+        "description": "REST-контроллер истории матчей и подробностей встреч."
+    },
+    {
+        "path": "backend/src/dashboard/servers.controller.ts",
+        "description": "REST-контроллер регистрации серверов и токенов, статусы и heartbeats."
+    },
+    {
+        "path": "backend/src/dashboard/system.controller.ts",
+        "description": "REST-контроллер сведений о диске, JetStream /jsz и настройках системы."
+    },
+    {
+        "path": "backend/src/dashboard/data-transfer.service.ts",
+        "description": "Сервис экспорта/импорта турниров в CSV/XLSX/SQLite с поддержкой dry-run и diff."
+    },
+    {
+        "path": "backend/src/dashboard/backup.service.ts",
+        "description": "Сервис pg_dump/pg_restore для резервного копирования и восстановления БД."
+    },
+    {
+        "path": "backend/src/database/entities/server-token.entity.ts",
+        "description": "TypeORM-сущность токенов серверов с метаданными и датами выдачи."
+    },
+    {
+        "path": "backend/src/database/migrations/1706040003000-AddServerTokensAndStatus.ts",
+        "description": "Миграция, добавляющая таблицу server_tokens и поля статуса/heartbeat серверов."
+    },
+    {
+        "path": "frontend/.env.example",
+        "description": "Пример переменных окружения для фронтенда (API_ORIGIN и роли)."
+    },
+    {
+        "path": "frontend/.eslintrc.json",
+        "description": "Настройки ESLint для Next.js проекта."
+    },
+    {
+        "path": "frontend/.gitignore",
+        "description": "Игнор-лист фронтенда (node_modules, .next, build.log и др.)."
+    },
+    {
+        "path": "frontend/package.json",
+        "description": "Конфигурация npm пакета фронтенда с Next.js/Tailwind."
+    },
+    {
+        "path": "frontend/package-lock.json",
+        "description": "Дерево зависимостей фронтенда."
+    },
+    {
+        "path": "frontend/tsconfig.json",
+        "description": "TypeScript-конфигурация Next.js приложения."
+    },
+    {
+        "path": "frontend/next-env.d.ts",
+        "description": "Автогенерируемые типы Next.js для TypeScript."
+    },
+    {
+        "path": "frontend/next.config.js",
+        "description": "Конфигурация Next.js (прокси API, strict mode)."
+    },
+    {
+        "path": "frontend/postcss.config.js",
+        "description": "Конфигурация PostCSS с Tailwind и Autoprefixer."
+    },
+    {
+        "path": "frontend/tailwind.config.ts",
+        "description": "Tailwind тема и расширения для интерфейса."
+    },
+    {
+        "path": "frontend/app/globals.css",
+        "description": "Глобальные стили Next.js, подключающие Tailwind."
+    },
+    {
+        "path": "frontend/app/layout.tsx",
+        "description": "Базовый layout фронтенда с Sidebar и метаданными."
+    },
+    {
+        "path": "frontend/app/providers.tsx",
+        "description": "Компонент провайдеров контекста (SWR/SSE, темы)."
+    },
+    {
+        "path": "frontend/app/page.tsx",
+        "description": "Редирект/домашняя страница панели (Live по умолчанию)."
+    },
+    {
+        "path": "frontend/app/live/page.tsx",
+        "description": "Страница Live с потоковым обновлением матчей."
+    },
+    {
+        "path": "frontend/app/history/page.tsx",
+        "description": "Страница History с фильтрами и экспортом результатов."
+    },
+    {
+        "path": "frontend/app/match/[id]/page.tsx",
+        "description": "Детальная страница матча с картами, boxscore и таймлайном."
+    },
+    {
+        "path": "frontend/app/servers/page.tsx",
+        "description": "Страница управления серверами и токенами."
+    },
+    {
+        "path": "frontend/app/disk/page.tsx",
+        "description": "Раздел Disk с мониторингом хранилища и ссылками на демки."
+    },
+    {
+        "path": "frontend/app/settings/page.tsx",
+        "description": "Раздел Settings с экспортом/импортом турниров, pg_dump/pg_restore и админ-операциями."
+    },
+    {
+        "path": "frontend/components/SidebarNav.tsx",
+        "description": "Компонент боковой навигации по разделам панели."
+    },
+    {
+        "path": "frontend/components/PageHeader.tsx",
+        "description": "Заголовок разделов с действиями и описаниями."
+    },
+    {
+        "path": "frontend/components/InfoCard.tsx",
+        "description": "Карточка статистики для live/истории."
+    },
+    {
+        "path": "frontend/components/DiskUsageBanner.tsx",
+        "description": "Сворачиваемый баннер предупреждения о заполнении диска."
+    },
+    {
+        "path": "frontend/components/ConfirmDialog.tsx",
+        "description": "Диалог подтверждения действий (TRUNCATE, drop БД)."
+    },
+    {
+        "path": "frontend/lib/types.ts",
+        "description": "Типы данных фронтенда для матчей, серверов, системной информации."
+    },
+    {
+        "path": "frontend/lib/api.ts",
+        "description": "Обёртки fetch/SSE для запросов к backend Dashboard API."
+    },
+    {
+        "path": "frontend/lib/hooks.ts",
+        "description": "Пользовательские хуки SWR/SSE для Live/History/Settings."
+    },
+    {
+        "path": "workers/.gitignore",
+        "description": "Игнор-лист воркеров (node_modules, coverage, *.log)."
+    },
+    {
+        "path": "backend/src/dashboard/demos.controller.ts",
+        "description": "REST-контроллер /demos для фильтрации, скачивания, удаления и повторной загрузки демок."
+    },
+    {
+        "path": "backend/src/database/migrations/1706040004000-AddDemoManagementColumns.ts",
+        "description": "Миграция, добавляющая статус/флаги и MatchZy-колонки в таблицу files для управления демками."
+    },
+    {
+        "path": "backend/src/database/entities/system-setting.entity.ts",
+        "description": "Entity system_settings для хранения конфигурации Emergency-GC и других глобальных настроек."
+    },
+    {
+        "path": "backend/src/database/migrations/1706040005000-AddSystemSettings.ts",
+        "description": "Миграция, создающая таблицу system_settings с JSON-значениями."
+    },
+    {
+        "path": "backend/src/dashboard/emergency-gc.service.ts",
+        "description": "Сервис аварийной очистки демок (97%→95%) с конфигурированием и аудитом."
+    },
+    {
+        "path": "backend/src/dashboard/emergency-gc.service.spec.ts",
+        "description": "Юнит-тесты Emergency-GC: сценарии отключения и успешного удаления демок."
+    },
+    {
+        "path": "backend/test/export-import.e2e-spec.ts",
+        "description": "E2E-тест экспорт/импорт турниров и проверки dry-run/diff."
+    }
+]

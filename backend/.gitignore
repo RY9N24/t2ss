@@ -1,0 +1,10 @@
+/node_modules
+/dist
+/.env
+/tmp
+coverage
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
